@@ -40,6 +40,11 @@ interface IntersectionProps {
     needTouchConfirmation?: boolean;
     showTouchConfirmation?: boolean;
     disableAnimation?: boolean;
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 interface IntersectionStates {

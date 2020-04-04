@@ -469,6 +469,10 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                     style={{ background: 'transparent', padding: 15, gridColor: tm.gridLineColor, blackStoneColor: tm.blackStoneColor, whiteStoneColor: tm.whiteStoneColor, coordTextColor: tm.coordTextColor, starPointColor: tm.starPointColor, winrateColor: tm.winrateColor, winrateBackgroundColor: tm.themeColor }}
                     size={this.game.size}
                     states={this.game.board}
+                    // Daoqi virtual board parameters
+                    vbSize={3}
+                    vbOffsetX={3}
+                    vbOffsetY={3}
                     disabled={this.props.disabled || this.state.disabled || shouldBeDisabled}
                     onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                     showCoordinate={window.innerWidth >= 800}

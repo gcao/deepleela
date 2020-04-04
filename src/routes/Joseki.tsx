@@ -242,6 +242,10 @@ export default class Joseki extends React.Component<{}, States> {
                             style={{ background: 'transparent', padding: 15, gridColor: tm.gridLineColor, blackStoneColor: tm.blackStoneColor, whiteStoneColor: tm.whiteStoneColor, coordTextColor: tm.coordTextColor, starPointColor: tm.starPointColor, winrateColor: tm.winrateColor }}
                             size={this.game.size}
                             states={this.game.board}
+                            // Daoqi virtual board parameters
+                            vbSize={3}
+                            vbOffsetX={3}
+                            vbOffsetY={3}
                             disabled={false}
                             onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                             showCoordinate={window.innerWidth >= 640}

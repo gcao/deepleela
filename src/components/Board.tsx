@@ -35,6 +35,11 @@ interface BoardProps {
     heatmap?: number[][];
     fontSize?: number;
     currentColor: 'W' | 'B';
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 interface BoardStates {
@@ -174,8 +179,27 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         this.setState({ touchedCoord: { x: -1, y: -1 } });
     }
 
+    getVisibleBoardState() {
+        const { size, vbSize, vbOffsetX, vbOffsetY } = this.props;
+        const visibleSize = size + 2 * vbSize;
+        let state: State[][] = [];
+
+        for (let i = 0; i < visibleSize; i++) {
+            let realI = (i - vbOffsetX + size) % size;
+            state.push([]);
+            for (let j = 0; j < visibleSize; j++) {
+                let realJ = (j - vbOffsetY + size) % size;
+                state[i].push(this.props.states[realI][realJ]);
+            }
+        }
+
+        return state;
+    }
+
     render() {
-        const size = 100.0 / this.props.size;
+        const visibleBoardState = this.getVisibleBoardState();
+
+        const size = 100.0 / visibleBoardState.length;
         const dimension = this.props.size;
 
         const boardParent = document.getElementById(this.props.id || '');
@@ -195,15 +219,17 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
 
                 <div style={{ background: this.props.style ? (this.props.style.background || '') : '', padding: 4, paddingBottom: `${0.6 + size}%`, }}>
 
-                    {this.props.states.map((row, i) => (
-                        <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
-                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: 0, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - i}</div> : undefined}
+                    {visibleBoardState.map((row, i) => {
+                        const realI = (i - this.props.vbOffsetX + this.props.size) % this.props.size;
+                        return <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
+                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: 0, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - realI}</div> : undefined}
 
-                            {row.map((state, j) => (
-                                <div key={`${i},${j}`}>
-                                    {this.props.showCoordinate && i === (this.props.size - 1) ?
+                            {row.map((state, j) => {
+                                const realJ = (j - this.props.vbOffsetY + this.props.size) % this.props.size;
+                                return <div key={`${i},${j}`}>
+                                    {this.props.showCoordinate && i === (visibleBoardState.length - 1) ?
                                         <div style={{ position: 'absolute', bottom: 0, left: left + j * (gridWidth - subtleTextBaseLeftMargin), fontSize: 8, fontWeight: 100, color: coordTextColor, top: top + 12 }}>
-                                            {'ABCDEFGHJKLMNOPQRST'[j]}
+                                            {'ABCDEFGHJKLMNOPQRST'[(j - this.props.vbOffsetY + this.props.size) % this.props.size]}
                                         </div>
                                         : undefined
                                     }
@@ -212,41 +238,45 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                         onClick={(r, c) => this.onClick(r, c)}
                                         style={{ color: gridLineColor, whiteStoneColor: this.props.style ? this.props.style.whiteStoneColor : 'white', blackStoneColor: this.props.style ? this.props.style.blackStoneColor : 'black', startPointColor: this.props.style ? this.props.style.starPointColor : undefined, winrateFontColor: this.props.style && this.props.style.winrateColor, winrateBackground: this.props.style && this.props.style.winrateBackgroundColor }}
                                         key={j}
-                                        row={this.props.size - i}
+                                        row={visibleBoardState.length - i}
                                         col={j + 1}
-                                        lineThickness={window.innerWidth < 1280 ? 1 : 1.5}
+                                        // Daoqi virtual board parameters
+                                        vbSize={this.props.vbSize}
+                                        vbOffsetX={this.props.vbOffsetX}
+                                        vbOffsetY={this.props.vbOffsetY}
+                                        lineThickness={1}
                                         disabled={this.props.disabled}
                                         width={size}
-                                        state={state === State.Empty ? (this.state.branchStates[i][j] ? this.state.branchStates[i][j]!.state : state) : state}
+                                        state={state === State.Empty ? (this.state.branchStates[realI][realJ] ? this.state.branchStates[realI][realJ]!.state : state) : state}
                                         topEdge={i === 0}
-                                        bottomEdge={i === dimension - 1}
+                                        bottomEdge={i === visibleBoardState.length - 1}
                                         leftEdge={j === 0}
-                                        rightEdge={j === dimension - 1}
-                                        star={startPoints.indexOf(i) >= 0 && startPoints.indexOf(j) >= 0}
-                                        highlight={this.props.highlightCoord && i === (this.props.size - this.props.highlightCoord.x) && j === this.props.highlightCoord.y - 1}
+                                        rightEdge={j === visibleBoardState.length - 1}
+                                        star={startPoints.indexOf(realI) >= 0 && startPoints.indexOf(realJ) >= 0}
+                                        highlight={this.props.highlightCoord && i === (visibleBoardState.length - this.props.highlightCoord.x) && j === this.props.highlightCoord.y - 1}
                                         highlightPointSize={gridWidth > 25 ? 'large' : 'small'}
                                         needTouchConfirmation={this.props.needTouchConfirmation !== undefined ? this.props.needTouchConfirmation : gridWidth < 25}
                                         onTouch={(x, y) => this.setState({ touchedCoord: { x, y } })}
                                         showTouchConfirmation={this.state.touchedCoord && i === (this.props.size - this.state.touchedCoord.x) && j === (this.state.touchedCoord.y - 1)}
-                                        heatmap={this.props.heatmap ? this.props.heatmap[i][j] : 0}
-                                        winrate={this.state.variationStates[i][j] ? {
-                                            value: this.state.variationStates[i][j]!.stats.W,
-                                            uvalue: this.state.variationStates[i][j]!.stats.U,
-                                            visits: this.state.variationStates[i][j]!.visits,
-                                            weight: this.state.variationStates[i][j]!.weight,
+                                        heatmap={this.props.heatmap ? this.props.heatmap[realI][realJ] : 0}
+                                        winrate={this.state.variationStates[realI][realJ] ? {
+                                            value: this.state.variationStates[realI][realJ]!.stats.W,
+                                            uvalue: this.state.variationStates[realI][realJ]!.stats.U,
+                                            visits: this.state.variationStates[realI][realJ]!.visits,
+                                            weight: this.state.variationStates[realI][realJ]!.weight,
                                             highest: this.state.highlightWinrateVariationOffset ? this.state.highlightWinrateVariationOffset.x === i && this.state.highlightWinrateVariationOffset.y === j : false,
                                         } : undefined}
                                         fontSize={this.props.fontSize}
                                         onVariationHover={(row, col) => this.onVariationHover(row, col)}
                                         onVariationHoverLeave={(row, col) => { this.clearBranchStates(), this.forceUpdate() }}
-                                        moveNumber={this.state.branchStates[i][j] ? this.state.branchStates[i][j]!.moveNumber : undefined}
+                                        moveNumber={this.state.branchStates[realI][realJ] ? this.state.branchStates[realI][realJ]!.moveNumber : undefined}
                                         disableAnimation={this.state.disableAnimation}
                                     />
                                 </div>
-                            ))}
+                            })}
 
                         </div>
-                    ))}
+                    })}
 
                 </div>
 
