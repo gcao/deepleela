@@ -97,7 +97,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.game.komi = config.komi;
         this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
 
-        let results = await this.client.requestAI(config.engine || 'leela');
+        let results = await this.client.requestAI(config.engine || 'KataGo');
         if (!results[0]) return results;
         this.client.initBoard(config);
 
@@ -127,7 +127,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
     async newSelfGame(config: NewGameDialogStates): Promise<boolean> {
         this.gameMode = 'self';
-        this.engine = config.engine || 'leela';
+        this.engine = config.engine || 'KataGo';
         UserPreferences.whitePlayer = UserPreferences.blackPlayer = 'Human';
 
         let results = await this.client.requestAI(this.engine);
@@ -194,9 +194,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (this.client.aiConnected) return true;
 
-        let [success, pending] = await this.client.requestAI(this.engine || 'leela');
+        let [success, pending] = await this.client.requestAI(this.engine || 'KataGo');
         if (!success) {
-            UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
+            // UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
             return false;
         }
 
@@ -289,11 +289,11 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         switch (result.move) {
             case 'pass':
-                UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
+                // UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
                 this.game.pass();
                 return;
             case 'resign':
-                UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
+                // UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
                 this.setState({ disabled: true });
                 return;
         }
@@ -364,7 +364,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         if (mode !== 'ai') return;
 
         let userstone = (UserPreferences.userStone) as StoneColor;
-        this.engine = UserPreferences.gameEngine || 'leela';
+        this.engine = UserPreferences.gameEngine || 'KataGo';
         this.userStone = userstone;
 
         if (this.game.currentColor === userstone) return;

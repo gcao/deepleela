@@ -86,14 +86,14 @@ class App extends React.Component<AppProps, AppStates> {
     let [success, pending] = await LocalGame.smartBoard!.newAIGame(config);
     this.setState({ loadingDialogOpen: false });
     if (!success || pending > 0) {
-      UIkit.notification(i18n.notifications.serversBusy(pending));
-      UIkit.notification(i18n.notifications.aiNotAvailable);
+      // UIkit.notification(i18n.notifications.serversBusy(pending));
+      // UIkit.notification(i18n.notifications.aiNotAvailable);
     }
   }
 
   async onNewSelfGame(config: NewGameDialogStates) {
     this.setState({ loadingDialogOpen: true, });
-    if (!await LocalGame.smartBoard!.newSelfGame(config)) { UIkit.notification(i18n.notifications.aiNotAvailable); }
+    // if (!await LocalGame.smartBoard!.newSelfGame(config)) { UIkit.notification(i18n.notifications.aiNotAvailable); }
     this.setState({ loadingDialogOpen: false, newSelfDialogOpen: false });
   }
 

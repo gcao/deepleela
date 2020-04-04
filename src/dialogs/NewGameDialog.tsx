@@ -32,7 +32,7 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
         super(props, ctx);
 
         let preferences = localStorage.getItem('newgame');
-        let defaultPreference: any = { selectedColor: "B", komi: UserPreferences.komi || 7.5, handicap: 0, time: 120, engine: 'Leela', boardSize: 19 };
+        let defaultPreference: any = { selectedColor: "B", komi: UserPreferences.komi || 7.5, handicap: 0, time: 120, engine: 'KataGo', boardSize: 19 };
 
         try {
             let pref = preferences ? JSON.parse(preferences) : defaultPreference;
@@ -88,6 +88,7 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
                         <label className="uk-form-label">{i18n.dialogs.newgame.engine}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
                             <select style={{ width: '100%' }} onChange={e => this.setState({ engine: e.target.value })} defaultValue={this.state.engine}>
+                                <option value="KataGo">{'KataGo'}</option>
                                 <option value="Leela">{'Leela'}</option>
                                 {/* <option value="Leela">{'Leela-Zero'}</option> */}
                             </select>
