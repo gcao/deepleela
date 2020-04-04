@@ -209,9 +209,6 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         const gridLineColor = this.props.style ? this.props.style.gridColor : undefined;
         const coordTextColor = this.props.style ? this.props.style.coordTextColor : gridLineColor;
 
-        const subtleTextCoordLeftMargin = 4.2 * (1 - this.props.size / 19);
-        const subtleTextBaseLeftMargin = this.props.size > 13 ? 2 : (this.props.size > 9 ? 2.12 : (this.props.size === 9 ? 4.24 : 3.92));
-
         const startPoints = [dimension > 9 ? 3 : (dimension > 7 ? 2 : 1), dimension > 9 ? dimension - 4 : (dimension > 7 ? dimension - 3 : dimension - 2), (dimension - 1) / 2];
 
         return (
@@ -227,13 +224,6 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                             {row.map((state, j) => {
                                 const realJ = (j - this.props.vbOffsetY + this.props.size) % this.props.size;
                                 return <div key={`${i},${j}`}>
-                                    {this.props.showCoordinate && i === (visibleBoardState.length - 1) ?
-                                        <div style={{ position: 'absolute', bottom: 0, left: left + j * (gridWidth - subtleTextBaseLeftMargin), fontSize: 8, fontWeight: 100, color: coordTextColor, top: top + 12 }}>
-                                            {'ABCDEFGHJKLMNOPQRST'[(j - this.props.vbOffsetY + this.props.size) % this.props.size]}
-                                        </div>
-                                        : undefined
-                                    }
-
                                     <Intersection
                                         onClick={(r, c) => this.onClick(r, c)}
                                         style={{ color: gridLineColor, whiteStoneColor: this.props.style ? this.props.style.whiteStoneColor : 'white', blackStoneColor: this.props.style ? this.props.style.blackStoneColor : 'black', startPointColor: this.props.style ? this.props.style.starPointColor : undefined, winrateFontColor: this.props.style && this.props.style.winrateColor, winrateBackground: this.props.style && this.props.style.winrateBackgroundColor }}
@@ -277,7 +267,18 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
 
                         </div>
                     })}
-
+                    <div key='hlabel' style={{ position: 'absolute', bottom: 25 }}>
+                        {visibleBoardState.map((_row, i) => {
+                            const realI = (i - this.props.vbOffsetX + this.props.size) % this.props.size;
+                            // TODO: the calculation is not working for different board size
+                            const width = (gridWidth * visibleBoardState.length - Math.round(gridWidth) * i) * 0.96 / (visibleBoardState.length - i);
+                            return <div key={i} style={{ display: 'inline-block', float: 'left', width: width }}>
+                                <div style={{ left: 0, top: -15, textAlign: 'center', fontSize: 8, fontWeight: 100, color: coordTextColor }}>
+                                    {'ABCDEFGHJKLMNOPQRST'[realI]}
+                                </div>
+                            </div>
+                        })}
+                    </div>
                 </div>
 
             </div>
