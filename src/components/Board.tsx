@@ -103,6 +103,8 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
 
     private onClick(row: number, col: number) {
         if (!this.props.onIntersectionClicked) return;
+        row = (row - this.props.vbOffsetX + this.props.size) % this.props.size;
+        col = (col - this.props.vbOffsetY + this.props.size) % this.props.size;
         this.props.onIntersectionClicked(row, col);
     }
 
@@ -228,6 +230,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                         onClick={(r, c) => this.onClick(r, c)}
                                         style={{ color: gridLineColor, whiteStoneColor: this.props.style ? this.props.style.whiteStoneColor : 'white', blackStoneColor: this.props.style ? this.props.style.blackStoneColor : 'black', startPointColor: this.props.style ? this.props.style.starPointColor : undefined, winrateFontColor: this.props.style && this.props.style.winrateColor, winrateBackground: this.props.style && this.props.style.winrateBackgroundColor }}
                                         key={j}
+                                        size={this.props.size}
                                         row={visibleBoardState.length - i}
                                         col={j + 1}
                                         // Daoqi virtual board parameters

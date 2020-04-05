@@ -29,6 +29,7 @@ interface IntersectionProps {
     leftEdge?: boolean;
     topEdge?: boolean;
     bottomEdge?: boolean;
+    size: number;
     row: number;
     col: number;
     style?: CSSProperties & { whiteStoneColor?: string, blackStoneColor?: string, startPointColor?: string, winrateFontColor?: string, winrateBackground?: string };
@@ -49,6 +50,7 @@ interface IntersectionProps {
 
 interface IntersectionStates {
     hover: boolean;
+    isOnVirtualBoard: boolean;
     touchConfirmed?: boolean;
     firstTouch?: boolean;
 }
@@ -63,7 +65,10 @@ export default class Intersection extends React.Component<IntersectionProps, Int
 
     constructor(props: IntersectionProps, ctx: any) {
         super(props, ctx);
-        this.state = { hover: false };
+        const isOnVirtualBoard =
+            this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
+            this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
+        this.state = { hover: false, isOnVirtualBoard };
     }
 
     private onMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
@@ -121,10 +126,11 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         const moveNumberFontSize = this.props.fontSize && this.props.highlightPointSize === 'large' ? this.props.fontSize + 2 : (this.props.fontSize || 10);
         const winrateMargin = this.props.highlightPointSize === 'small' ? '3%' : '4.3%';
         const winrate = (this.props.winrate || {}) as WinRate;
+        const background = this.state.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
 
         return (
 
-            <div style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center' }}>
+            <div style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center', background }}>
 
                 {/* Vertical Grid Line */}
                 <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '50%' : 0, left: this.props.leftEdge ? '50%' : 0, transform: 'translateY(-50%)' }} />
