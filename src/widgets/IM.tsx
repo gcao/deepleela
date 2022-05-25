@@ -101,7 +101,7 @@ export default class IM extends React.Component<Props, States> {
         if (this.audioConnection) return;
 
         let connection = this.audioConnection = new RTCMultiConnection();
-        connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+        connection.socketURL = 'https://muazkhan.com:9001/';
         connection.socketMessageEvent = 'deepleela-review';
 
         connection.session = {

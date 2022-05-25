@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "/Users/gcao/daoqi/deepleela-server"
+			"path": "../deepleela-server"
 		}
 	],
 	"settings": {}
