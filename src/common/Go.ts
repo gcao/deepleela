@@ -133,7 +133,7 @@ export default class Go extends EventEmitter {
     play(row: number, col: number, mode: 'normal' | 'force_main' | 'cut_current' = 'normal') {
         // Convert cartesian coord to array offset
         let currentCoord = { x: row, y: col };
-        let { x, y } = { x: this.size - row, y: col - 1 };
+        let { x, y } = { x: (this.size - row) % this.size, y: (this.size + col - 1) % this.size };
         row = x;
         col = y;
 

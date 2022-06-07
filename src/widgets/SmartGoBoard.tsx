@@ -285,7 +285,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         this.setState({ isThinking: true, disabled: true });
         let result = await this.client.genmove(color);
-        this.setState({ isThinking: false, disabled: false });
+        // this.setState({ isThinking: false, disabled: false });
 
         switch (result.move) {
             case 'pass':
@@ -301,6 +301,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');
 
+        this.setState({ isThinking: false, disabled: false });
         this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
 
         if (this.props.showWinrate && this.game.isLatestCursor) {
