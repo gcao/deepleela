@@ -48,6 +48,12 @@ interface BoardStates {
     highlightWinrateVariationOffset?: { x: number, y: number };
     touchedCoord?: { x: number, y: number };
     disableAnimation?: boolean;
+    dragStart?: {x: number, y: number};
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 export default class Board extends React.Component<BoardProps, BoardStates> {
@@ -98,13 +104,14 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
             }
         }
 
-        this.state = { variationStates, branchStates };
+        const { vbSize, vbOffsetX, vbOffsetY } = this.props;
+        this.state = { variationStates, branchStates, vbSize, vbOffsetX, vbOffsetY };
     }
 
     private onClick(row: number, col: number) {
         if (!this.props.onIntersectionClicked) return;
-        row = (row - this.props.vbOffsetX + this.props.size) % this.props.size;
-        col = (col - this.props.vbOffsetY + this.props.size) % this.props.size;
+        row = (row - this.state.vbOffsetX + this.props.size) % this.props.size;
+        col = (col - this.state.vbOffsetY + this.props.size) % this.props.size;
         this.props.onIntersectionClicked(row, col);
     }
 
@@ -182,7 +189,8 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
     }
 
     getVisibleBoardState() {
-        const { size, vbSize, vbOffsetX, vbOffsetY } = this.props;
+        const { size } = this.props;
+        const { vbSize, vbOffsetX, vbOffsetY } = this.state;
         const visibleSize = size + 2 * vbSize;
         let state: State[][] = [];
 
@@ -196,6 +204,28 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         }
 
         return state;
+    }
+
+    private onDragStart(event) {
+        var dragStart = {x: event.clientX, y: event.clientY};
+        this.setState({ dragStart });
+    }
+
+    private onDragEnd(event) {
+        if (this.state.dragStart) {
+            var dragEnd = {x: event.clientX, y: event.clientY};
+            let { vbOffsetX, vbOffsetY } = this.state;
+            vbOffsetX += Math.round((dragEnd.y - this.state.dragStart.y ) / this.gridWidth);
+            vbOffsetY += Math.round((dragEnd.x - this.state.dragStart.x ) / this.gridWidth);
+            this.setState({ vbOffsetX, vbOffsetY });
+        }
+    }
+
+    private get gridWidth() {
+        const visibleBoardState = this.getVisibleBoardState();
+        const boardParent = document.getElementById(this.props.id || '');
+        const size = 100.0 / visibleBoardState.length;
+        return boardParent ? boardParent!.getBoundingClientRect().height * (size / 100.0) : 0;
     }
 
     render() {
@@ -214,17 +244,20 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         const startPoints = [dimension > 9 ? 3 : (dimension > 7 ? 2 : 1), dimension > 9 ? dimension - 4 : (dimension > 7 ? dimension - 3 : dimension - 2), (dimension - 1) / 2];
 
         return (
-            <div id={this.props.id} style={this.props.style} draggable={false}>
+            <div id={this.props.id} style={this.props.style} draggable={true}
+                onDragStart={e => this.onDragStart(e)}
+                onDragEnd={e => this.onDragEnd(e)}
+            >
 
                 <div style={{ background: this.props.style ? (this.props.style.background || '') : '', padding: 4, paddingBottom: `${0.6 + size}%`, }}>
 
                     {visibleBoardState.map((row, i) => {
-                        const realI = (i - this.props.vbOffsetX + this.props.size) % this.props.size;
+                        const realI = (i - this.state.vbOffsetX + this.props.size) % this.props.size;
                         return <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
                             {this.props.showCoordinate ? <div style={{ position: 'absolute', left: 0, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - realI}</div> : undefined}
 
                             {row.map((state, j) => {
-                                const realJ = (j - this.props.vbOffsetY + this.props.size) % this.props.size;
+                                const realJ = (j - this.state.vbOffsetY + this.props.size) % this.props.size;
                                 return <div key={`${i},${j}`}>
                                     <Intersection
                                         onClick={(r, c) => this.onClick(r, c)}
@@ -234,9 +267,9 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                         row={visibleBoardState.length - i}
                                         col={j + 1}
                                         // Daoqi virtual board parameters
-                                        vbSize={this.props.vbSize}
-                                        vbOffsetX={this.props.vbOffsetX}
-                                        vbOffsetY={this.props.vbOffsetY}
+                                        vbSize={this.state.vbSize}
+                                        vbOffsetX={this.state.vbOffsetX}
+                                        vbOffsetY={this.state.vbOffsetY}
                                         lineThickness={1}
                                         disabled={this.props.disabled}
                                         width={size}
@@ -245,7 +278,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                         bottomEdge={i === visibleBoardState.length - 1}
                                         leftEdge={j === 0}
                                         rightEdge={j === visibleBoardState.length - 1}
-                                        star={startPoints.indexOf(realI) >= 0 && startPoints.indexOf(realJ) >= 0}
+                                        star={startPoints.indexOf(i - this.state.vbSize) >= 0 && startPoints.indexOf(j - this.state.vbSize) >= 0}
                                         highlight={this.props.highlightCoord && i === (visibleBoardState.length - this.props.highlightCoord.x) && j === this.props.highlightCoord.y - 1}
                                         highlightPointSize={gridWidth > 25 ? 'large' : 'small'}
                                         needTouchConfirmation={this.props.needTouchConfirmation !== undefined ? this.props.needTouchConfirmation : gridWidth < 25}
@@ -272,7 +305,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                     })}
                     <div key='hlabel' style={{ position: 'absolute', bottom: 25 }}>
                         {visibleBoardState.map((_row, i) => {
-                            const realI = (i - this.props.vbOffsetX + this.props.size) % this.props.size;
+                            const realI = (i - this.state.vbOffsetX + this.props.size) % this.props.size;
                             // TODO: the calculation is not working for different board size
                             const width = (gridWidth * visibleBoardState.length - Math.round(gridWidth) * i) * 0.96 / (visibleBoardState.length - i);
                             return <div key={i} style={{ display: 'inline-block', float: 'left', width: width }}>
