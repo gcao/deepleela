@@ -83,10 +83,15 @@ export default class Go extends EventEmitter {
 
         let neighbors: Coordinate[] = [];
 
-        if (row > 0) neighbors.push({ x: row - 1, y: col }); // upper neighbor
-        if (row < boardSize - 1) neighbors.push({ x: row + 1, y: col }); // lower neighbor
-        if (col > 0) neighbors.push({ x: row, y: col - 1 }); // left neighbor
-        if (col < boardSize - 1) neighbors.push({ x: row, y: col + 1 }); // right neighbor
+        // if (row > 0) neighbors.push({ x: row - 1, y: col }); // upper neighbor
+        // if (row < boardSize - 1) neighbors.push({ x: row + 1, y: col }); // lower neighbor
+        // if (col > 0) neighbors.push({ x: row, y: col - 1 }); // left neighbor
+        // if (col < boardSize - 1) neighbors.push({ x: row, y: col + 1 }); // right neighbor
+
+        neighbors.push({ x: (row - 1 + boardSize) % boardSize, y: col }); // upper neighbor
+        neighbors.push({ x: (row + 1) % boardSize, y: col }); // lower neighbor
+        neighbors.push({ x: row, y: (col - 1 + boardSize) % boardSize }); // left neighbor
+        neighbors.push({ x: row, y: (col + 1) % boardSize }); // right neighbor
 
         return neighbors;
     }
