@@ -279,7 +279,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                         leftEdge={j === 0}
                                         rightEdge={j === visibleBoardState.length - 1}
                                         star={startPoints.indexOf(i - this.state.vbSize) >= 0 && startPoints.indexOf(j - this.state.vbSize) >= 0}
-                                        highlight={this.props.highlightCoord && i === (visibleBoardState.length - this.props.highlightCoord.x) && j === this.props.highlightCoord.y - 1}
+                                        highlight={this.props.highlightCoord && realI === (this.props.size - this.props.highlightCoord.x) && realJ === (this.props.highlightCoord.y - 1)}
                                         highlightPointSize={gridWidth > 25 ? 'large' : 'small'}
                                         needTouchConfirmation={this.props.needTouchConfirmation !== undefined ? this.props.needTouchConfirmation : gridWidth < 25}
                                         onTouch={(x, y) => this.setState({ touchedCoord: { x, y } })}

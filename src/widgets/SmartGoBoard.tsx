@@ -471,9 +471,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                     size={this.game.size}
                     states={this.game.board}
                     // Daoqi virtual board parameters
-                    vbSize={0}
-                    vbOffsetX={0}
-                    vbOffsetY={0}
+                    vbSize={3}
+                    vbOffsetX={3}
+                    vbOffsetY={3}
                     disabled={this.props.disabled || this.state.disabled || shouldBeDisabled}
                     onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                     showCoordinate={window.innerWidth >= 800}
