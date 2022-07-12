@@ -41,7 +41,7 @@ const EmptyDiv = () => (<div />);
 
 export default class AnalysisPanel extends React.Component<Props, PanelState> {
 
-    static readonly url = process.env.NODE_ENV === 'production' ? 'https://analysis.deepleela.com' : 'http://localhost:3304';
+    static readonly url = process.env.NODE_ENV === 'production' ? 'https://analysis.daoqi.org' : 'http://localhost:3304';
 
     private root: JQuery<HTMLElement>;
     get open() { return this.root.height()! > 0; }

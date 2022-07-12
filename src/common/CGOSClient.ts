@@ -23,8 +23,8 @@ export interface Update {
 
 export default class CGOSClient extends EventEmitter {
 
-    // static readonly url = process.env.NODE_ENV === 'production' ? `ws${location.protocol === 'https:' ? 's' : ''}://cgos.deepleela.com` : 'ws://192.168.31.54:3302';
-    static readonly url = 'ws://cgos.deepleela.com';
+    // static readonly url = process.env.NODE_ENV === 'production' ? `ws${location.protocol === 'https:' ? 's' : ''}://cgos.daoqi.org` : 'ws://192.168.31.54:3302';
+    static readonly url = 'ws://cgos.daoqi.org';
     static default: CGOSClient = new CGOSClient();
 
     private ws: WebSocket;
