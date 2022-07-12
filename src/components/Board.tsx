@@ -65,6 +65,8 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
     }
 
     static cartesianCoordToString(x: number, y: number) {
+        if (x == 0) x = 19;
+        if (y == 0) y = 19;
         return `${Board.alphabets[y - 1]}${x}`;
     }
 
