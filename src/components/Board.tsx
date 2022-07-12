@@ -112,7 +112,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
 
     private onClick(row: number, col: number) {
         if (!this.props.onIntersectionClicked) return;
-        row = (row - this.state.vbOffsetX + this.props.size) % this.props.size;
+        row = (row + this.state.vbOffsetX - 2 * this.state.vbSize + this.props.size) % this.props.size;
         col = (col - this.state.vbOffsetY + this.props.size) % this.props.size;
         this.props.onIntersectionClicked(row, col);
     }
