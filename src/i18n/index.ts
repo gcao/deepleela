@@ -10,6 +10,7 @@ const langs = {
     'zh-TW': zhTW,
 };
 
-const userLang: 'en-US' | 'zh-CN' = navigator.language as any;
+// const userLang: 'en-US' | 'zh-CN' = navigator.language as any;
+const userLang: 'en-US' | 'zh-CN' = 'zh-CN';
 
 export default (langs[userLang] || enUS);

@@ -218,7 +218,9 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
             var dragEnd = {x: event.clientX, y: event.clientY};
             let { vbOffsetX, vbOffsetY } = this.state;
             vbOffsetX += Math.round((dragEnd.y - this.state.dragStart.y ) / this.gridWidth);
+            vbOffsetX = vbOffsetX % this.props.size;
             vbOffsetY += Math.round((dragEnd.x - this.state.dragStart.x ) / this.gridWidth);
+            vbOffsetY = vbOffsetY % this.props.size;
             this.setState({ vbOffsetX, vbOffsetY });
         }
     }

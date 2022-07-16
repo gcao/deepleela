@@ -82,7 +82,8 @@ class App extends React.Component<AppProps, AppStates> {
   }
 
   async onNewAIGame(config: NewGameDialogStates) {
-    this.setState({ newGameDialogOpen: false, loadingDialogOpen: true, });
+    // this.setState({ newGameDialogOpen: false, loadingDialogOpen: true, });
+    this.setState({ newGameDialogOpen: false });
     let [success, pending] = await LocalGame.smartBoard!.newAIGame(config);
     this.setState({ loadingDialogOpen: false });
     if (!success || pending > 0) {

@@ -1,5 +1,8 @@
 
 export const lang = {
+    human: 'Human',
+    ai: 'AI',
+
     menu: {
         cgos: 'CGOS',
         joseki: 'Joseki',

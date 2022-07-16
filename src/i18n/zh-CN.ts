@@ -1,5 +1,8 @@
 
 export const lang = {
+    human: '凡人',
+    ai: 'AI',
+
     menu: {
         cgos: '遛狗场',
         joseki: '定式大全',

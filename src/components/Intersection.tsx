@@ -68,6 +68,9 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         const isOnVirtualBoard =
             this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
             this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
+        // const isOnVirtualBoard =
+        //     ((this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize) && this.props.col > this.props.vbSize && this.props.col <= this.props.size + this.props.vbSize) ||
+        //     ((this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize) && this.props.row > this.props.vbSize && this.props.row <= this.props.size + this.props.vbSize);
         this.state = { hover: false, isOnVirtualBoard };
     }
 
@@ -126,7 +129,9 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         const moveNumberFontSize = this.props.fontSize && this.props.highlightPointSize === 'large' ? this.props.fontSize + 2 : (this.props.fontSize || 10);
         const winrateMargin = this.props.highlightPointSize === 'small' ? '3%' : '4.3%';
         const winrate = (this.props.winrate || {}) as WinRate;
-        const background = this.state.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
+        // const background = this.state.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
+        // const background = this.state.isOnVirtualBoard ? '#B8B888' : '#C39350';
+        const background = this.state.isOnVirtualBoard ? 'inherited' : '#B8B888';
 
         return (
 
