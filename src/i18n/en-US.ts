@@ -2,6 +2,7 @@
 export const lang = {
     human: 'Human',
     ai: 'AI',
+    hint: 'Hint: drag the board to adjust the view point.',
 
     menu: {
         cgos: 'CGOS',

@@ -41,7 +41,8 @@ const EmptyDiv = () => (<div />);
 
 export default class AnalysisPanel extends React.Component<Props, PanelState> {
 
-    static readonly url = process.env.NODE_ENV === 'production' ? 'https://analysis.daoqi.org' : 'http://localhost:3304';
+    // static readonly url = process.env.NODE_ENV === 'production' ? 'https://analysis.daoqi.org' : 'http://localhost:3304';
+    static readonly url = 'http://analysis.daoqi.org:8080';
 
     private root: JQuery<HTMLElement>;
     get open() { return this.root.height()! > 0; }
@@ -81,7 +82,7 @@ export default class AnalysisPanel extends React.Component<Props, PanelState> {
         steps[0].delta = 0;
         steps[0].bestMove = '';
 
-        for (let i = 1; i <= (process.env.NODE_ENV === 'production' ? steps.length : 8); i++) {
+        for (let i = 1; i <= (process.env.NODE_ENV === 'production' ? steps.length : 50); i++) {
             let moves = data.moves.slice(0, i);
             let genmove = moves[moves.length - 1][0] === 'B' ? 'W' : 'B';
 
@@ -101,6 +102,9 @@ export default class AnalysisPanel extends React.Component<Props, PanelState> {
             let lastWinrate = 100 - bestWinrate;
             steps[i - 1].value = lastWinrate;
             steps[i - 1].delta = lastWinrate - steps[i - 1].value;
+            if (!steps[i]) {
+                break;
+            }
             steps[i].value = bestWinrate;
             steps[i].delta = variations.length === 0 ? 0 : bestWinrate - steps[i - 1].value;
             steps[i].bestMove = variations.length === 0 ? '' : variations[0].variation[0].split(' ')[0];

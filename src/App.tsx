@@ -258,6 +258,9 @@ class App extends React.Component<AppProps, AppStates> {
           {/* Footer Aera */}
           <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
             <div style={{ fontSize: 10, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
+              {i18n.hint}
+              <br/>
+              <br/>
               &copy; 2018 DeepLeela
             </div>
           </div>
