@@ -42,7 +42,11 @@ interface AppStates {
 }
 
 interface AppProps {
-
+  sgf?: string|null;
+  move?: number;
+  vbSize?: number;
+  vbOffsetX?: number;
+  vbOffsetY?: number;
 }
 
 class App extends React.Component<AppProps, AppStates> {
@@ -55,6 +59,10 @@ class App extends React.Component<AppProps, AppStates> {
 
     if (localStorage.getItem('heatmap') === null) UserPreferences.heatmap = true;
     this.state = { paddingTop: 0, boardBottomMargin: 0, };
+
+    if (this.props.sgf) {
+      this.loadSgf(this.props.sgf, this.props.move as number, {});
+    }
   }
 
   static history: History;
@@ -96,6 +104,35 @@ class App extends React.Component<AppProps, AppStates> {
     this.setState({ loadingDialogOpen: true, });
     // if (!await LocalGame.smartBoard!.newSelfGame(config)) { UIkit.notification(i18n.notifications.aiNotAvailable); }
     this.setState({ loadingDialogOpen: false, newSelfDialogOpen: false });
+  }
+
+  async loadSgf(sgf: string | undefined, move: number, options?: SGFDialogStates) {
+    try {
+      if (!sgf) return;
+
+      let { game, whitePlayer, blackPlayer } = SGF.import(sgf);
+      UserPreferences.whitePlayer = whitePlayer || '';
+      UserPreferences.blackPlayer = blackPlayer || '';
+      UserPreferences.kifu = sgf;
+
+      if (options!.online) {
+        await ReviewClient.default.init();
+        // this.setState({ loadingDialogOpen: true });
+        let room = await ReviewClient.default.createReviewRoom({ nickname: UserPreferences.nickname, roomName: (options!.roomName || ''), uuid: UserPreferences.uuid, sgf, });
+        if (!room) return;
+
+        App.history.push(`/review/${room.roomId}`);
+        return;
+      }
+
+      setTimeout(() => {
+        LocalGame.smartBoard!.importGame({ game, whitePlayer, blackPlayer }, 'review');
+        LocalGame.smartBoard!.changeCursor(move);
+        window.dispatchEvent(new Event('resize'));
+      }, 500);
+    } finally {
+      // this.setState({ loadSgfDialogOpen: false, loadingDialogOpen: false });
+    }
   }
 
   async onLoadSgf(sgf: string | undefined, options?: SGFDialogStates) {

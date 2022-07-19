@@ -20,10 +20,6 @@ import 'rc-tooltip/assets/bootstrap.css';
 import Tooltip from 'rc-tooltip';
 const Handle = Slider.Handle;
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const handle = (props) => {
     const { value, dragging, index, ...restProps } = props;
     return (
@@ -303,7 +299,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         }
 
         // Let it think for 0-15 seconds to make the experience more realistic.
-        await sleep(Math.random() * 15000);
+        await Utils.sleep(Math.random() * 15000);
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');
@@ -515,3 +511,4 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         );
     }
 }
+
