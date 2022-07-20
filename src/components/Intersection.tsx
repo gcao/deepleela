@@ -68,9 +68,6 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         const isOnVirtualBoard =
             this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
             this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
-        // const isOnVirtualBoard =
-        //     ((this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize) && this.props.col > this.props.vbSize && this.props.col <= this.props.size + this.props.vbSize) ||
-        //     ((this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize) && this.props.row > this.props.vbSize && this.props.row <= this.props.size + this.props.vbSize);
         this.state = { hover: false, isOnVirtualBoard };
     }
 

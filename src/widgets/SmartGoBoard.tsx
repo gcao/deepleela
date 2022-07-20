@@ -66,7 +66,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     private readonly client = GameClient.default;
     private wheeling = false;
 
-    game = new Go(19);
+    game = new Go(UserPreferences.gameSize);
     gameMode: GameMode = 'self';
     state: SmartGoBoardStates = { remaingTime: '--:--' };
     userStone: StoneColor = 'B';
@@ -92,7 +92,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         UserPreferences.blackPlayer = this.userStone === 'B' ? 'Human' : this.engine;
 
         this.board.clearVariations();
-        this.game = new Go(19);
+        this.game = new Go(config.boardSize);
         this.game.time = config.time;
         this.game.komi = config.komi;
         this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
@@ -136,7 +136,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         UserPreferences.gameEngine = this.engine;
 
         this.game = new Go(config.boardSize);
-        this.client.initBoard({ handicap: 0, komi: this.game.komi, time: 60 * 24, size: config.boardSize });
+        this.client.initBoard({ handicap: 0, komi: this.game.komi, time: 60 * 24, boardSize: config.boardSize });
         if (config.handicap > 1) {
             this.game.setHandicap(config.handicap);
             await this.reloadCurrentBoard();
@@ -208,7 +208,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.setState({ disabled: true });
 
         if (this.client.aiConnected) {
-            await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, size: this.game.size });
+            await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, boardSize: this.game.size });
             await this.client.loadMoves(this.game.genMoves(true));
         }
 
@@ -337,7 +337,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.setState({ disabled: true, isThinking: true });
 
         // peek winrate
-        await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, size: this.game.size });
+        await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, boardSize: this.game.size });
         let moves = this.game.genMoves();
         await this.client.loadMoves(moves);
 

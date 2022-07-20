@@ -148,9 +148,9 @@ export default class GameClient extends EventEmitter {
         });
     }
 
-    initBoard(configs: { komi: number, handicap: number, time: number, size: number }) {
+    initBoard(configs: { komi: number, handicap: number, time: number, boardSize: number }) {
         return new Promise(resolve => {
-            this.sendGtpCommand(CommandBuilder.boardsize(configs.size || 19, this.msgId++));
+            this.sendGtpCommand(CommandBuilder.boardsize(configs.boardSize || 19, this.msgId++));
             if (configs.komi > 0) this.sendGtpCommand(CommandBuilder.komi(configs.komi, this.msgId++));
             if (configs.handicap > 0) this.sendGtpCommand(CommandBuilder.fixed_handicap(configs.handicap, this.msgId++));
             if (configs.time > 0) this.sendGtpCommand(CommandBuilder.time_settings(configs.time * 60, 25 * 60, 25, this.msgId++));

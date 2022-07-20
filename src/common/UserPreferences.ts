@@ -40,6 +40,21 @@ export default class UserPreferences {
     static get cursor() { return Number.parseInt(localStorage.getItem('cursor') || '-1'); }
     static set cursor(value: number) { localStorage.setItem('cursor', value.toString()); }
 
+    static get gameSize() {
+        const defaultSize = 19;
+        try {
+            let preferences = localStorage.getItem('newgame');
+            if (preferences) {
+                let pref = JSON.parse(preferences);
+                return pref.boardSize || defaultSize;
+            } else {
+                return defaultSize;
+            }
+        } catch (error) {
+            return defaultSize;
+        }
+    }
+
     static get uuid() {
         let uuid = localStorage.getItem('uuid') || '';
         if (uuid) return uuid;

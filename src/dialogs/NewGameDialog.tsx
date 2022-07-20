@@ -21,7 +21,7 @@ export interface NewGameDialogStates {
     komi: number,
     handicap: number,
     time: number,
-    size: number,
+    // size: number,
     engine: string;
     boardSize: number;
 }
