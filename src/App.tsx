@@ -44,9 +44,6 @@ interface AppStates {
 interface AppProps {
   sgf?: string|null;
   move?: number;
-  vbSize?: number;
-  vbOffsetX?: number;
-  vbOffsetY?: number;
 }
 
 class App extends React.Component<AppProps, AppStates> {

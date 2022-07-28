@@ -12,6 +12,7 @@ import { State } from '../components/Intersection';
 import { StoneColor } from '../common/Constants';
 import * as moment from 'moment';
 import * as Utils from '../lib/Utils';
+import { getUrlParams } from '../lib/URL';
 import SGF from '../common/SGF';
 import UserPreferences from '../common/UserPreferences';
 import Slider from 'rc-slider';
@@ -74,6 +75,28 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     configs: NewGameDialogStates;
 
     get currentCursor() { return this.game.cursor; }
+
+    vbSize = 3;
+    vbOffsetX = 3;
+    vbOffsetY = 3;
+
+    constructor(props: any, ctx: any) {
+        super(props, ctx);
+
+        const urlParams = getUrlParams();
+        const vbSizeParam = urlParams.get('vbsize');
+        if (vbSizeParam) {
+            this.vbSize = parseInt(vbSizeParam);
+        }
+        const vbOffsetXParam = urlParams.get('vboffsetx');
+        if (vbOffsetXParam) {
+            this.vbOffsetX = parseInt(vbOffsetXParam);
+        }
+        const vbOffsetYParam = urlParams.get('vboffsety');
+        if (vbOffsetYParam) {
+            this.vbOffsetY = parseInt(vbOffsetYParam);
+        }
+    }
 
     componentDidMount() {
         this.game.on('tick', () => {
@@ -473,10 +496,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                     style={{ background: 'transparent', padding: 15, gridColor: tm.gridLineColor, blackStoneColor: tm.blackStoneColor, whiteStoneColor: tm.whiteStoneColor, coordTextColor: tm.coordTextColor, starPointColor: tm.starPointColor, winrateColor: tm.winrateColor, winrateBackgroundColor: tm.themeColor }}
                     size={this.game.size}
                     states={this.game.board}
-                    // Daoqi virtual board parameters
-                    vbSize={3}
-                    vbOffsetX={3}
-                    vbOffsetY={3}
+                    vbSize={this.vbSize}
+                    vbOffsetX={this.vbOffsetX}
+                    vbOffsetY={this.vbOffsetY}
                     disabled={this.props.disabled || this.state.disabled || shouldBeDisabled}
                     onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                     showCoordinate={window.innerWidth >= 800}
