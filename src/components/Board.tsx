@@ -258,7 +258,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                     {visibleBoardState.map((row, i) => {
                         const realI = (i - this.state.vbOffsetX + this.props.size) % this.props.size;
                         return <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
-                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: 0, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - realI}</div> : undefined}
+                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: -10, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - realI}</div> : undefined}
 
                             {row.map((state, j) => {
                                 const realJ = (j - this.state.vbOffsetY + this.props.size) % this.props.size;
@@ -307,11 +307,12 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
 
                         </div>
                     })}
-                    <div key='hlabel' style={{ position: 'absolute', bottom: 25 }}>
+                    <div key='hlabel' style={{ position: 'absolute', bottom: 15 }}>
                         {visibleBoardState.map((_row, i) => {
                             const realI = (i - this.state.vbOffsetX + this.props.size) % this.props.size;
                             // TODO: the calculation is not working for different board size
-                            const width = (gridWidth * visibleBoardState.length - Math.round(gridWidth) * i) * 0.96 / (visibleBoardState.length - i);
+                            // const width = (gridWidth * visibleBoardState.length - Math.round(gridWidth) * i) * 0.96 / (visibleBoardState.length - i);
+                            const width = (gridWidth * visibleBoardState.length - gridWidth * i) * 0.96 / (visibleBoardState.length - i);
                             return <div key={i} style={{ display: 'inline-block', float: 'left', width: width }}>
                                 <div style={{ left: 0, top: -15, textAlign: 'center', fontSize: 8, fontWeight: 100, color: coordTextColor }}>
                                     {'ABCDEFGHJKLMNOPQRST'[realI]}

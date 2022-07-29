@@ -135,10 +135,10 @@ export default class Intersection extends React.Component<IntersectionProps, Int
             <div style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center', background }}>
 
                 {/* Vertical Grid Line */}
-                <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '50%' : 0, left: this.props.leftEdge ? '50%' : 0, transform: 'translateY(-50%)' }} />
+                <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '30%' : 0, left: this.props.leftEdge ? '30%' : 0, transform: 'translateY(-50%)' }} />
 
                 {/* Horizontal Grid Line */}
-                <div style={{ pointerEvents: 'none', background: gridColor, width: this.props.lineThickness || 1, position: 'absolute', left: '50%', top: this.props.topEdge ? '50%' : 0, bottom: this.props.bottomEdge ? '50%' : 0, transform: 'translateX(-50%)' }} />
+                <div style={{ pointerEvents: 'none', background: gridColor, width: this.props.lineThickness || 1, position: 'absolute', left: '50%', top: this.props.topEdge ? '30%' : 0, bottom: this.props.bottomEdge ? '30%' : 0, transform: 'translateX(-50%)' }} />
 
                 {/* Star Point */}
                 {this.props.star ? <div style={{ pointerEvents: 'none', background: this.props.style ? (this.props.style.startPointColor || '#d3d3d380') : '#d3d3d380', borderRadius: '50%', height: 6, width: 6, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', }} /> : null}
