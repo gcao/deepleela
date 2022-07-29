@@ -45,6 +45,9 @@ export default class BoardController extends React.Component<BoardControllerProp
         this.root = document.getElementById('board-controller') as HTMLDivElement;
         this.calcPos();
         jQuery(window).on('resize', this.calcPos);
+        setTimeout(() => {
+            this.expandSelf();
+        }, 50);
     }
 
     componentWillUnmount() {

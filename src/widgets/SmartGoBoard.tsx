@@ -84,15 +84,15 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         super(props, ctx);
 
         const urlParams = getUrlParams();
-        const vbSizeParam = urlParams.get('vbsize');
+        const vbSizeParam = urlParams.get('vbSize');
         if (vbSizeParam) {
             this.vbSize = parseInt(vbSizeParam);
         }
-        const vbOffsetXParam = urlParams.get('vboffsetx');
+        const vbOffsetXParam = urlParams.get('vbOffsetX');
         if (vbOffsetXParam) {
             this.vbOffsetX = parseInt(vbOffsetXParam);
         }
-        const vbOffsetYParam = urlParams.get('vboffsety');
+        const vbOffsetYParam = urlParams.get('vbOffsetY');
         if (vbOffsetYParam) {
             this.vbOffsetY = parseInt(vbOffsetYParam);
         }
@@ -321,8 +321,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                 return;
         }
 
-        // Let it think for 0-15 seconds to make the experience more realistic.
-        await Utils.sleep(Math.random() * 15000);
+        await Utils.aiThinking();
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');
