@@ -24,6 +24,11 @@ import ReviewClient from './common/ReviewClient';
 import BrowserHelper from './components/BrowserHelper';
 import Joseki from './routes/Joseki';
 
+export enum Action {
+  None,
+  Load,
+}
+
 interface AppStates {
   newGameDialogOpen?: boolean,
   newSelfDialogOpen?: boolean;
@@ -42,6 +47,7 @@ interface AppStates {
 }
 
 interface AppProps {
+  action?: Action;
   sgf?: string|null;
   move?: number;
 }
@@ -57,7 +63,7 @@ class App extends React.Component<AppProps, AppStates> {
     if (localStorage.getItem('heatmap') === null) UserPreferences.heatmap = true;
     this.state = { paddingTop: 0, boardBottomMargin: 0, };
 
-    if (this.props.sgf) {
+    if (this.props.action === Action.Load && this.props.sgf) {
       this.loadSgf(this.props.sgf, this.props.move as number, {});
     }
   }
