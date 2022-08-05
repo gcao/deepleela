@@ -98,14 +98,19 @@ class App extends React.Component<AppProps, AppStates> {
     let [success, pending] = await LocalGame.smartBoard!.newAIGame(config);
     this.setState({ loadingDialogOpen: false });
     if (!success || pending > 0) {
-      // UIkit.notification(i18n.notifications.serversBusy(pending));
-      // UIkit.notification(i18n.notifications.aiNotAvailable);
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.serversBusy(pending));
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.aiNotAvailable);
     }
   }
 
   async onNewSelfGame(config: NewGameDialogStates) {
     this.setState({ loadingDialogOpen: true, });
-    // if (!await LocalGame.smartBoard!.newSelfGame(config)) { UIkit.notification(i18n.notifications.aiNotAvailable); }
+    if (!await LocalGame.smartBoard!.newSelfGame(config)) {
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.aiNotAvailable);
+    }
     this.setState({ loadingDialogOpen: false, newSelfDialogOpen: false });
   }
 
@@ -227,11 +232,13 @@ class App extends React.Component<AppProps, AppStates> {
                 <div className="uk-nav uk-dropdown-nav" >
                   <ul className="uk-nav uk-dropdown-nav">
 
+                    {/*
                     <div className='uk-nav uk-dropdown-nav'>
                       <li><a href='#' onClick={e => App.history.push('/cgos')}>CGOS</a></li>
                       <li><a href="#" onClick={e => App.history.push('/joseki')}>{i18n.menu.joseki}</a> </li>
                       <li className="uk-nav-divider"></li>
                     </div>
+                    */}
 
                     {
                       this.isOnlineMode ?
@@ -245,7 +252,7 @@ class App extends React.Component<AppProps, AppStates> {
 
                     <li><a href="#" onClick={e => this.outputSgf()}>{i18n.menu.exportsgf}</a></li>
 
-                    {
+                    {/*
                       this.isOnlineMode ?
                         undefined :
                         <div className='uk-nav uk-dropdown-nav'>
@@ -254,7 +261,7 @@ class App extends React.Component<AppProps, AppStates> {
                           <li><a href="#" onClick={e => { UserPreferences.heatmap = !UserPreferences.heatmap; this.forceUpdate(); }}><span className={UserPreferences.heatmap ? '' : 'display-none'} uk-icon="check"></span> {i18n.menu.showHeatmap}</a></li>
                           <li><a href="#" onClick={e => { UserPreferences.winrate = !UserPreferences.winrate; this.forceUpdate(); }}><span className={UserPreferences.winrate ? '' : 'display-none'} uk-icon="check"></span> {i18n.menu.showWinrate}</a></li>
                         </div>
-                    }
+                    */}
 
                     {
                       this.isOnlineMode ?

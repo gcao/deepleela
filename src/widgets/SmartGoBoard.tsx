@@ -219,7 +219,8 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         let [success, pending] = await this.client.requestAI(this.engine || 'KataGo');
         if (!success) {
-            // UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
+            // @ts-ignore
+            UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
             return false;
         }
 
@@ -312,11 +313,13 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         switch (result.move) {
             case 'pass':
-                // UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
                 this.game.pass();
                 return;
             case 'resign':
-                // UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
                 this.setState({ disabled: true });
                 return;
         }
