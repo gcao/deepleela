@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as constants from './common/Constants';
 import i18n from './i18n';
 import NewGameDialog, { NewGameDialogStates } from './dialogs/NewGameDialog';
+import NewAIvsAIGameDialog, { NewAIvsAIGameDialogStates } from './dialogs/NewAIvsAIGameDialog';
 import SGFDialog, { SGFDialogStates } from './dialogs/SGFDialog';
 import LoadingDialog from './dialogs/LoadingDialog';
 import SettingsDialog from './dialogs/SettingsDialog';
@@ -32,6 +33,7 @@ export enum Action {
 interface AppStates {
   newGameDialogOpen?: boolean,
   newSelfDialogOpen?: boolean;
+  newAIvsAIGameDialogOpen?: boolean,
   loadSgfDialogOpen?: boolean,
   exportSgfDialogOpen?: boolean,
   loadingDialogOpen?: boolean;
@@ -96,6 +98,19 @@ class App extends React.Component<AppProps, AppStates> {
     // this.setState({ newGameDialogOpen: false, loadingDialogOpen: true, });
     this.setState({ newGameDialogOpen: false });
     let [success, pending] = await LocalGame.smartBoard!.newAIGame(config);
+    this.setState({ loadingDialogOpen: false });
+    if (!success || pending > 0) {
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.serversBusy(pending));
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.aiNotAvailable);
+    }
+  }
+
+  async onNewAIvsAIGame(config: NewAIvsAIGameDialogStates) {
+    // this.setState({ newAIvsAIGameDialogOpen: false, loadingDialogOpen: true, });
+    this.setState({ newAIvsAIGameDialogOpen: false });
+    let [success, pending] = await LocalGame.smartBoard!.newAIvsAIGame(config);
     this.setState({ loadingDialogOpen: false });
     if (!success || pending > 0) {
       // @ts-ignore
@@ -246,6 +261,7 @@ class App extends React.Component<AppProps, AppStates> {
                         <div className='uk-nav uk-dropdown-nav'>
                           <li><a href="#" onClick={e => this.setState({ newGameDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'ai' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_vs_leela}</a></li>
                           <li><a href="#" onClick={e => this.setState({ newSelfDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'self' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_vs_self}</a></li>
+                          <li><a href="#" onClick={e => this.setState({ newAIvsAIGameDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'ai-ai' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_ai_vs_ai}</a></li>
                           <li><a href="#" onClick={e => this.setState({ loadSgfDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'review' ? 'deepskyblue' : undefined }}>{i18n.menu.loadsgf}</a></li>
                         </div>
                     }
@@ -315,6 +331,7 @@ class App extends React.Component<AppProps, AppStates> {
           {/* Dialogs Aera */}
           <NewGameDialog isOpen={this.state.newGameDialogOpen} onCancel={() => this.setState({ newGameDialogOpen: false })} onOk={c => this.onNewAIGame(c)} enableSize enableStone />
           <NewGameDialog isOpen={this.state.newSelfDialogOpen} onCancel={() => this.setState({ newSelfDialogOpen: false })} onOk={c => this.onNewSelfGame(c)} enableSize />
+          <NewAIvsAIGameDialog isOpen={this.state.newAIvsAIGameDialogOpen} onCancel={() => this.setState({ newAIvsAIGameDialogOpen: false })} onOk={c => this.onNewAIvsAIGame(c)} enableSize />
           <SGFDialog isOpen={this.state.loadSgfDialogOpen} onCancel={() => this.setState({ loadSgfDialogOpen: false })} onOk={(sgf, options) => this.onLoadSgf(sgf, options)} showOnlineMode />
           <SGFDialog isOpen={this.state.exportSgfDialogOpen} sgf={this.state.sgf} readOnly onCancel={() => this.setState({ exportSgfDialogOpen: false })} onOk={() => this.setState({ exportSgfDialogOpen: false })} />
           <SettingsDialog isOpen={this.state.settingsDialogOpen} onOk={() => this.setState({ settingsDialogOpen: false })} />

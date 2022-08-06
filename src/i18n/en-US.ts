@@ -10,6 +10,7 @@ export const lang = {
 
         newgame_vs_leela: 'Challenge AI',
         newgame_vs_self: 'Free Practice',
+        newgame_ai_vs_ai: 'AI vs AI',
         loadsgf: 'Review SGF',
         exportsgf: 'Export SGF',
 
@@ -29,7 +30,9 @@ export const lang = {
         newgame: {
             title: 'New Game',
             yourColor: 'Your Color',
-            engine: 'Go Engine',
+            engine: 'AI Engine',
+            engineB: 'AI Engine (B)',
+            engineW: 'AI Engine (W)',
             komi: 'Komi',
             handicap: 'Handicap',
             time: 'Time (minutes)',

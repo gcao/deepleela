@@ -8,6 +8,7 @@ import * as jQuery from 'jquery';
 import GameClient from '../common/GameClient';
 import Go from '../common/Go';
 import { NewGameDialogStates } from '../dialogs/NewGameDialog';
+import { NewAIvsAIGameDialogStates } from 'src/dialogs/NewAIvsAIGameDialog';
 import { State } from '../components/Intersection';
 import { StoneColor } from '../common/Constants';
 import * as moment from 'moment';
@@ -53,13 +54,14 @@ interface SmartGoBoardStates {
     heatmap?: number[][];
     isThinking?: boolean;
 
+    isAIvsAI?: boolean;
     whitePlayer?: string;
     blackPlayer?: string;
 
     forceColor?: StoneColor;
 }
 
-export type GameMode = 'ai' | 'self' | 'guest' | 'review';
+export type GameMode = 'ai' | 'ai-ai' | 'self' | 'guest' | 'review';
 
 export default class SmartGoBoard extends React.Component<SmartGoBoardProps, SmartGoBoardStates> {
 
@@ -72,7 +74,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     state: SmartGoBoardStates = { remaingTime: '--:--' };
     userStone: StoneColor = 'B';
     engine: string;
-    configs: NewGameDialogStates;
 
     get currentCursor() { return this.game.cursor; }
 
@@ -110,7 +111,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.gameMode = 'ai';
         this.userStone = config.selectedColor;
         this.engine = config.engine;
-        this.configs = config;
         UserPreferences.whitePlayer = this.userStone === 'W' ? 'Human' : this.engine;
         UserPreferences.blackPlayer = this.userStone === 'B' ? 'Human' : this.engine;
 
@@ -127,7 +127,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         UserPreferences.gameMode = this.gameMode;
         UserPreferences.userStone = this.userStone;
         UserPreferences.gameEngine = this.engine;
-        UserPreferences.komi = this.configs.komi;
 
         if (config.handicap > 1) {
             this.game.setHandicap(config.handicap);
@@ -144,6 +143,59 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         this.game.start();
         this.returnToMainBranch();
+
+        return results;
+    }
+
+    async newAIvsAIGame(config: NewAIvsAIGameDialogStates): Promise<[boolean, number]> {
+        this.gameMode = 'ai-ai';
+        this.state.isAIvsAI = true;
+        this.userStone = 'B';
+        this.engine = config.engineW;
+        UserPreferences.blackPlayer = config.engineB;
+        UserPreferences.whitePlayer = config.engineW;
+
+        this.board.clearVariations();
+        this.game = new Go(config.boardSize);
+        this.game.time = config.time;
+        this.game.komi = config.komi;
+        this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
+
+        let results = await this.client.requestAI(config.engineB || 'KataGo');
+        if (!results[0]) return results;
+        this.client.initBoard(config);
+
+        UserPreferences.gameMode = this.gameMode;
+        UserPreferences.userStone = this.userStone;
+        UserPreferences.gameEngine = this.engine;
+        UserPreferences.komi = config.komi;
+
+        if (config.handicap > 1) {
+            this.game.setHandicap(config.handicap);
+            await this.client.loadMoves(this.game.genMoves(true));
+        }
+
+        if (config.handicap === 0) {
+            await this.genmove('B');
+        } else if (config.handicap > 0) {
+            await this.pass();
+        }
+
+        this.game.start();
+        this.returnToMainBranch();
+
+        var lastMoveIsPass = false;
+        while (this.game.length < 350) {
+            let move = await this.genmove(this.game.currentColor);
+            if (move == 'pass') {
+                if (lastMoveIsPass) {
+                    break;
+                }
+                lastMoveIsPass = true;
+            } else if (move == 'resign') {
+                break;
+            }
+        }
 
         return results;
     }
@@ -304,7 +356,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         await this.genmove(this.game.currentColor);
     }
 
-    private async genmove(color: StoneColor) {
+    private async genmove(color: StoneColor): Promise<string> {
         await this.checkAIOnline();
 
         this.setState({ isThinking: true, disabled: true });
@@ -313,15 +365,17 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         switch (result.move) {
             case 'pass':
+                // TODO: handle AI vs AI
                 // @ts-ignore
                 UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
                 this.game.pass();
-                return;
+                return result.move;
             case 'resign':
+                // TODO: handle AI vs AI
                 // @ts-ignore
                 UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
                 this.setState({ disabled: true });
-                return;
+                return result.move;
         }
 
         await Utils.aiThinking();
@@ -336,6 +390,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
             await this.peekWinrate();
         }
 
+        return result.move;
     }
 
     private async peekWinrate() {
@@ -520,7 +575,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                             <span style={{ opacity: 0.75, maxWidth: 150, textOverflow: 'ellipsis' }}>{blackPlayer || '---'}</span>
                         </div>
 
+                        {/*
                         <div style={{ color: this.game.currentColor === 'B' ? constants.BlackStoneColor : 'lightgrey', marginTop: 12, fontSize: 11, position: 'absolute', left: '50%', transform: 'translate(-50%, -50%)', }}>{this.gameMode === 'self' ? '--:--' : this.state.remaingTime}</div>
+                        */}
 
                         <div style={{ marginRight: playerMargin, paddingTop: 4, display: 'flex', alignItems: 'center', alignContent: 'center' }}>
                             <div style={{ position: 'relative', width: 12, height: 12, marginRight: 4, marginTop: -1 }}>

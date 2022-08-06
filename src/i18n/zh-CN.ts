@@ -10,6 +10,7 @@ export const lang = {
 
         newgame_vs_leela: '对战 AI',
         newgame_vs_self: '自由探索',
+        newgame_ai_vs_ai: 'AI 对战 AI',
         loadsgf: '复盘 SGF',
         exportsgf: '导出 SGF',
 
@@ -30,6 +31,8 @@ export const lang = {
             title: '新对局',
             yourColor: '执子颜色',
             engine: 'AI 引擎',
+            engineB: 'AI 引擎（黑）',
+            engineW: 'AI 引擎（白）',
             komi: '贴目',
             handicap: '让子',
             time: '游戏时间 (分钟)',
