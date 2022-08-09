@@ -170,14 +170,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         UserPreferences.gameEngine = this.engine;
         UserPreferences.komi = config.komi;
 
-        if (config.handicap > 1) {
+        if (config.handicap > 0) {
             this.game.setHandicap(config.handicap);
             await this.client.loadMoves(this.game.genMoves(true));
-        }
-
-        if (config.handicap === 0) {
-            await this.genmove('B');
-        } else if (config.handicap > 0) {
             await this.pass();
         }
 
@@ -187,13 +182,17 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         var lastMoveIsPass = false;
         while (this.game.length < 350) {
             let move = await this.genmove(this.game.currentColor);
-            if (move == 'pass') {
-                if (lastMoveIsPass) {
+            switch(move) {
+                case 'pass':
+                    if (lastMoveIsPass) {
+                        lastMoveIsPass = true;
+                        break;
+                    }
+                case 'resign':
+                    lastMoveIsPass = false;
                     break;
-                }
-                lastMoveIsPass = true;
-            } else if (move == 'resign') {
-                break;
+                default:
+                    lastMoveIsPass = false;
             }
         }
 
@@ -384,7 +383,8 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.game.play(coord.x, coord.y, 'force_main');
 
         this.setState({ isThinking: false, disabled: false });
-        this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
+        // TODO: this.clent.heatmap() does not work?
+        // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
 
         if (this.props.showWinrate && this.game.isLatestCursor) {
             await this.peekWinrate();

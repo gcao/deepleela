@@ -1,5 +1,6 @@
 
 export const lang = {
+    title: 'Welcome to Daoqi!',
     human: 'Human',
     ai: 'AI',
     hint: 'Hint: drag the board to adjust the view point.',

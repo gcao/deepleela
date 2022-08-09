@@ -1,5 +1,6 @@
 
 export const lang = {
+    title: '欢迎进入道棋的奇妙世界！',
     human: '凡人',
     ai: 'AI',
     hint: '提示：拖拽棋盘可以帮助调整对局视角。',

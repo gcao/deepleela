@@ -231,9 +231,9 @@ class App extends React.Component<AppProps, AppStates> {
           {/* Head Aera */}
           <div style={{ position: 'relative' }}>
             <div id='logo' style={{ margin: 0, marginTop: 22, fontWeight: 100, fontSize: 22, display: 'flex', justifyContent: 'center', }}>
-              <img src='/favicon.ico' style={{ width: 36, height: 36 }} alt='DeepLeela' />
+              {/* <img src='/favicon.ico' style={{ width: 36, height: 36 }} alt='DeepLeela' /> */}
               <Link to={location.pathname.startsWith('/cgos/') ? '/cgos' : '/'} onClick={e => this.forceUpdate()}>
-                <span style={{ display: 'inline-block', marginLeft: 8, verticalAlign: 'middle', lineHeight: '38px', fontFamily: 'Questrial', fontWeight: 100, opacity: 0.7, color: ThemeManager.default.logoColor }}>DeepLeela</span>
+                <span style={{ display: 'inline-block', marginLeft: 8, verticalAlign: 'middle', lineHeight: '38px', fontFamily: 'Questrial', fontWeight: 100, opacity: 0.7, color: ThemeManager.default.logoColor }}>{i18n.title}</span>
               </Link>
             </div>
 
@@ -320,11 +320,8 @@ class App extends React.Component<AppProps, AppStates> {
 
           {/* Footer Aera */}
           <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
-            <div style={{ fontSize: 10, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
+            <div style={{ fontSize: 12, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
               {i18n.hint}
-              <br/>
-              <br/>
-              &copy; 2018 DeepLeela
             </div>
           </div>
 
