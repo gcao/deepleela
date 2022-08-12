@@ -50,7 +50,6 @@ interface IntersectionProps {
 
 interface IntersectionStates {
     hover: boolean;
-    isOnVirtualBoard: boolean;
     touchConfirmed?: boolean;
     firstTouch?: boolean;
 }
@@ -63,12 +62,14 @@ export enum State {
 
 export default class Intersection extends React.Component<IntersectionProps, IntersectionStates> {
 
+    get isOnVirtualBoard() {
+        return this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
+            this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
+    }
+
     constructor(props: IntersectionProps, ctx: any) {
         super(props, ctx);
-        const isOnVirtualBoard =
-            this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
-            this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
-        this.state = { hover: false, isOnVirtualBoard };
+        this.state = { hover: false };
     }
 
     private onMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
@@ -119,20 +120,22 @@ export default class Intersection extends React.Component<IntersectionProps, Int
             this.setState({ firstTouch: false, touchConfirmed: false });
         }
     }
+
     render() {
+        const key = this.props.row + '-' + this.props.col;
         const gridColor = this.props.style ? (this.props.style.color || 'black') : 'black';
         const highlightSize = this.props.highlightPointSize === 'small' ? 5 : 8;
         // const moveNumberPaddingTop = this.props.highlightPointSize === 'small' ? 0 : 2;
         const moveNumberFontSize = this.props.fontSize && this.props.highlightPointSize === 'large' ? this.props.fontSize + 2 : (this.props.fontSize || 10);
         const winrateMargin = this.props.highlightPointSize === 'small' ? '3%' : '4.3%';
         const winrate = (this.props.winrate || {}) as WinRate;
-        // const background = this.state.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
-        // const background = this.state.isOnVirtualBoard ? '#B8B888' : '#C39350';
-        const background = this.state.isOnVirtualBoard ? 'inherited' : '#B8B888';
+        // const background = this.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
+        // const background = this.isOnVirtualBoard ? '#B8B888' : '#C39350';
+        const background = this.isOnVirtualBoard ? 'inherited' : '#B8B888';
 
         return (
 
-            <div style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center', background }}>
+            <div key={key} style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center', background }}>
 
                 {/* Vertical Grid Line */}
                 <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '30%' : 0, left: this.props.leftEdge ? '30%' : 0, transform: 'translateY(-50%)' }} />

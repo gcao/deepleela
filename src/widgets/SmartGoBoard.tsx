@@ -436,9 +436,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         let vars = await this.client.peekWinrate(this.game.currentColor, UserPreferences.winrateBlackOnly, UserPreferences.winrate500Base);
         this.board.setVariations(vars);
 
-        if (vars.length === 0) {
-            this.setState({ heatmap: await this.client.heatmap() });
-        }
+        // if (vars.length === 0) {
+        //     this.setState({ heatmap: await this.client.heatmap() });
+        // }
 
         this.setState({ disabled: false, isThinking: false });
 

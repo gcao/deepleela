@@ -90,18 +90,17 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         super(props, ctx);
 
         let variationStates: (Variation | undefined)[][] = [];
-
-        for (let i = 0; i < props.size; i++) {
+        for (let i = 0; i < 19; i++) {
             variationStates.push([]);
-            for (let j = 0; j < props.size; j++) {
+            for (let j = 0; j < 19; j++) {
                 variationStates[i].push(undefined);
             }
         }
 
         let branchStates: (BranchState | undefined)[][] = [];
-        for (let i = 0; i < props.size; i++) {
+        for (let i = 0; i < 19; i++) {
             branchStates.push([]);
-            for (let j = 0; j < props.size; j++) {
+            for (let j = 0; j < 19; j++) {
                 branchStates[i].push(undefined)
             }
         }
