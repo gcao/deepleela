@@ -342,7 +342,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (!reloaded) {
             this.setState({ disabled: true });
-            let move = Board.cartesianCoordToString(x, y);
+            let move = Board.cartesianCoordToString(x, y, this.game.size);
             await this.client.play(lastColor, move);
             this.setState({ disabled: false });
         }

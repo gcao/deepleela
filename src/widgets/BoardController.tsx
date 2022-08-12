@@ -65,10 +65,9 @@ export default class BoardController extends React.Component<BoardControllerProp
         if (this.props.onAIAutoPlayClick) {
             this.setState({autoplay: !this.state.autoplay});
             setImmediate(async () => {
-                if (this.props.onAIAutoPlayClick) {
-                    await this.props.onAIAutoPlayClick(this.state.autoplay);
-                    this.setState({autoplay: !this.state.autoplay});
-                }
+                // @ts-ignore ignore the error of "cannot invoke an object which is possibly undefined"
+                await this.props.onAIAutoPlayClick(!this.state.autoplay);
+                this.setState({autoplay: !this.state.autoplay});
             });
         }
 

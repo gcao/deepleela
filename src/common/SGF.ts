@@ -36,7 +36,7 @@ export default class SGF {
                 let row = SGF.alphabets.indexOf(pos[1]);
                 let col = SGF.alphabets.indexOf(pos[0]);
                 let coord = Board.arrayPositionToCartesianCoord(row, col, boardSize);
-                let coordstr = Board.cartesianCoordToString(coord.x, coord.y);
+                let coordstr = Board.cartesianCoordToString(coord.x, coord.y, parseInt(tree.props.SZ || '19'));
 
                 moves.push([color!, coordstr]);
             }

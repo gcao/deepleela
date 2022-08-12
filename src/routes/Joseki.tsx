@@ -114,7 +114,7 @@ export default class Joseki extends React.Component<{}, States> {
             let coord = (n.props.W || n.props.B)!;
             let pos = SGF.stringToArrayPosition(coord);
             let cartesian = Board.arrayPositionToCartesianCoord(pos.x, pos.y, 19);
-            coord = Board.cartesianCoordToString(cartesian.x, cartesian.y).toLowerCase();
+            coord = Board.cartesianCoordToString(cartesian.x, cartesian.y, 19).toLowerCase();
 
             let [win, nextMove] = n.props.C!.split('\n');
             let winrate = Number.parseFloat(win);

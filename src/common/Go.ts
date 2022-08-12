@@ -50,7 +50,7 @@ export default class Go extends EventEmitter {
 
     get length() { return this.snapshots.length; }
 
-    get cartesianCoord() { return this.cartesianCoordXY.x < 0 ? '' : Board.cartesianCoordToString(this.cartesianCoordXY.x, this.cartesianCoordXY.y); }
+    get cartesianCoord() { return this.cartesianCoordXY.x < 0 ? '' : Board.cartesianCoordToString(this.cartesianCoordXY.x, this.cartesianCoordXY.y, this.size); }
 
     constructor(size: number) {
         super();
@@ -375,7 +375,7 @@ export default class Go extends EventEmitter {
         let moves = mainBranch ? this.mainBranch : this.mainBranch.slice(0, this.cursor + 1).concat(this.history);
         moves = handicap.concat(moves);
 
-        return moves.map(m => [m.stone, Board.cartesianCoordToString(m.cartesianCoord.x, m.cartesianCoord.y)]) as [string, string][];
+        return moves.map(m => [m.stone, Board.cartesianCoordToString(m.cartesianCoord.x, m.cartesianCoord.y, this.size)]) as [string, string][];
     }
 
     genSgf(info: { blackPlayer: string, whitePlayer: string, result?: string, size?: number, handicap?: string[] }, mainBranch = false) {
