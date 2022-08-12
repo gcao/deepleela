@@ -116,6 +116,14 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         this.props.onIntersectionClicked(row, col);
     }
 
+    private onRightClick(row: number, col: number) {
+        row = (row + this.state.vbOffsetX - 2 * this.state.vbSize + this.props.size) % this.props.size;
+        col = (col - this.state.vbOffsetY + this.props.size) % this.props.size;
+        let vbOffsetX = (row + this.state.vbSize + (this.props.size - 1)/2) % this.props.size;
+        let vbOffsetY = (-col + this.state.vbSize + (this.props.size + 1)/2) % this.props.size;
+        this.setState({ vbOffsetX, vbOffsetY });
+    }
+
     private onVariationHover(row: number, col: number) {
         let { x, y } = Board.cartesianCoordToArrayPosition(row, col, this.props.size);
         let branch = this.state.variationStates[x][y];
@@ -264,6 +272,7 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
                                 return <div key={`${i},${j}`}>
                                     <Intersection
                                         onClick={(r, c) => this.onClick(r, c)}
+                                        onRightClick={(r, c) => this.onRightClick(r, c)}
                                         style={{ color: gridLineColor, whiteStoneColor: this.props.style ? this.props.style.whiteStoneColor : 'white', blackStoneColor: this.props.style ? this.props.style.blackStoneColor : 'black', startPointColor: this.props.style ? this.props.style.starPointColor : undefined, winrateFontColor: this.props.style && this.props.style.winrateColor, winrateBackground: this.props.style && this.props.style.winrateBackgroundColor }}
                                         key={j}
                                         size={this.props.size}

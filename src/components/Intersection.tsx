@@ -17,6 +17,7 @@ interface IntersectionProps {
     lineThickness?: number;
     onTouch?: (x: number, y: number) => void;
     onClick: (row: number, col: number) => void;
+    onRightClick?: (row: number, col: number) => void;
     onMouseEnter?: (x: number, y: number) => void;
     onMouseLeave?: (x: number, y: number) => void;
     onVariationHover?: (row: number, col: number) => void;
@@ -104,6 +105,12 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         this.setState({ touchConfirmed: true, firstTouch: true });
     }
 
+    private onRightClick(e: React.MouseEvent<HTMLDivElement>) {
+        if (this.props.onRightClick) {
+            this.props.onRightClick(this.props.row, this.props.col);
+        }
+    }
+
     private onTouchStart() {
         if (this.props.winrate && this.props.onVariationHover)
             this.props.onVariationHover(this.props.row, this.props.col)
@@ -155,6 +162,7 @@ export default class Intersection extends React.Component<IntersectionProps, Int
                 {/* Winrate */}
                 <div className='uk-tooltip-visits' uk-tooltip={this.props.winrate ? `${this.props.winrate.visits} Visits` : undefined}
                     style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, fontSize: this.props.fontSize || 10, background: 'transparent', opacity: this.props.state !== State.Empty ? 0 : (winrate.value || winrate.uvalue) ? (winrate.weight || 1) + 0.45 : 0, transition: 'all 0.5s', zIndex: 2 }}
+                    onContextMenu={e => this.onRightClick(e)}
                     onMouseEnter={e => this.onMouseEnter(e)}
                     onClick={e => this.onClick(e)}
                     onTouchStart={e => this.onTouchStart()}
