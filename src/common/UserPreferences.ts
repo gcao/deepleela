@@ -40,6 +40,12 @@ export default class UserPreferences {
     static get cursor() { return Number.parseInt(localStorage.getItem('cursor') || '-1'); }
     static set cursor(value: number) { localStorage.setItem('cursor', value.toString()); }
 
+    static get aiWaitTime() { return localStorage.getItem('aiWaitTime') || '3000'; }
+    static set aiWaitTime(value: string) { localStorage.setItem('aiWaitTime', value); }
+
+    static get aiWaitRandom() { return localStorage.getItem('aiWaitRandom') || 'true'; }
+    static set aiWaitRandom(value: string) { localStorage.setItem('aiWaitRandom', value); }
+
     static get gameSize() {
         const defaultSize = 19;
         try {

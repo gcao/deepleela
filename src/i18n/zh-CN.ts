@@ -4,6 +4,8 @@ export const lang = {
     human: '凡人',
     ai: 'AI',
     hint: '提示：拖拽棋盘可以帮助调整对局视角。',
+    yes: '是',
+    no: '否',
 
     menu: {
         cgos: '遛狗场',
@@ -82,6 +84,8 @@ export const lang = {
             winrateBase_percent: '基于百分比显示',
             winrateBase_500: '基于 500 显示',
             nickname: '昵称',
+            aiWaitTime: 'AI思考时间(毫秒)',
+            aiWaitRandom: 'AI思考时间不固定，模拟人类下棋速度',
         }
     },
 

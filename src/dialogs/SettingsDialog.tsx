@@ -53,6 +53,13 @@ export default class SettingsDialog extends React.Component<SettingsDialogProps,
                     <legend className="uk-legend">{i18n.dialogs.settings.title}</legend>
 
                     <div className="uk-margin">
+                        <label className="uk-form-label">{i18n.dialogs.settings.nickname}:</label>
+                        <div className="uk-form-controls">
+                            <input className="uk-input" type="text" maxLength={32} placeholder="Nickname" defaultValue={UserPreferences.nickname} onChange={e => UserPreferences.nickname = e.target.value.substr(0, 32)} />
+                        </div>
+                    </div>
+
+                    <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.settings.themes}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
                             <select style={{ width: '100%' }} onChange={e => this.onThemesChange(e.target.value)} defaultValue={this.state.theme}>
@@ -71,6 +78,7 @@ export default class SettingsDialog extends React.Component<SettingsDialogProps,
                         </div>
                     </div>
 
+                    {/*
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.settings.winrate}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
@@ -96,11 +104,25 @@ export default class SettingsDialog extends React.Component<SettingsDialogProps,
                             </button>
                         </div>
                     </div>
+                    */}
 
                     <div className="uk-margin">
-                        <label className="uk-form-label">{i18n.dialogs.settings.nickname}:</label>
+                        <label className="uk-form-label">{i18n.dialogs.settings.aiWaitTime}:</label>
                         <div className="uk-form-controls">
-                            <input className="uk-input" type="text" maxLength={32} placeholder="Nickname" defaultValue={UserPreferences.nickname} onChange={e => UserPreferences.nickname = e.target.value.substr(0, 32)} />
+                            <input className="uk-input" type="text" maxLength={32} placeholder="AI Thinking Time" defaultValue={UserPreferences.aiWaitTime} onChange={e => UserPreferences.aiWaitTime = e.target.value.trim()} />
+                        </div>
+                    </div>
+
+                    <div className="uk-margin">
+                        <label className="uk-form-label">{i18n.dialogs.settings.aiWaitRandom}:</label>
+                        <div className="full-width" uk-form-custom="target: > * > span.selected-text">
+                            <select style={{ width: '100%' }} onChange={e => UserPreferences.aiWaitRandom = e.target.value} defaultValue={'true'}>
+                                <option value="true">{i18n.yes}</option>
+                                <option value="false">{i18n.no}</option>
+                            </select>
+                            <button className="uk-button uk-button-default" type="button" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }} >
+                                <span className="selected-text"></span>
+                            </button>
                         </div>
                     </div>
 

@@ -62,14 +62,17 @@ export default class BoardController extends React.Component<BoardControllerProp
     }
 
     private onAIClick() {
-        if (this.props.mode === 'self') {
-            if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
-            this.setState({ autoplay: !this.state.autoplay });
-            return;
-        }
+        if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
+        this.setState({ autoplay: !this.state.autoplay });
 
-        if (!this.props.onAIThinkingClick) return;
-        this.props.onAIThinkingClick();
+        // if (this.props.mode === 'self') {
+        //     if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
+        //     this.setState({ autoplay: !this.state.autoplay });
+        //     return;
+        // }
+
+        // if (!this.props.onAIThinkingClick) return;
+        // this.props.onAIThinkingClick();
     }
 
     private triggerCursorChange(delta: number) {
