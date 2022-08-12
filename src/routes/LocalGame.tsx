@@ -58,6 +58,14 @@ export default class LocalGame extends React.Component<LocalProps, LocalStates> 
         LocalGame.smartBoard = undefined;
     }
 
+    async onAIAutoPlayClick(autoplay: boolean) {
+        if (autoplay) {
+            this.setState({aiAutoplay: true});
+            await this.smartBoard.autoGenmove(true);
+            this.setState({aiAutoplay: false});
+        }
+    }
+
     private saveKifu() {
         let sgf = this.smartBoard.exportGame();
         UserPreferences.kifu = sgf;
@@ -92,7 +100,7 @@ export default class LocalGame extends React.Component<LocalProps, LocalStates> 
                     mode={this.smartBoard ? this.smartBoard.gameMode : 'self'}
                     onCursorChange={d => this.smartBoard.changeCursor(d)}
                     onAIThinkingClick={() => this.smartBoard.peekSgfWinrate()}
-                    onAIAutoPlayClick={autoplay => { this.setState({ aiAutoplay: autoplay }); if (autoplay) this.smartBoard.autoGenmove(true); }}
+                    onAIAutoPlayClick={this.onAIAutoPlayClick.bind(this)}
                     onExitBranch={() => this.smartBoard.returnToMainBranch()}
                     onAnalyticsClick={() => this.analysisPanel.toggle()}
                     showAnalytics={!BrowserHelper.isMobile}

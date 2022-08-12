@@ -61,9 +61,16 @@ export default class BoardController extends React.Component<BoardControllerProp
         jQuery('#board-controller').css('left', fx).css('top', fy);
     }
 
-    private onAIClick() {
-        if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
-        this.setState({ autoplay: !this.state.autoplay });
+    private async onAIClick() {
+        if (this.props.onAIAutoPlayClick) {
+            this.setState({autoplay: !this.state.autoplay});
+            setImmediate(async () => {
+                if (this.props.onAIAutoPlayClick) {
+                    await this.props.onAIAutoPlayClick(this.state.autoplay);
+                    this.setState({autoplay: !this.state.autoplay});
+                }
+            });
+        }
 
         // if (this.props.mode === 'self') {
         //     if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
@@ -71,8 +78,8 @@ export default class BoardController extends React.Component<BoardControllerProp
         //     return;
         // }
 
-        // if (!this.props.onAIThinkingClick) return;
-        // this.props.onAIThinkingClick();
+        if (!this.props.onAIThinkingClick) return;
+        this.props.onAIThinkingClick();
     }
 
     private triggerCursorChange(delta: number) {

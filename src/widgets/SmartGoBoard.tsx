@@ -87,6 +87,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     constructor(props: any, ctx: any) {
         super(props, ctx);
 
+        this.aiWaitTime = 0;
+        this.aiWaitRandom = false;
+
         const urlParams = getUrlParams();
         const vbSizeParam = urlParams.get('vbSize');
         if (vbSizeParam) {
@@ -207,6 +210,8 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newSelfGame(config: NewGameDialogStates): Promise<boolean> {
+        this.aiWaitTime = 0;
+        this.aiWaitRandom = false;
         this.gameMode = 'self';
         this.engine = config.engine || 'KataGo';
         UserPreferences.whitePlayer = UserPreferences.blackPlayer = 'Human';
@@ -342,11 +347,11 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
             this.setState({ disabled: false });
         }
 
-        if (this.gameMode === 'self' && this.props.showHeatmap) {
-            this.setState({ disabled: true });
-            let heatmap = await this.client.heatmap();
-            this.setState({ heatmap, disabled: false });
-        }
+        // if (this.gameMode === 'self' && this.props.showHeatmap) {
+        //     this.setState({ disabled: true });
+        //     let heatmap = await this.client.heatmap();
+        //     this.setState({ heatmap, disabled: false });
+        // }
 
         if (this.props.showWinrate) {
             await this.peekWinrate();
@@ -373,13 +378,13 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
             case 'pass':
                 // TODO: handle AI vs AI
                 // @ts-ignore
-                UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
+                UIkit.notification({ message: i18n.notifications.pass(i18n[this.game.currentColor]), status: 'primary' });
                 this.game.pass();
                 return result.move;
             case 'resign':
                 // TODO: handle AI vs AI
                 // @ts-ignore
-                UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
+                UIkit.notification({ message: i18n.notifications.resigns(i18n[this.game.currentColor]), status: 'success' });
                 this.setState({ disabled: true });
                 return result.move;
         }

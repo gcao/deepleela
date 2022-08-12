@@ -4,6 +4,8 @@ export const lang = {
     human: '凡人',
     ai: 'AI',
     hint: '提示：拖拽棋盘可以帮助调整对局视角。',
+    B: '黑方',
+    W: '白方',
     yes: '是',
     no: '否',
 

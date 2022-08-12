@@ -4,6 +4,10 @@ export const lang = {
     human: 'Human',
     ai: 'AI',
     hint: 'Hint: drag the board to adjust the view point.',
+    B: 'Black',
+    W: 'White',
+    yes: 'Yes',
+    no: 'No',
 
     menu: {
         cgos: 'CGOS',
@@ -82,6 +86,8 @@ export const lang = {
             winrateBase_percent: 'Percent-based',
             winrateBase_500: '500-based',
             nickname: 'Nickname',
+            aiWaitTime: 'AI Thinking Time(ms)',
+            aiWaitRandom: 'Randomize AI Thinking Time',
         }
     },
 
