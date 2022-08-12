@@ -69,6 +69,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     private readonly client = GameClient.default;
     private wheeling = false;
 
+    aiWaitTime: number|undefined;
+    aiWaitRandom: boolean|undefined;
+
     game = new Go(UserPreferences.gameSize);
     gameMode: GameMode = 'self';
     state: SmartGoBoardStates = { remaingTime: '--:--' };
@@ -108,6 +111,8 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newAIGame(config: NewGameDialogStates): Promise<[boolean, number]> {
+        this.aiWaitTime = undefined;
+        this.aiWaitRandom = undefined;
         this.gameMode = 'ai';
         this.userStone = config.selectedColor;
         this.engine = config.engine;
@@ -148,6 +153,8 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newAIvsAIGame(config: NewAIvsAIGameDialogStates): Promise<[boolean, number]> {
+        this.aiWaitTime = 0;
+        this.aiWaitRandom = false;
         this.gameMode = 'ai-ai';
         this.state.isAIvsAI = true;
         this.userStone = 'B';
@@ -180,17 +187,17 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.returnToMainBranch();
 
         var lastMoveIsPass = false;
-        while (this.game.length < 350) {
+        gameLoop: while (this.game.length < 350) {
             let move = await this.genmove(this.game.currentColor);
             switch(move) {
                 case 'pass':
                     if (lastMoveIsPass) {
-                        lastMoveIsPass = true;
-                        break;
+                        break gameLoop;
                     }
+                    lastMoveIsPass = true;
                 case 'resign':
                     lastMoveIsPass = false;
-                    break;
+                    break gameLoop;
                 default:
                     lastMoveIsPass = false;
             }
@@ -377,7 +384,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                 return result.move;
         }
 
-        await Utils.aiThinking();
+        await Utils.aiThinking(this.aiWaitTime, this.aiWaitRandom);
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');

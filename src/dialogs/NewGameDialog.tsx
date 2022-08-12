@@ -6,6 +6,7 @@ import i18n from '../i18n';
 import * as jQuery from 'jquery';
 import { littleBox } from './Styles';
 import UserPreferences from '../common/UserPreferences';
+import Engine from 'src/components/Engine';
 
 interface NewGameDialogProps {
     onCancel?: () => void,
@@ -87,11 +88,12 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.engine}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
+                            <Engine onChange={e => this.setState({ engine: e.target.value })} engine={this.state.engine}/>
+                            {/*
                             <select style={{ width: '100%' }} onChange={e => this.setState({ engine: e.target.value })} defaultValue={this.state.engine}>
                                 <option value="KataGo">{'KataGo'}</option>
-                                {/* <option value="Leela">{'Leela'}</option> */}
-                                {/* <option value="Leela">{'Leela-Zero'}</option> */}
                             </select>
+                            */}
                             <button className="uk-button uk-button-default" type="button" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }} >
                                 <span className="selected-text"></span>
                                 <span uk-icon="icon: chevron-down"></span>

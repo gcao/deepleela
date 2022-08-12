@@ -6,16 +6,23 @@ export async function sleep(duration: number) {
     });
 }
 
-export async function aiThinking() {
+export async function aiThinking(time: number|undefined, random: boolean|undefined) {
     const urlParams = getUrlParams();
 
-    let waitTime = 3000;
-    const waitParam = urlParams.get('aiWaitTime');
-    if (waitParam) {
-        waitTime = parseInt(waitParam) * 1000;
+    let waitTime = time;
+    if (waitTime === undefined) {
+        waitTime = 3000;
+        const waitParam = urlParams.get('aiWaitTime');
+        if (waitParam) {
+            waitTime = parseInt(waitParam) * 1000;
+        }
     }
 
-    let waitRandom = urlParams.get('aiWaitRandom') != 'false';
+    let waitRandom = random;
+    if (waitRandom === undefined) {
+        waitRandom = urlParams.get('aiWaitRandom') != 'false';
+    }
+
     if (waitRandom) {
         await sleep(Math.random() * waitTime);
     } else {

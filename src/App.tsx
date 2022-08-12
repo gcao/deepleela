@@ -187,6 +187,9 @@ class App extends React.Component<AppProps, AppStates> {
 
   async popScoreInfo() {
     this.setState({ loadingDialogOpen: true });
+    if (!GameClient.default.aiConnected) {
+      await GameClient.default.requestAI('KataGo');
+    }
     let msg = await GameClient.default.finalScore() || '';
     this.setState({ loadingDialogOpen: false, infoDialogOpen: true, info: { title: i18n.dialogs.info.title_score, message: msg } });
   }
@@ -289,14 +292,14 @@ class App extends React.Component<AppProps, AppStates> {
                         </div>
                     }
 
-                    {
-                      LocalGame.smartBoard && LocalGame.smartBoard.gameMode === 'ai' ?
-                        <div className='uk-nav uk-dropdown-nav'>
-                          <li><a href="#" onClick={e => this.popResignInfo()}>{i18n.menu.resign}</a></li>
-                          <li><a href="#" onClick={e => this.popScoreInfo()}>{i18n.menu.score}</a></li>
-                        </div> :
-                        undefined
-                    }
+                    <div className='uk-nav uk-dropdown-nav'>
+                      {
+                        LocalGame.smartBoard && LocalGame.smartBoard.gameMode === 'ai'
+                          ? <li><a href="#" onClick={e => this.popResignInfo()}>{i18n.menu.resign}</a></li>
+                          : undefined
+                      }
+                      <li><a href="#" onClick={e => this.popScoreInfo()}>{i18n.menu.score}</a></li>
+                    </div>
 
                     <li className="uk-nav-divider"></li>
 
