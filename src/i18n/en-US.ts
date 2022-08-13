@@ -31,6 +31,10 @@ export const lang = {
         about: 'About',
     },
 
+    aiLevel: {
+        strongest: 'Strongest',
+    },
+
     dialogs: {
         newgame: {
             title: 'New Game',

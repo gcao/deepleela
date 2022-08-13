@@ -6,6 +6,7 @@ import i18n from '../i18n';
 import * as jQuery from 'jquery';
 import { littleBox } from './Styles';
 import UserPreferences from '../common/UserPreferences';
+import Engine from '../components/Engine';
 
 interface NewAIvsAIGameDialogProps {
     onCancel?: () => void,
@@ -67,11 +68,7 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.engineB}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
-                            <select style={{ width: '100%' }} onChange={e => this.setState({ engineB: e.target.value })} defaultValue={this.state.engineB}>
-                                <option value="KataGo">{'KataGo'}</option>
-                                {/* <option value="Leela">{'Leela'}</option> */}
-                                {/* <option value="Leela">{'Leela-Zero'}</option> */}
-                            </select>
+                            <Engine onChange={e => this.setState({ engineB: e.target.value })} engine={this.state.engineB}/>
                             <button className="uk-button uk-button-default" type="button" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }} >
                                 <span className="selected-text"></span>
                                 <span uk-icon="icon: chevron-down"></span>
@@ -82,11 +79,7 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.engineW}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
-                            <select style={{ width: '100%' }} onChange={e => this.setState({ engineW: e.target.value })} defaultValue={this.state.engineW}>
-                                <option value="KataGo">{'KataGo'}</option>
-                                {/* <option value="Leela">{'Leela'}</option> */}
-                                {/* <option value="Leela">{'Leela-Zero'}</option> */}
-                            </select>
+                            <Engine onChange={e => this.setState({ engineW: e.target.value })} engine={this.state.engineW}/>
                             <button className="uk-button uk-button-default" type="button" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }} >
                                 <span className="selected-text"></span>
                                 <span uk-icon="icon: chevron-down"></span>

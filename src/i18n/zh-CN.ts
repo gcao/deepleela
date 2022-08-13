@@ -31,6 +31,10 @@ export const lang = {
         about: '关于',
     },
 
+    aiLevel: {
+        strongest: '最强版',
+    },
+
     dialogs: {
         newgame: {
             title: '新对局',
