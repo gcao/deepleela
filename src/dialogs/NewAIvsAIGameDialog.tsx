@@ -108,13 +108,14 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
                         </div>
                     </div>
 
+                    {/*
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.time}:</label>
                         <div className="uk-form-controls">
                             <input className="uk-input" type="number" placeholder="200" defaultValue={this.state.time.toString()} onChange={e => this.setState({ time: e.target.valueAsNumber || 120 })} />
                         </div>
                     </div>
-
+                    */}
 
                     <div style={{ height: 1, width: '100%', backgroundColor: '#eee', marginBottom: 12 }} />
 

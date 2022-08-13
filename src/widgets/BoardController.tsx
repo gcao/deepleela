@@ -63,12 +63,15 @@ export default class BoardController extends React.Component<BoardControllerProp
 
     private async onAIClick() {
         if (this.props.onAIAutoPlayClick) {
+            let autoplay = this.state.autoplay;
             this.setState({autoplay: !this.state.autoplay});
-            setImmediate(async () => {
-                // @ts-ignore ignore the error of "cannot invoke an object which is possibly undefined"
-                await this.props.onAIAutoPlayClick(!this.state.autoplay);
-                this.setState({autoplay: !this.state.autoplay});
-            });
+            if (!autoplay) {
+                setImmediate(async () => {
+                    // @ts-ignore ignore the error of "cannot invoke an object which is possibly undefined"
+                    await this.props.onAIAutoPlayClick(true);
+                    this.setState({autoplay: false});
+                });
+            }
         }
 
         // if (this.props.mode === 'self') {
@@ -111,12 +114,12 @@ export default class BoardController extends React.Component<BoardControllerProp
     }
 
     componentDidUpdate() {
-        if (!this.props.onAIAutoPlayClick) return;
+        // if (!this.props.onAIAutoPlayClick) return;
 
-        if (this.props.mode !== 'self' && this.state.autoplay) {
-            this.props.onAIAutoPlayClick(false);
-            this.setState({ autoplay: false });
-        }
+        // if (this.props.mode !== 'self' && this.state.autoplay) {
+        //     this.props.onAIAutoPlayClick(false);
+        //     this.setState({ autoplay: false });
+        // }
     }
 
     enterBranchMode() {
