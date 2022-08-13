@@ -33,6 +33,7 @@ export const lang = {
 
     aiLevel: {
         strongest: '最强版',
+        notWorking: '有问题',
     },
 
     dialogs: {

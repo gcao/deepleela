@@ -70,7 +70,7 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGo:s1600128-d224253">KataGo 04</option>
             <option value="KataGo:s951936-d170159">KataGo 03</option>
             <option value="KataGo:s437376-d86279">KataGo 02</option>
-            <option value="KataGo:s583680-d41745">KataGo 01</option>
+            <option value="KataGo:s583680-d41745">KataGo 01 {i18n.aiLevel.notWorking}</option>
           </select>
         );
     }
