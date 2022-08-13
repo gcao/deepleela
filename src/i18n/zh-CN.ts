@@ -13,9 +13,9 @@ export const lang = {
         cgos: '遛狗场',
         joseki: '定式大全',
 
-        newgame_vs_leela: '对战 AI',
+        newgame_vs_leela: '挑战 AI',
         newgame_vs_self: '自由探索',
-        newgame_ai_vs_ai: 'AI 对战 AI',
+        newgame_ai_vs_ai: 'AI 战 AI',
         loadsgf: '复盘 SGF',
         exportsgf: '导出 SGF',
 
