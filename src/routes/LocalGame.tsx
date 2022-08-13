@@ -62,7 +62,7 @@ export default class LocalGame extends React.Component<LocalProps, LocalStates> 
         if (autoplay) {
             this.setState({aiAutoplay: true});
             await this.smartBoard.autoGenmove(true);
-            if (this.smartBoard.game.currentColor !== this.smartBoard.userStone) {
+            if (this.smartBoard.gameMode === 'ai' && this.smartBoard.game.currentColor !== this.smartBoard.userStone) {
                 await this.smartBoard.autoGenmove(true);
             }
             this.setState({aiAutoplay: false});
