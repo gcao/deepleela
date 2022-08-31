@@ -12,7 +12,17 @@ export default class Engine extends React.Component<EngineProps, any> {
     render() {
         return (
           <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
-            <option value="KataGo:s29096448-d8520277">KataGo 59 {i18n.aiLevel.strongest}</option>
+            <option value="KataGo:s40080640-d11542882">KataGo 69 {i18n.aiLevel.strongest}</option>
+            <option value="KataGo:s39415040-d11203900">KataGo 68</option>
+            <option value="KataGo:s39148800-d11051308">KataGo 67</option>
+            <option value="KataGo:s38882688-d10899161">KataGo 66</option>
+            <option value="KataGo:s37169152-d10156350">KataGo 65</option>
+            <option value="KataGo:s36889088-d10038372">KataGo 64</option>
+            <option value="KataGo:s36335872-d9808736">KataGo 63</option>
+            <option value="KataGo:s36064384-d9694347">KataGo 62</option>
+            <option value="KataGo:s35788160-d9579671">KataGo 61</option>
+            <option value="KataGo:s17324544-d9313956">KataGo 60</option>
+            <option value="KataGo:s29096448-d8520277">KataGo 59</option>
             <option value="KataGo:s28731264-d8293612">KataGo 58</option>
             <option value="KataGo:s28096256-d8065839">KataGo 57</option>
             <option value="KataGo:s27462400-d7834755">KataGo 56</option>
