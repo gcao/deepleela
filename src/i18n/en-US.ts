@@ -3,7 +3,7 @@ export const lang = {
     title: 'Welcome to Daoqi!',
     human: 'Human',
     ai: 'AI',
-    hint: 'Hint: drag the board to adjust the view point.',
+    hint: 'Hint: rightclick or drag the board to adjust the view point.',
     B: 'Black',
     W: 'White',
     yes: 'Yes',
@@ -59,7 +59,7 @@ export const lang = {
 
         info: {
             title_score: 'Game Score',
-            resigns: (color: string) => `${color} resigns`,
+            resigns: (color: string) => `${color} resigned`,
         },
 
         about: {

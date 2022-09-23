@@ -65,8 +65,8 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGo:s15325952-d3731791">KataGo 32</option>
             <option value="KataGo:s14939904-d3588306">KataGo 31</option>
             <option value="KataGo:s14586496-d3448502">KataGo 30</option>
-            <option value="KataGo:s13805312-d3160255">KataGo 29</option>
             {/*
+            <option value="KataGo:s13805312-d3160255">KataGo 29</option>
             <option value="KataGo:s13530240-d3016364">KataGo 28</option>
             <option value="KataGo:s12528000-d2717595">KataGo 27</option>
             <option value="KataGo:s12054144-d2599380">KataGo 26</option>

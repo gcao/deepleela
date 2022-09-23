@@ -2,6 +2,7 @@ import { lang as enUS } from './en-US';
 import { lang as zhCN } from './zh-CN';
 import { lang as jaJP } from './ja-JP';
 import { lang as zhTW } from './zh-TW';
+import { getUrlParams } from '../lib/URL';
 
 const langs = {
     'en-US': enUS,
@@ -11,6 +12,6 @@ const langs = {
 };
 
 // const userLang: 'en-US' | 'zh-CN' = navigator.language as any;
-const userLang: 'en-US' | 'zh-CN' = 'zh-CN';
+const userLang = getUrlParams().get('lang') || 'zh-CN';
 
 export default (langs[userLang] || enUS);
