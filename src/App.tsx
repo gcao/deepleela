@@ -150,6 +150,10 @@ class App extends React.Component<AppProps, AppStates> {
 
       setTimeout(() => {
         LocalGame.smartBoard!.importGame({ game, whitePlayer, blackPlayer }, 'review');
+        // Change from to 0-based
+        if (move) {
+          move = move - 1;
+        }
         LocalGame.smartBoard!.changeCursor(move);
         window.dispatchEvent(new Event('resize'));
       }, 500);
