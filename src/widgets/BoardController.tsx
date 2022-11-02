@@ -168,11 +168,11 @@ export default class BoardController extends React.Component<BoardControllerProp
                         </div> : undefined
                     }
 
-                    {isReview && this.props.showAnalytics ?
+                    {/* {isReview && this.props.showAnalytics ?
                         <div className='touch' uk-tooltip={i18n.tips.anayltics} onClick={e => this.props.onAnalyticsClick && this.props.onAnalyticsClick()}>
                             <span uk-icon='icon: nut; ' style={{ display: 'inline-block', marginLeft: -32, marginTop: 2, }}></span>
                         </div> : undefined
-                    }
+                    } */}
                 </div>
             </div>
         );
