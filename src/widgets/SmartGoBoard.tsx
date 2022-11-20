@@ -66,7 +66,8 @@ export type GameMode = 'ai' | 'ai-ai' | 'self' | 'guest' | 'review';
 export default class SmartGoBoard extends React.Component<SmartGoBoardProps, SmartGoBoardStates> {
 
     private board: Board;
-    private readonly client = GameClient.default;
+    private client = new GameClient();  // Engine for black if AI vs AI
+    private client2 = new GameClient(); // Engine for white if AI vs AI
     private wheeling = false;
 
     aiWaitTime: number|undefined;
@@ -128,7 +129,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.game.komi = config.komi;
         this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
 
-        let results = await this.client.requestAI(config.engine || 'KataGo');
+        let results = await this.client.requestAI(config.engine);
         if (!results[0]) return results;
         this.client.initBoard(config);
 
@@ -171,9 +172,13 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.game.komi = config.komi;
         this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
 
-        let results = await this.client.requestAI(config.engineB || 'KataGo');
+        let results = await this.client.requestAI(config.engineB);
         if (!results[0]) return results;
         this.client.initBoard(config);
+
+        let results2 = await this.client2.requestAI(config.engineW);
+        if (!results2[0]) return results2;
+        this.client2.initBoard(config);
 
         UserPreferences.gameMode = this.gameMode;
         UserPreferences.userStone = this.userStone;
@@ -182,7 +187,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (config.handicap > 0) {
             this.game.setHandicap(config.handicap);
-            await this.client.loadMoves(this.game.genMoves(true));
+            let handicaps =  this.game.genMoves(true);
+            await this.client.loadMoves(handicaps);
+            await this.client2.loadMoves(handicaps);
             await this.pass();
         }
 
@@ -191,7 +198,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         var lastMoveIsPass = false;
         gameLoop: while (this.game.length < 350) {
-            let move = await this.genmove(this.game.currentColor);
+            let move = await this.genmove2(this.game.currentColor);
             switch(move) {
                 case 'pass':
                     if (lastMoveIsPass) {
@@ -280,7 +287,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (this.client.aiConnected) return true;
 
-        let [success, pending] = await this.client.requestAI(this.engine || 'KataGo');
+        let [success, pending] = await this.client.requestAI(this.engine);
         if (!success) {
             // @ts-ignore
             UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
@@ -393,6 +400,62 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');
+
+        this.setState({ isThinking: false, disabled: false });
+        // TODO: this.clent.heatmap() does not work?
+        // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
+
+        if (this.props.showWinrate && this.game.isLatestCursor) {
+            await this.peekWinrate();
+        }
+
+        return result.move;
+    }
+
+    private async genmove2(color: StoneColor): Promise<string> {
+        await this.checkAIOnline();
+
+        this.setState({ isThinking: true, disabled: true });
+        var result: any;
+        if (color == 'B') {
+            result = await this.client.genmove(color);
+        } else {
+            result = await this.client2.genmove(color);
+        }
+
+        switch (result.move) {
+            case 'pass':
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.pass(i18n[this.game.currentColor]), status: 'primary' });
+                // Notify the other AI
+                if (color == 'B') {
+                    await this.client2.pass(this.game.currentColor);
+                } else {
+                    await this.client.pass(this.game.currentColor);
+                }
+                this.game.pass();
+                return result.move;
+            case 'resign':
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.resigns(i18n[this.game.currentColor]), status: 'success' });
+                if (color == 'B') {
+                    await this.client2.resign(this.game.currentColor);
+                } else {
+                    await this.client.resign(this.game.currentColor);
+                }
+                this.setState({ disabled: true });
+                return result.move;
+        }
+
+        let coord = Board.stringToCartesianCoord(result.move);
+        this.game.play(coord.x, coord.y, 'force_main');
+
+        // Notify the other AI
+        if (color == 'B') {
+            await this.client2.play(color, result.move);
+        } else {
+            await this.client.play(color, result.move);
+        }
 
         this.setState({ isThinking: false, disabled: false });
         // TODO: this.clent.heatmap() does not work?
