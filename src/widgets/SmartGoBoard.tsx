@@ -77,7 +77,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     gameMode: GameMode = 'self';
     state: SmartGoBoardStates = { remaingTime: '--:--' };
     userStone: StoneColor = 'B';
-    engine: string;
+    engine: string = 'KataGo';
 
     get currentCursor() { return this.game.cursor; }
 
