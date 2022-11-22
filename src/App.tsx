@@ -24,6 +24,7 @@ import { History } from 'history';
 import ReviewClient from './common/ReviewClient';
 import BrowserHelper from './components/BrowserHelper';
 import Joseki from './routes/Joseki';
+import Ringo from './components/Ringo';
 
 export enum Action {
   None,
@@ -321,6 +322,7 @@ class App extends React.Component<AppProps, AppStates> {
               <Route path='/cgos' exact component={CGOS} />
               <Route path='/cgos/:gameId' component={LiveGame} />
               <Route path='/joseki' component={Joseki} />
+              <Route path='/ringo' component={Ringo} />
               <Route path='/' component={LocalGame} />
             </Switch>
           </div>

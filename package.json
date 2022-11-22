@@ -21,6 +21,7 @@
     "react-modal": "^3.4.5",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "2.15.1",
+    "react-svg-path": "^1.13.3",
     "recharts": "^1.0.0-beta.10",
     "rtcmulticonnection": "github:muaz-khan/RTCMultiConnection",
     "rtcmulticonnection-v3": "github:muaz-khan/RTCMultiConnection",
@@ -42,7 +43,7 @@
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "@types/react-router-dom": "^4.2.7",
-    "@types/uikit": "^2.27.6",
+    "@types/uikit": "^3.14.0",
     "ajv": "^6.5.2",
     "typescript": "^2.9.2"
   }
