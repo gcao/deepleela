@@ -66,12 +66,9 @@ export type GameMode = 'ai' | 'ai-ai' | 'self' | 'guest' | 'review';
 export default class SmartGoBoard extends React.Component<SmartGoBoardProps, SmartGoBoardStates> {
 
     private board: Board;
-    private client = new GameClient();  // Engine for black if AI vs AI
+    private client = GameClient.default;
     private client2 = new GameClient(); // Engine for white if AI vs AI
     private wheeling = false;
-
-    aiWaitTime: number|undefined;
-    aiWaitRandom: boolean|undefined;
 
     game = new Go(UserPreferences.gameSize);
     gameMode: GameMode = 'self';
@@ -88,8 +85,10 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     constructor(props: any, ctx: any) {
         super(props, ctx);
 
-        this.aiWaitTime = 0;
-        this.aiWaitRandom = false;
+        // Added to window for debugging purpose
+        (window as any).board = this;
+        (window as any).client = this.client;
+        (window as any).client2 = this.client2;
 
         const urlParams = getUrlParams();
         const vbSizeParam = urlParams.get('vbSize');
@@ -115,8 +114,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newAIGame(config: NewGameDialogStates): Promise<[boolean, number]> {
-        this.aiWaitTime = undefined;
-        this.aiWaitRandom = undefined;
         this.gameMode = 'ai';
         this.userStone = config.selectedColor;
         this.engine = config.engine;
@@ -157,8 +154,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newAIvsAIGame(config: NewAIvsAIGameDialogStates): Promise<[boolean, number]> {
-        this.aiWaitTime = 0;
-        this.aiWaitRandom = false;
         this.gameMode = 'ai-ai';
         this.state.isAIvsAI = true;
         this.userStone = 'B';
@@ -217,8 +212,6 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     }
 
     async newSelfGame(config: NewGameDialogStates): Promise<boolean> {
-        this.aiWaitTime = 0;
-        this.aiWaitRandom = false;
         this.gameMode = 'self';
         this.engine = config.engine || 'KataGo';
         UserPreferences.whitePlayer = UserPreferences.blackPlayer = 'Human';
@@ -396,7 +389,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                 return result.move;
         }
 
-        await Utils.aiThinking(this.aiWaitTime, this.aiWaitRandom);
+        await Utils.aiThinking();
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');

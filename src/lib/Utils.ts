@@ -7,7 +7,7 @@ export async function sleep(duration: number) {
     });
 }
 
-export async function aiThinking(time: number|undefined, random: boolean|undefined) {
+export async function aiThinking(time?: number, random?: boolean) {
     const urlParams = getUrlParams();
 
     let waitTime = time;
