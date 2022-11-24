@@ -9,22 +9,18 @@ interface EngineProps {
 
 export default class Engine extends React.Component<EngineProps, any> {
 
+    static default = "KataGoX:xu-128";
+
     render() {
         return (
-          <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
-            <option value="KataGoX:xu-128">KataGoX Xu 128 {i18n.aiLevel.strongest}</option>
-            <option value="KataGoX:xu-100">KataGoX Xu 100</option>
+          <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue="KataGoX:xu-128">
+            <option value="KataGoX:xu-128">长考许家狗 {i18n.aiLevel.strongest}</option>
+            <option value="KataGoX:s23439424-d13434081">长考曹家狗</option>
 
-            <option value="KataGoX:s23439424-d13434081">KataGoX 75</option>
-            <option value="KataGoX:s23172608-d13319785">KataGoX 74</option>
-            <option value="KataGoX:s22906496-d13208116">KataGoX 73</option>
-            <option value="KataGoX:s21172736-d12529899">KataGoX 72</option>
-            <option value="KataGoX:s40746624-d11963425">KataGoX 71</option>
-            <option value="KataGoX:s40413184-d11733792">KataGoX 70</option>
-
-            <option value="KataGo:xu-128">KataGo Xu 128</option>
+            <option value="KataGo:xu-128">快棋许家狗</option>
+            <option value="KataGo:s23439424-d13434081">快棋曹家狗</option>
+            {/*
             <option value="KataGo:xu-100">KataGo Xu 100</option>
-            <option value="KataGo:s23439424-d13434081">KataGo 75</option>
             <option value="KataGo:s23172608-d13319785">KataGo 74</option>
             <option value="KataGo:s22906496-d13208116">KataGo 73</option>
             <option value="KataGo:s21172736-d12529899">KataGo 72</option>
@@ -70,7 +66,6 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGo:s15325952-d3731791">KataGo 32</option>
             <option value="KataGo:s14939904-d3588306">KataGo 31</option>
             <option value="KataGo:s14586496-d3448502">KataGo 30</option>
-            {/*
             <option value="KataGo:s13805312-d3160255">KataGo 29</option>
             <option value="KataGo:s13530240-d3016364">KataGo 28</option>
             <option value="KataGo:s12528000-d2717595">KataGo 27</option>

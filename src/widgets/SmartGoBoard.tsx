@@ -20,6 +20,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import Tooltip from 'rc-tooltip';
+import Engine from 'src/components/Engine';
 const Handle = Slider.Handle;
 
 const handle = (props) => {
@@ -74,7 +75,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
     gameMode: GameMode = 'self';
     state: SmartGoBoardStates = { remaingTime: '--:--' };
     userStone: StoneColor = 'B';
-    engine: string = 'KataGo';
+    engine: string = Engine.default;
 
     get currentCursor() { return this.game.cursor; }
 
@@ -213,7 +214,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
     async newSelfGame(config: NewGameDialogStates): Promise<boolean> {
         this.gameMode = 'self';
-        this.engine = config.engine || 'KataGo';
+        this.engine = config.engine || Engine.default;
         UserPreferences.whitePlayer = UserPreferences.blackPlayer = 'Human';
 
         let results = await this.client.requestAI(this.engine);
@@ -516,7 +517,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         if (mode !== 'ai') return;
 
         let userstone = (UserPreferences.userStone) as StoneColor;
-        this.engine = UserPreferences.gameEngine || 'KataGo';
+        this.engine = UserPreferences.gameEngine || Engine.default;
         this.userStone = userstone;
 
         if (this.game.currentColor === userstone) return;

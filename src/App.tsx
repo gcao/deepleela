@@ -24,6 +24,7 @@ import { History } from 'history';
 import ReviewClient from './common/ReviewClient';
 import BrowserHelper from './components/BrowserHelper';
 import Joseki from './routes/Joseki';
+import Engine from './components/Engine';
 
 export enum Action {
   None,
@@ -192,7 +193,7 @@ class App extends React.Component<AppProps, AppStates> {
   async popScoreInfo() {
     this.setState({ loadingDialogOpen: true });
     if (!GameClient.default.aiConnected) {
-      await GameClient.default.requestAI('KataGo');
+      await GameClient.default.requestAI(Engine.default);
     }
     let msg = await GameClient.default.finalScore() || '';
     this.setState({ loadingDialogOpen: false, infoDialogOpen: true, info: { title: i18n.dialogs.info.title_score, message: msg } });
