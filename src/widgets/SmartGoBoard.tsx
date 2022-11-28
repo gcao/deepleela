@@ -399,9 +399,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         // TODO: this.clent.heatmap() does not work?
         // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
 
-        if (this.props.showWinrate && this.game.isLatestCursor) {
-            await this.peekWinrate();
-        }
+        // if (this.props.showWinrate && this.game.isLatestCursor) {
+        //     await this.peekWinrate();
+        // }
 
         return result.move;
     }
@@ -455,9 +455,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         // TODO: this.clent.heatmap() does not work?
         // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
 
-        if (this.props.showWinrate && this.game.isLatestCursor) {
-            await this.peekWinrate();
-        }
+        // if (this.props.showWinrate && this.game.isLatestCursor) {
+        //     await this.peekWinrate();
+        // }
 
         return result.move;
     }
