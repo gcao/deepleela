@@ -30,8 +30,16 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
     constructor(props: NewAIvsAIGameDialogProps, ctx: any) {
         super(props, ctx);
 
-        let preferences = localStorage.getItem('newgame');
-        let defaultPreference: any = { selectedColor: "B", komi: UserPreferences.komi || 7.5, handicap: 0, time: 120, engineB: Engine.default, engineW: Engine.default, boardSize: 19 };
+        let preferences = localStorage.getItem('newgameAIvsAI');
+        let defaultPreference: any = {
+            selectedColor: "B",
+            komi: UserPreferences.komi || 7.5,
+            handicap: 0,
+            time: 120,
+            engineB: Engine.default,
+            engineW: Engine.default,
+            boardSize: 19
+        };
 
         try {
             let pref = preferences ? JSON.parse(preferences) : defaultPreference;
@@ -46,7 +54,7 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
     }
 
     savePreferences() {
-        localStorage.setItem('newgame', JSON.stringify(this.state));
+        localStorage.setItem('newgameAIvsAI', JSON.stringify(this.state));
     }
 
     render() {

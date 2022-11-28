@@ -36,6 +36,13 @@ export const lang = {
         notWorking: '有问题',
     },
 
+    bot: {
+        xu128     : '长考许家狗（每步 15 秒）',
+        xu128Fast : '快棋许家狗（每步  1 秒）',
+        newest    : '长考最新狗（每步 15 秒）',
+        newestFast: '快棋最新狗（每步  1 秒）',
+    },
+
     dialogs: {
         newgame: {
             title: '新对局',

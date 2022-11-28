@@ -35,6 +35,13 @@ export const lang = {
         strongest: 'Strongest',
     },
 
+    bot: {
+        xu128     : 'Bot 128 by Xu (slow - 15 secs/move)',
+        xu128Fast : 'Bot 128 by Xu (fast -  1 sec /move)',
+        newest    : 'Newest bot (slow - 15 secs/move)',
+        newestFast: 'Newest bot (fast -  1 sec /move)',
+    },
+
     dialogs: {
         newgame: {
             title: 'New Game',

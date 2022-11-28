@@ -9,18 +9,23 @@ interface EngineProps {
 
 export default class Engine extends React.Component<EngineProps, any> {
 
-    static default = "KataGoX:xu-128";
+    static default = "KataGoX:s60775040-d15559956";
 
     render() {
         return (
-          <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue="KataGoX:xu-128">
-            <option value="KataGoX:xu-128">长考许家狗 {i18n.aiLevel.strongest}</option>
-            <option value="KataGoX:s23439424-d13434081">长考曹家狗</option>
-
-            <option value="KataGo:xu-128">快棋许家狗</option>
-            <option value="KataGo:s23439424-d13434081">快棋曹家狗</option>
+          <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
+            <option value="KataGoX:s60775040-d15559956">{i18n.bot.newest}</option>
             {/*
+            <option value="KataGoX:xu-128">{i18n.bot.xu128}</option>
+            <option value="KataGoX:xu-100">KataGoX Xu 100</option>
+            <option value="KataGoX:s23439424-d13434081">KataGoX 75</option>
+            */}
+
+            <option value="KataGo:s60775040-d15559956">{i18n.bot.newestFast}</option>
+            {/*
+            <option value="KataGo:xu-128">{i18n.bot.xu128Fast}</option>
             <option value="KataGo:xu-100">KataGo Xu 100</option>
+            <option value="KataGo:s23439424-d13434081">KataGo 75</option>
             <option value="KataGo:s23172608-d13319785">KataGo 74</option>
             <option value="KataGo:s22906496-d13208116">KataGo 73</option>
             <option value="KataGo:s21172736-d12529899">KataGo 72</option>
