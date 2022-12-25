@@ -37,12 +37,12 @@ export const lang = {
     },
 
     bot: {
-        xu128Fast : '快棋许家狗（每步  1 秒）',
-        xu128     : '正常许家狗（每步  5 秒）',
-        xu128Slow : '长考许家狗（每步 30 秒）',
         newestFast: '快棋最新狗（每步  1 秒）',
         newest    : '正常最新狗（每步  5 秒）',
         newestSlow: '长考最新狗（每步 30 秒）',
+        oldFast   : '快棋上代狗（每步  1 秒）',
+        old       : '正常上代狗（每步  5 秒）',
+        oldSlow   : '长考上代狗（每步 30 秒）',
     },
 
     dialogs: {

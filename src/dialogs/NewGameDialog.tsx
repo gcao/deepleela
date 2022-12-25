@@ -35,7 +35,7 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
         let preferences = localStorage.getItem('newgame');
         let defaultPreference: any = {
             selectedColor: "B",
-            komi: UserPreferences.komi || 7.5,
+            komi: UserPreferences.komi || 6.5,
             handicap: 0,
             time: 120,
             engine: Engine.default,

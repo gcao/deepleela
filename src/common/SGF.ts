@@ -58,7 +58,7 @@ export default class SGF {
         let size = Number.parseInt(tree.props.SZ || '19') || 19;
 
         let game = new Go(size);
-        game.komi = Number.parseFloat(tree.props.KM || '7.5');
+        game.komi = Number.parseFloat(tree.props.KM || '6.5');
         game.result = tree.props.RE;
 
         if (tree.props.AB && tree.props.AB.length > 0) {

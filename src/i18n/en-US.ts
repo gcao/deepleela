@@ -36,12 +36,12 @@ export const lang = {
     },
 
     bot: {
-        xu128Fast : 'Bot 128 by Xu (1 sec/move)',
-        xu128     : 'Bot 128 by Xu (5 secs/move)',
-        xu128Slow : 'Bot 128 by Xu (30 secs/move)',
         newestFast: 'Newest bot (1 sec/move)',
         newest    : 'Newest bot (5 secs/move)',
         newestSlow: 'Newest bot (30 secs/move)',
+        oldFast   : 'Prev bot (1 sec/move)',
+        old       : 'Prev bot (5 secs/move)',
+        oldSlow   : 'Prev bot (30 secs/move)',
     },
 
     dialogs: {

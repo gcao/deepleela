@@ -33,7 +33,7 @@ export default class NewAIvsAIGameDialog extends React.Component<NewAIvsAIGameDi
         let preferences = localStorage.getItem('newgameAIvsAI');
         let defaultPreference: any = {
             selectedColor: "B",
-            komi: UserPreferences.komi || 7.5,
+            komi: UserPreferences.komi || 6.5,
             handicap: 0,
             time: 120,
             engineB: Engine.default,

@@ -26,7 +26,7 @@ export default class Go extends EventEmitter {
     branchCursor?: number;
 
     get size() { return this.board.length };
-    komi = 7.5;
+    komi = 6.5;
     current = State.Black;
     cartesianCoordXY = { x: -1, y: -1 };
 

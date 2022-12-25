@@ -9,20 +9,22 @@ interface EngineProps {
 
 export default class Engine extends React.Component<EngineProps, any> {
 
-    static default = "KataGoX:s60775040-d15559956";
+    static default = "KataGoX:xu-200";
 
     render() {
         return (
           <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
-            <option value="KataGoXX:s60775040-d15559956">{i18n.bot.newestSlow}</option>
-            <option value="KataGoX:s60775040-d15559956">{i18n.bot.newest}</option>
+            <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
+            <option value="KataGoX:xu-200">{i18n.bot.newestSlow}</option>
+            <option value="KataGo:xu-200">{i18n.bot.newestSlow}</option>
+            <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
+            <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
+            <option value="KataGo:s60775040-d15559956">{i18n.bot.oldFast}</option>
             {/*
-            <option value="KataGoX:xu-128">{i18n.bot.xu128}</option>
-            <option value="KataGoX:xu-100">KataGoX Xu 100</option>
-            <option value="KataGoX:s23439424-d13434081">KataGoX 75</option>
+            <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
+            <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
+            <option value="KataGo:temp">快棋成长狗（每步  1 秒）</option>
             */}
-
-            <option value="KataGo:s60775040-d15559956">{i18n.bot.newestFast}</option>
             {/*
             <option value="KataGo:xu-128">{i18n.bot.xu128Fast}</option>
             <option value="KataGo:xu-100">KataGo Xu 100</option>
