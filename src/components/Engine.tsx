@@ -15,8 +15,8 @@ export default class Engine extends React.Component<EngineProps, any> {
         return (
           <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
             <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
-            <option value="KataGoX:xu-200">{i18n.bot.newestSlow}</option>
-            <option value="KataGo:xu-200">{i18n.bot.newestSlow}</option>
+            <option value="KataGoX:xu-200">{i18n.bot.newest}</option>
+            <option value="KataGo:xu-200">{i18n.bot.newestFast}</option>
             <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
             <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
             <option value="KataGo:s60775040-d15559956">{i18n.bot.oldFast}</option>
