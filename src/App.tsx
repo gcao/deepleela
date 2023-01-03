@@ -52,6 +52,7 @@ interface AppStates {
 interface AppProps {
   action?: Action;
   sgf?: string|null;
+  url?: string|null;
   move?: number;
 }
 
@@ -66,8 +67,14 @@ class App extends React.Component<AppProps, AppStates> {
     if (localStorage.getItem('heatmap') === null) UserPreferences.heatmap = true;
     this.state = { paddingTop: 0, boardBottomMargin: 0, };
 
-    if (this.props.action === Action.Load && this.props.sgf) {
-      this.loadSgf(this.props.sgf, this.props.move as number, {});
+    if (this.props.action === Action.Load) {
+      if (this.props.sgf) {
+        this.loadSgf(this.props.sgf, this.props.move as number, {});
+      } else if (this.props.url) {
+        fetch(this.props.url)
+          .then(resp => resp.text())
+          .then(sgf => this.loadSgf(sgf, this.props.move as number, {}));
+      }
     }
   }
 

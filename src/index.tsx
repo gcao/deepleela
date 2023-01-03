@@ -23,6 +23,7 @@ ReactDOM.render(
   <App
     action={action}
     sgf={urlParams.get('sgf')}
+    url={urlParams.get('url')}
     move={move}
   />,
   document.getElementById('root') as HTMLElement
