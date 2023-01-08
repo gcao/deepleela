@@ -109,6 +109,7 @@ export const lang = {
         white: 'White',
         date: 'Date',
         time: 'Time',
+        komi: 'Komi',
         result: 'Result',
     },
 

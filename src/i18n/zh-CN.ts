@@ -110,6 +110,7 @@ export const lang = {
         white: '白棋',
         date: '日期',
         time: '时间',
+        komi: '贴目',
         result: '比赛结果',
     },
 

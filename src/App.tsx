@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Route, Link, Switch, RouteComponentProps } fro
 import OnlineReivew from './routes/OnlineReview';
 import CGOS from './routes/CGOS';
 import LiveGame from './routes/LiveGame';
+import Games from './routes/Games';
 import { History } from 'history';
 import ReviewClient from './common/ReviewClient';
 import BrowserHelper from './components/BrowserHelper';
@@ -329,6 +330,7 @@ class App extends React.Component<AppProps, AppStates> {
               <Route path='/cgos' exact component={CGOS} />
               <Route path='/cgos/:gameId' component={LiveGame} />
               <Route path='/joseki' component={Joseki} />
+              <Route path='/games' component={Games} />
               <Route path='/' component={LocalGame} />
             </Switch>
           </div>
