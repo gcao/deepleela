@@ -38,6 +38,7 @@ export default class Games extends React.Component {
                         <table id='games-table' className="uk-table uk-table-hover uk-table-divider uk-table-small " style={{ fontSize: 12, marginLeft: 14 }}>
                             <thead>
                                 <tr>
+                                    <th style={{ color: `${ThemeManager.default.logoColor}` }}>{i18n.cgos.description}</th>
                                     <th style={{ color: `${ThemeManager.default.logoColor}` }}>{i18n.cgos.black}</th>
                                     <th style={{ color: `${ThemeManager.default.logoColor}` }}>{i18n.cgos.white}</th>
                                     <th style={{ color: `${ThemeManager.default.logoColor}` }}>{i18n.cgos.komi}</th>
@@ -48,6 +49,7 @@ export default class Games extends React.Component {
                                 {this.games.map(m => {
                                     return (
                                         <tr className='uk-animation-fade' key={m.id} style={{ cursor: 'pointer', }} onClick={e => this.openGame(m.sgfUrl)}>
+                                            <td>{m.description}</td>
                                             <td>{m.B}</td>
                                             <td>{m.W}</td>
                                             <td>{m.komi}</td>
