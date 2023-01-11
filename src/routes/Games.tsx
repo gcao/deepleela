@@ -35,7 +35,8 @@ export default class Games extends React.Component {
                 <div style={{ display: 'flex', justifyContent: 'center', }}>
                     {/* <div style={{ display: 'block' }}>{model.name} : {model.description}</div> */}
                     <div className='uk-overflow-auto' style={{ minWidth: '80%', display: 'block' }}>
-                        <table id='games-table' className="uk-table uk-table-hover uk-table-divider uk-table-small " style={{ fontSize: 12, marginLeft: 14 }}>
+                        <table id='games-table' className="uk-table uk-table-hover uk-table-divider uk-table-small "
+                               style={{ fontSize: 12, marginLeft: 14, background: '#e0e0e0' }}>
                             <thead>
                                 <tr>
                                     <th style={{ color: `${ThemeManager.default.logoColor}` }}>{i18n.cgos.description}</th>

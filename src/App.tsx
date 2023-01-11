@@ -330,7 +330,7 @@ class App extends React.Component<AppProps, AppStates> {
               <Route path='/cgos' exact component={CGOS} />
               <Route path='/cgos/:gameId' component={LiveGame} />
               <Route path='/joseki' component={Joseki} />
-              <Route path='/games' component={Games} />
+              <Route path='/gamelist' component={Games} />
               <Route path='/' component={LocalGame} />
             </Switch>
           </div>
