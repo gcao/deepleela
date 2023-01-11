@@ -49,7 +49,7 @@ export default class Games extends React.Component {
                             <tbody>
                                 {this.games.map(m => {
                                     return (
-                                        <tr className='uk-animation-fade' key={m.id} style={{ cursor: 'pointer', }} onClick={e => this.openGame(m.sgfUrl)}>
+                                        <tr className='uk-animation-fade' key={m.B + m.W + m.id} style={{ cursor: 'pointer', }} onClick={e => this.openGame(m.sgfUrl)}>
                                             <td>{m.description}</td>
                                             <td>{m.B}</td>
                                             <td>{m.W}</td>

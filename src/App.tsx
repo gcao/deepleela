@@ -263,13 +263,15 @@ class App extends React.Component<AppProps, AppStates> {
                 <div className="uk-nav uk-dropdown-nav" >
                   <ul className="uk-nav uk-dropdown-nav">
 
-                    {/*
                     <div className='uk-nav uk-dropdown-nav'>
+                      <li className="uk-nav-divider"></li>
+                      {/*
                       <li><a href='#' onClick={e => App.history.push('/cgos')}>CGOS</a></li>
                       <li><a href="#" onClick={e => App.history.push('/joseki')}>{i18n.menu.joseki}</a> </li>
+                      */}
+                      <li><a href="#" onClick={e => App.history.push('/gamelist')}>{i18n.menu.gamelist}</a> </li>
                       <li className="uk-nav-divider"></li>
                     </div>
-                    */}
 
                     {
                       this.isOnlineMode ?
@@ -281,8 +283,6 @@ class App extends React.Component<AppProps, AppStates> {
                           <li><a href="#" onClick={e => this.setState({ loadSgfDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'review' ? 'deepskyblue' : undefined }}>{i18n.menu.loadsgf}</a></li>
                         </div>
                     }
-
-                    <li><a href="#" onClick={e => this.outputSgf()}>{i18n.menu.exportsgf}</a></li>
 
                     {/*
                       this.isOnlineMode ?
@@ -312,6 +312,7 @@ class App extends React.Component<AppProps, AppStates> {
                           : undefined
                       }
                       <li><a href="#" onClick={e => this.popScoreInfo()}>{i18n.menu.score}</a></li>
+                      <li><a href="#" onClick={e => this.outputSgf()}>{i18n.menu.exportsgf}</a></li>
                     </div>
 
                     <li className="uk-nav-divider"></li>
