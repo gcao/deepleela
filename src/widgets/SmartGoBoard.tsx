@@ -237,11 +237,26 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         return results[0];
     }
 
+    recenter() {
+        if (this.game.mainBranch.length == 0 || this.board == null) {
+            return;
+        }
+
+        let lastMove = this.game.mainBranch[this.game.cursor];
+        this.board.setState({
+            vbOffsetX: Math.floor(this.game.size/2) - lastMove.arrayCoord.x + this.board.state.vbSize,
+            vbOffsetY: Math.floor(this.game.size/2) - lastMove.arrayCoord.y + this.board.state.vbSize,
+        });
+    }
+
     changeCursor(delta: number) {
         if (delta > 0 && this.game.isLatestCursor) return;
 
         this.board.clearVariations();
         this.game.changeCursor(delta);
+        if (delta == 0) {
+            this.recenter();
+        }
 
         if (this.gameMode === 'review') UserPreferences.cursor = this.game.cursor;
         if (this.game.isBranch) this.showBranch();
