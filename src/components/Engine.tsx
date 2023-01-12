@@ -23,6 +23,18 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
             <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
             <option value="KataGo:temp">快棋成长狗（每步  1 秒）</option>
+            <option value="KataGo:cao-v12">ModelCao V12</option>
+            <option value="KataGo:cao-v11">ModelCao V11</option>
+            <option value="KataGo:cao-v10">ModelCao V10</option>
+            <option value="KataGo:cao-v9">ModelCao V9</option>
+            <option value="KataGo:cao-v8">ModelCao V8</option>
+            <option value="KataGo:cao-v7">ModelCao V7</option>
+            <option value="KataGo:cao-v6">ModelCao V6</option>
+            <option value="KataGo:cao-v5">ModelCao V5</option>
+            <option value="KataGo:cao-v4">ModelCao V4</option>
+            <option value="KataGo:cao-v3">ModelCao V3</option>
+            <option value="KataGo:cao-v2">ModelCao V2</option>
+            <option value="KataGo:cao-v1">ModelCao V1</option>
             {/*
             <option value="KataGo:xu-128">{i18n.bot.xu128Fast}</option>
             <option value="KataGo:xu-100">KataGo Xu 100</option>
