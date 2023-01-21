@@ -17,193 +17,51 @@ export default {
       },
       "games": [
         {
-          "id": 24,
-          "description": "V1 执白胜 V0",
-          "B": "modelcao-v0",
-          "W": "modelcao-v1",
-          "komi": "6",
-          "result": "W+103",
-          "sgfUrl": "/games/modelcao/gatekeeper/v1/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V1 执黑胜 V0",
-          "B": "modelcao-v1",
-          "W": "modelcao-v0",
-          "komi": "7.5",
-          "result": "B+115.5",
-          "sgfUrl": "/games/modelcao/gatekeeper/v1/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V2 执黑胜 V1",
-          "B": "modelcao-v2",
-          "W": "modelcao-v1",
-          "komi": "8",
-          "result": "B+",
-          "sgfUrl": "/games/modelcao/gatekeeper/v2/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V2 执白胜 V1",
-          "B": "modelcao-v1",
-          "W": "modelcao-v2",
-          "komi": "32",
-          "result": "W+185",
-          "sgfUrl": "/games/modelcao/gatekeeper/v2/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V3 执黑胜 V2",
-          "B": "modelcao-v3",
-          "W": "modelcao-v2",
-          "komi": "37.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v3/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V3 执黑胜 V2",
-          "B": "modelcao-v3",
-          "W": "modelcao-v2",
-          "komi": "37.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v3/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V4 执白胜 V3",
-          "B": "modelcao-v3",
-          "W": "modelcao-v4",
-          "komi": "40.5",
+          "id": 1,
+          "description": "Xu200 执白胜 Xu200",
+          "B": "Xu200",
+          "W": "Xu200",
+          "komi": "6.5",
           "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v4/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V4 执黑胜 V3",
-          "B": "modelcao-v4",
-          "W": "modelcao-v3",
-          "komi": "40.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v4/25.sgf"
+          "sgfUrl": "/games/xu-200/1.sgf"
         },
 
         {
           "id": 24,
-          "description": "V5 执白胜 V4",
-          "B": "modelcao-v4",
-          "W": "modelcao-v5",
-          "komi": "53",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v5/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V5 执白胜 V4",
-          "B": "modelcao-v4",
-          "W": "modelcao-v5",
-          "komi": "53",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v5/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V6 执白胜 V5",
-          "B": "modelcao-v5",
-          "W": "modelcao-v6",
-          "komi": "-24.5",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v6/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V6 执黑胜 V5",
-          "B": "modelcao-v6",
-          "W": "modelcao-v5",
-          "komi": "-24.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v6/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V7 执白胜 V6",
-          "B": "modelcao-v6",
-          "W": "modelcao-v7",
-          "komi": "1",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v7/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V7 执黑胜 V6",
-          "B": "modelcao-v7",
-          "W": "modelcao-v6",
-          "komi": "-24.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v7/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V8 执白胜 V7",
-          "B": "modelcao-v7",
-          "W": "modelcao-v8",
+          "description": "V13 执黑胜 V12",
+          "B": "modelcao-v13",
+          "W": "modelcao-v12",
           "komi": "5.5",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v8/24.sgf"
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v13/24.sgf"
         },
         {
           "id": 25,
-          "description": "V8 执黑胜 V7",
-          "B": "modelcao-v8",
-          "W": "modelcao-v7",
-          "komi": "-0.5",
+          "description": "V13 执黑胜 V12",
+          "B": "modelcao-v13",
+          "W": "modelcao-v12",
+          "komi": "6",
           "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v8/25.sgf"
+          "sgfUrl": "/games/modelcao/gatekeeper/v13/25.sgf"
         },
 
         {
           "id": 24,
-          "description": "V9 执白胜 V8",
-          "B": "modelcao-v8",
-          "W": "modelcao-v9",
-          "komi": "-1",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v9/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V9 执白胜 V8",
-          "B": "modelcao-v8",
-          "W": "modelcao-v9",
-          "komi": "-1",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v9/25.sgf"
-        },
-
-        {
-          "id": 24,
-          "description": "V10 执白胜 V9",
-          "B": "modelcao-v9",
-          "W": "modelcao-v10",
-          "komi": "4",
-          "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v10/24.sgf"
-        },
-        {
-          "id": 25,
-          "description": "V10 执黑胜 V9",
-          "B": "modelcao-v10",
-          "W": "modelcao-v9",
-          "komi": "4",
+          "description": "V12 执黑胜 V11",
+          "B": "modelcao-v12",
+          "W": "modelcao-v11",
+          "komi": "2.5",
           "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v10/25.sgf"
+          "sgfUrl": "/games/modelcao/gatekeeper/v12/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V12 执白胜 V11",
+          "B": "modelcao-v11",
+          "W": "modelcao-v12",
+          "komi": "4.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v12/25.sgf"
         },
 
         {
@@ -227,22 +85,194 @@ export default {
 
         {
           "id": 24,
-          "description": "V12 执黑胜 V11",
-          "B": "modelcao-v12",
-          "W": "modelcao-v11",
-          "komi": "2.5",
-          "result": "B+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v12/24.sgf"
+          "description": "V10 执白胜 V9",
+          "B": "modelcao-v9",
+          "W": "modelcao-v10",
+          "komi": "4",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v10/24.sgf"
         },
         {
           "id": 25,
-          "description": "V12 执白胜 V11",
-          "B": "modelcao-v11",
-          "W": "modelcao-v12",
-          "komi": "4.5",
+          "description": "V10 执黑胜 V9",
+          "B": "modelcao-v10",
+          "W": "modelcao-v9",
+          "komi": "4",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v10/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V9 执白胜 V8",
+          "B": "modelcao-v8",
+          "W": "modelcao-v9",
+          "komi": "-1",
           "result": "W+R",
-          "sgfUrl": "/games/modelcao/gatekeeper/v12/25.sgf"
+          "sgfUrl": "/games/modelcao/gatekeeper/v9/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V9 执白胜 V8",
+          "B": "modelcao-v8",
+          "W": "modelcao-v9",
+          "komi": "-1",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v9/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V8 执白胜 V7",
+          "B": "modelcao-v7",
+          "W": "modelcao-v8",
+          "komi": "5.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v8/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V8 执黑胜 V7",
+          "B": "modelcao-v8",
+          "W": "modelcao-v7",
+          "komi": "-0.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v8/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V7 执白胜 V6",
+          "B": "modelcao-v6",
+          "W": "modelcao-v7",
+          "komi": "1",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v7/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V7 执黑胜 V6",
+          "B": "modelcao-v7",
+          "W": "modelcao-v6",
+          "komi": "-24.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v7/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V6 执白胜 V5",
+          "B": "modelcao-v5",
+          "W": "modelcao-v6",
+          "komi": "-24.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v6/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V6 执黑胜 V5",
+          "B": "modelcao-v6",
+          "W": "modelcao-v5",
+          "komi": "-24.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v6/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V5 执白胜 V4",
+          "B": "modelcao-v4",
+          "W": "modelcao-v5",
+          "komi": "53",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v5/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V5 执白胜 V4",
+          "B": "modelcao-v4",
+          "W": "modelcao-v5",
+          "komi": "53",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v5/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V4 执白胜 V3",
+          "B": "modelcao-v3",
+          "W": "modelcao-v4",
+          "komi": "40.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v4/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V4 执黑胜 V3",
+          "B": "modelcao-v4",
+          "W": "modelcao-v3",
+          "komi": "40.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v4/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V3 执黑胜 V2",
+          "B": "modelcao-v3",
+          "W": "modelcao-v2",
+          "komi": "37.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v3/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V3 执黑胜 V2",
+          "B": "modelcao-v3",
+          "W": "modelcao-v2",
+          "komi": "37.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/gatekeeper/v3/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V2 执黑胜 V1",
+          "B": "modelcao-v2",
+          "W": "modelcao-v1",
+          "komi": "8",
+          "result": "B+",
+          "sgfUrl": "/games/modelcao/gatekeeper/v2/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V2 执白胜 V1",
+          "B": "modelcao-v1",
+          "W": "modelcao-v2",
+          "komi": "32",
+          "result": "W+185",
+          "sgfUrl": "/games/modelcao/gatekeeper/v2/25.sgf"
+        },
+
+        {
+          "id": 24,
+          "description": "V1 执白胜 V0",
+          "B": "modelcao-v0",
+          "W": "modelcao-v1",
+          "komi": "6",
+          "result": "W+103",
+          "sgfUrl": "/games/modelcao/gatekeeper/v1/24.sgf"
+        },
+        {
+          "id": 25,
+          "description": "V1 执黑胜 V0",
+          "B": "modelcao-v1",
+          "W": "modelcao-v0",
+          "komi": "7.5",
+          "result": "B+115.5",
+          "sgfUrl": "/games/modelcao/gatekeeper/v1/25.sgf"
         }
+
       ]
     }
   ]
