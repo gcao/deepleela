@@ -14,15 +14,20 @@ export default class Engine extends React.Component<EngineProps, any> {
     render() {
         return (
           <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
-            <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
-            <option value="KataGoX:xu-200">{i18n.bot.newest}</option>
             <option value="KataGo:xu-200">{i18n.bot.newestFast}</option>
-            <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
-            <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
+            <option value="KataGoX:xu-200">{i18n.bot.newest}</option>
+            <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
             <option value="KataGo:s60775040-d15559956">{i18n.bot.oldFast}</option>
-            <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
-            <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
+            <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
+            <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
+            {/*
             <option value="KataGo:temp">快棋成长狗（每步  1 秒）</option>
+            <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
+            <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
+            */}
+            <option value="KataGo:cao-v14">ModelCao v14</option>
+            <option value="KataGoX:cao-v14">ModelCao v14（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v14">ModelCao v14（每步 30 秒）</option>
             <option value="KataGo:cao-v13">ModelCao V13</option>
             <option value="KataGo:cao-v12">ModelCao V12</option>
             <option value="KataGo:cao-v11">ModelCao V11</option>
@@ -36,6 +41,11 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGo:cao-v3">ModelCao V3</option>
             <option value="KataGo:cao-v2">ModelCao V2</option>
             <option value="KataGo:cao-v1">ModelCao V1</option>
+            {/*
+            <option value="KataGo:s23439424-d13434081">快棋??狗（每步  1 秒）</option>
+            <option value="KataGoX:s23439424-d13434081">正常??狗（每步  5 秒）</option>
+            <option value="KataGoXX:s23439424-d13434081">长考??狗（每步 30 秒）</option>
+            */}
             {/*
             <option value="KataGoXX:s23439424-d13434081">长考一代狗（每步 30 秒）</option>
             <option value="KataGoX:s23439424-d13434081">正常一代狗（每步  5 秒）</option>
