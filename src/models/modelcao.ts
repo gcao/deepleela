@@ -30,7 +30,7 @@ export default {
           "description": "V18 让七子胜 Xu-200",
           "B": "Xu-200",
           "W": "modelcao-v18",
-          "komi": "4.5",
+          "komi": "7.5",
           "result": "W+R",
           "sgfUrl": "/games/modelcao/v18/vs-xu200-h7.sgf"
         },
