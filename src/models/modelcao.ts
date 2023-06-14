@@ -17,14 +17,60 @@ export default {
       },
       "games": [
         {
+          "id": 51,
+          "description": "V17 让二子胜 Xu-200",
+          "B": "modelcao-v17",
+          "W": "Xu-200",
+          "komi": "2.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v17/vs-xu200-h2.sgf"
+        },
+        {
+          "id": 52,
+          "description": "V17 让三子胜 Xu-200",
+          "B": "modelcao-v17",
+          "W": "Xu-200",
+          "komi": "3.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v17/vs-xu200-h3.sgf"
+        },
+        {
+          "id": 53,
+          "description": "V17 让三子胜 V14",
+          "B": "modelcao-v17",
+          "W": "modelcao-v14",
+          "komi": "3.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v17/vs-v14-h3.sgf"
+        },
+        {
           "id": 1,
-          "description": "Xu200 执白胜 Xu200",
-          "B": "Xu200",
-          "W": "Xu200",
+          "description": "Xu-200 执白胜 Xu-200",
+          "B": "Xu-200",
+          "W": "Xu-200",
           "komi": "6.5",
           "result": "W+R",
           "sgfUrl": "/games/xu-200/1.sgf"
         },
+
+        // {
+        //   "id": 19,
+        //   "description": "V14 执白胜 V13",
+        //   "B": "modelcao-v13",
+        //   "W": "modelcao-v14",
+        //   "komi": "6",
+        //   "result": "W+R",
+        //   "sgfUrl": "/games/modelcao/gatekeeper/v14/19.sgf"
+        // },
+        // {
+        //   "id": 20,
+        //   "description": "V14 执黑胜 V13",
+        //   "B": "modelcao-v14",
+        //   "W": "modelcao-v13",
+        //   "komi": "6",
+        //   "result": "B+R",
+        //   "sgfUrl": "/games/modelcao/gatekeeper/v14/20.sgf"
+        // },
 
         {
           "id": 24,
