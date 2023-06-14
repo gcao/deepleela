@@ -17,10 +17,19 @@ export default {
       },
       "games": [
         {
+          "id": 1,
+          "description": "V18 让四子胜 Xu-200",
+          "B": "Xu-200",
+          "W": "modelcao-v18",
+          "komi": "4.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v18/vs-xu200-h4.sgf"
+        },
+        {
           "id": 51,
           "description": "V17 让二子胜 Xu-200",
-          "B": "modelcao-v17",
-          "W": "Xu-200",
+          "B": "Xu-200",
+          "W": "modelcao-v17",
           "komi": "2.5",
           "result": "W+R",
           "sgfUrl": "/games/modelcao/v17/vs-xu200-h2.sgf"
@@ -28,8 +37,8 @@ export default {
         {
           "id": 52,
           "description": "V17 让三子胜 Xu-200",
-          "B": "modelcao-v17",
-          "W": "Xu-200",
+          "B": "Xu-200",
+          "W": "modelcao-v17",
           "komi": "3.5",
           "result": "W+R",
           "sgfUrl": "/games/modelcao/v17/vs-xu200-h3.sgf"
@@ -37,8 +46,8 @@ export default {
         {
           "id": 53,
           "description": "V17 让三子胜 V14",
-          "B": "modelcao-v17",
-          "W": "modelcao-v14",
+          "B": "modelcao-v14",
+          "W": "modelcao-v17",
           "komi": "3.5",
           "result": "W+R",
           "sgfUrl": "/games/modelcao/v17/vs-v14-h3.sgf"
