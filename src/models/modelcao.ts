@@ -26,6 +26,15 @@ export default {
           "sgfUrl": "/games/modelcao/v18/vs-xu200-h4.sgf"
         },
         {
+          "id": 2,
+          "description": "V18 让七子胜 Xu-200",
+          "B": "Xu-200",
+          "W": "modelcao-v18",
+          "komi": "4.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v18/vs-xu200-h7.sgf"
+        },
+        {
           "id": 51,
           "description": "V17 让二子胜 Xu-200",
           "B": "Xu-200",
