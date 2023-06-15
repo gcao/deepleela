@@ -25,6 +25,9 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
             <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
             */}
+            {/* <option value="KataGo:cao-v19">ModelCao v19</option>
+            <option value="KataGoX:cao-v19">ModelCao v19（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v19">ModelCao v19（每步 30 秒）</option> */}
             <option value="KataGo:cao-v18">ModelCao v18</option>
             <option value="KataGoX:cao-v18">ModelCao v18（每步  5 秒）</option>
             <option value="KataGoXX:cao-v18">ModelCao v18（每步 30 秒）</option>

@@ -18,6 +18,16 @@ export default {
       "games": [
         {
           "id": 1,
+          "description": "V18（30秒）让七子负 weiqilover",
+          "B": "weiqilover",
+          "W": "modelcao-v18",
+          "komi": "7.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/vs-human/v18-30s-vs-weiqilover-h7.sgf"
+        },
+
+        {
+          "id": 1,
           "description": "V18 让四子胜 Xu-200",
           "B": "Xu-200",
           "W": "modelcao-v18",
