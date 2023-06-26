@@ -17,11 +17,20 @@ export default {
       },
       "games": [
         {
+          "id": 3,
+          "description": "V18（5秒）让五子负 weiqilover",
+          "B": "weiqilover",
+          "W": "modelcao-v18",
+          "komi": "5.5",
+          "result": "B+R",
+          "sgfUrl": "/games/modelcao/vs-human/v18-5s-vs-weiqilover-h5.sgf"
+        },
+        {
           "id": 2,
           "description": "V18（30秒）让六子负 weiqilover",
           "B": "weiqilover",
           "W": "modelcao-v18",
-          "komi": "7.5",
+          "komi": "6.5",
           "result": "B+R",
           "sgfUrl": "/games/modelcao/vs-human/v18-30s-vs-weiqilover-h6.sgf"
         },
