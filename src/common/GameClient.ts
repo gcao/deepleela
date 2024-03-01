@@ -10,7 +10,8 @@ import SGF from "./SGF";
 export default class GameClient extends EventEmitter {
 
     // static readonly url = process.env.NODE_ENV === 'production' ? `wss://w.daoqi.org` : 'ws://192.168.31.54:3301';
-    static readonly url = 'ws://gtp.daoqi.org:8080';
+    // static readonly url = 'ws://gtp.daoqi.org:8080';
+    static readonly url = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/gtp`;
     static readonly default = new GameClient();
 
     private ws: WebSocket;

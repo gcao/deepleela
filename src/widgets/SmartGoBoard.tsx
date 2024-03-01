@@ -619,9 +619,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         return (
             <div id={this.props.id} style={{ position: 'relative' }} onWheel={e => this.onWheelChanged(e)} onContextMenu={e => this.onContextMenu(e)}>
-                <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, fontSize: 10, color: tm.logoColor, marginLeft: aiTipsMarginLeft, marginTop: 12, opacity: this.state.isThinking ? 1 : 0, transition: 'all 0.5s', }}>
+                {/* <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, fontSize: 10, color: tm.logoColor, marginLeft: aiTipsMarginLeft, marginTop: 12, opacity: this.state.isThinking ? 1 : 0, transition: 'all 0.5s', }}>
                     {i18n.notifications.aiIsThinking}
-                </div>
+                </div> */}
 
                 {
                     this.gameMode === 'review' ?

@@ -337,11 +337,11 @@ class App extends React.Component<AppProps, AppStates> {
           </div>
 
           {/* Footer Aera */}
-          <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
+          {/* <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
             <div style={{ fontSize: 12, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
               {i18n.hint}
             </div>
-          </div>
+          </div> */}
 
           {/* Dialogs Aera */}
           <NewGameDialog isOpen={this.state.newGameDialogOpen} onCancel={() => this.setState({ newGameDialogOpen: false })} onOk={c => this.onNewAIGame(c)} enableSize enableStone />
