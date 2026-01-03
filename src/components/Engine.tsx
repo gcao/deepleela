@@ -9,7 +9,7 @@ interface EngineProps {
 
 export default class Engine extends React.Component<EngineProps, any> {
 
-    static default = "KataGo:cao-v25";
+    static default = "KataGo:cao-v31";
 
     render() {
         return (
@@ -19,6 +19,21 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
             <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
             */}
+            <option value="KataGo:cao-v31">ModelCao v31</option>
+            <option value="KataGoX:cao-v31">ModelCao v31（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v31">ModelCao v31（每步 30 秒）</option>
+            <option value="KataGo:cao-v30">ModelCao v30</option>
+            <option value="KataGoX:cao-v30">ModelCao v30（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v30">ModelCao v30（每步 30 秒）</option>
+            <option value="KataGo:cao-v29">ModelCao v29</option>
+            <option value="KataGoX:cao-v29">ModelCao v29（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v29">ModelCao v29（每步 30 秒）</option>
+            <option value="KataGo:cao-v28">ModelCao v28</option>
+            <option value="KataGoX:cao-v28">ModelCao v28（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v28">ModelCao v28（每步 30 秒）</option>
+            <option value="KataGo:cao-v27">ModelCao v27</option>
+            <option value="KataGoX:cao-v27">ModelCao v27（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v27">ModelCao v27（每步 30 秒）</option>
             <option value="KataGo:cao-v26">ModelCao v26</option>
             <option value="KataGoX:cao-v26">ModelCao v26（每步  5 秒）</option>
             <option value="KataGoXX:cao-v26">ModelCao v26（每步 30 秒）</option>
@@ -43,18 +58,29 @@ export default class Engine extends React.Component<EngineProps, any> {
             <option value="KataGo:cao-v19">ModelCao v19</option>
             <option value="KataGoX:cao-v19">ModelCao v19（每步  5 秒）</option>
             <option value="KataGoXX:cao-v19">ModelCao v19（每步 30 秒）</option>
+            <option value="KataGo:xu-600">ModelXu v600</option>
+            <option value="KataGoX:xu-600">ModelXu v600（每步  5 秒）</option>
+            <option value="KataGoXX:xu-600">ModelXu v600（每步 30 秒）</option>
             <option value="KataGo:cao-v18">ModelCao v18</option>
             <option value="KataGoX:cao-v18">ModelCao v18（每步  5 秒）</option>
             <option value="KataGoXX:cao-v18">ModelCao v18（每步 30 秒）</option>
             <option value="KataGo:cao-v17">ModelCao v17</option>
             <option value="KataGoX:cao-v17">ModelCao v17（每步  5 秒）</option>
             <option value="KataGoXX:cao-v17">ModelCao v17（每步 30 秒）</option>
+            {/*
             <option value="KataGo:xu-200">{i18n.bot.newestFast}</option>
             <option value="KataGoX:xu-200">{i18n.bot.newest}</option>
             <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
             <option value="KataGo:s60775040-d15559956">{i18n.bot.oldFast}</option>
             <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
             <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
+            */}
+            <option value="KataGo:xu-200">ModelXu v200</option>
+            <option value="KataGoX:xu-200">ModelXu v200（每步  5 秒）</option>
+            <option value="KataGoXX:xu-200">ModelXu v200（每步 30 秒）</option>
+            <option value="KataGo:s60775040-d15559956">ModelXu v100</option>
+            <option value="KataGoX:s60775040-d15559956">ModelXu v100（每步  5 秒）</option>
+            <option value="KataGoXX:s60775040-d15559956">ModelXu v100（每步 30 秒）</option>
             <option value="KataGo:cao-v16">ModelCao v16</option>
             <option value="KataGoX:cao-v16">ModelCao v16（每步  5 秒）</option>
             <option value="KataGoXX:cao-v16">ModelCao v16（每步 30 秒）</option>

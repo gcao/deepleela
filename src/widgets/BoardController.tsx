@@ -144,9 +144,14 @@ export default class BoardController extends React.Component<BoardControllerProp
                     <div id='draggable-handler' className='center-div' onMouseEnter={e => this.expandSelf()} onClick={e => this.toggleSelf()} style={{ background: 'transparent', height: 52, }}>
                         <span uk-icon='icon: more-vertical; ratio: 1' style={{ display: 'inline-block', paddingLeft: 10 }}></span>
                     </div>
+                    <div className='touch' uk-tooltip={i18n.tips.first} onClick={e => this.triggerCursorChange(-1000)}>
+                        <span uk-icon='icon: chevron-left; ratio: 1;' style={{ display: 'inline-block', marginLeft: 0 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1;' style={{ display: 'inline-block', marginLeft: -15 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1.2;' style={{ display: 'inline-block', marginLeft: -16 }}></span>
+                    </div>
                     <div className='touch' uk-tooltip={i18n.tips.backward} onClick={e => this.triggerCursorChange(-10)}>
-                        <span uk-icon='icon:  chevron-left; ratio: 1;'></span>
-                        <span uk-icon='icon:  chevron-left; ratio: 1.2' style={{ display: 'inline-block', marginLeft: -16 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1;'></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1.2' style={{ display: 'inline-block', marginLeft: -16 }}></span>
                     </div>
                     <div className='touch' style={{ paddingTop: 2 }} uk-tooltip={i18n.tips.previous} onClick={e => this.triggerCursorChange(-1)}>
                         <span uk-icon='icon: arrow-left; ratio: 1.35'></span>
@@ -161,6 +166,12 @@ export default class BoardController extends React.Component<BoardControllerProp
                         <span uk-icon='icon:  chevron-right; ratio: 1.2' style={{ display: 'inline-block', marginRight: -16 }}></span>
                         <span uk-icon='icon:  chevron-right; ratio: 1'></span>
                     </div>
+                    <div className='touch' uk-tooltip={i18n.tips.last} onClick={e => this.triggerCursorChange(1000)}>
+                        <span uk-icon='icon:  chevron-right; ratio: 1.2;' style={{ display: 'inline-block', marginRight: -16 }}></span>
+                        <span uk-icon='icon:  chevron-right; ratio: 1;' style={{ display: 'inline-block', marginRight: -15 }}></span>
+                        <span uk-icon='icon:  chevron-right; ratio: 1;' style={{ display: 'inline-block', marginRight: 0 }}></span>
+                    </div>
+
 
                     {isReview ?
                         <div className='touch' uk-tooltip={i18n.tips.branch} onClick={e => this.triggerExitBranchMode()}>

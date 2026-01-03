@@ -17,6 +17,15 @@ export default {
       },
       "games": [
         {
+          "id": 1,
+          "description": "V31 让六子胜 Xu-200",
+          "B": "Xu-200",
+          "W": "modelcao-v31",
+          "komi": "0.5",
+          "result": "W+R",
+          "sgfUrl": "/games/modelcao/v31/vs-xu200-h6.sgf"
+        },
+        {
           "id": 3,
           "description": "V18（5秒）让五子负 weiqilover",
           "B": "weiqilover",
