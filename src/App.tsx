@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as constants from './common/Constants';
 import i18n from './i18n';
 import NewGameDialog, { NewGameDialogStates } from './dialogs/NewGameDialog';
+import NewAIvsAIGameDialog, { NewAIvsAIGameDialogStates } from './dialogs/NewAIvsAIGameDialog';
 import SGFDialog, { SGFDialogStates } from './dialogs/SGFDialog';
 import LoadingDialog from './dialogs/LoadingDialog';
 import SettingsDialog from './dialogs/SettingsDialog';
@@ -19,14 +20,22 @@ import { BrowserRouter as Router, Route, Link, Switch, RouteComponentProps } fro
 import OnlineReivew from './routes/OnlineReview';
 import CGOS from './routes/CGOS';
 import LiveGame from './routes/LiveGame';
+import Games from './routes/Games';
 import { History } from 'history';
 import ReviewClient from './common/ReviewClient';
 import BrowserHelper from './components/BrowserHelper';
 import Joseki from './routes/Joseki';
+import Engine from './components/Engine';
+
+export enum Action {
+  None,
+  Load,
+}
 
 interface AppStates {
   newGameDialogOpen?: boolean,
   newSelfDialogOpen?: boolean;
+  newAIvsAIGameDialogOpen?: boolean,
   loadSgfDialogOpen?: boolean,
   exportSgfDialogOpen?: boolean,
   loadingDialogOpen?: boolean;
@@ -42,7 +51,10 @@ interface AppStates {
 }
 
 interface AppProps {
-
+  action?: Action;
+  sgf?: string|null;
+  url?: string|null;
+  move?: number;
 }
 
 class App extends React.Component<AppProps, AppStates> {
@@ -55,6 +67,16 @@ class App extends React.Component<AppProps, AppStates> {
 
     if (localStorage.getItem('heatmap') === null) UserPreferences.heatmap = true;
     this.state = { paddingTop: 0, boardBottomMargin: 0, };
+
+    if (this.props.action === Action.Load) {
+      if (this.props.sgf) {
+        this.loadSgf(this.props.sgf, this.props.move as number, {});
+      } else if (this.props.url) {
+        fetch(this.props.url)
+          .then(resp => resp.text())
+          .then(sgf => this.loadSgf(sgf, this.props.move as number, {}));
+      }
+    }
   }
 
   static history: History;
@@ -82,19 +104,71 @@ class App extends React.Component<AppProps, AppStates> {
   }
 
   async onNewAIGame(config: NewGameDialogStates) {
-    this.setState({ newGameDialogOpen: false, loadingDialogOpen: true, });
+    // this.setState({ newGameDialogOpen: false, loadingDialogOpen: true, });
+    this.setState({ newGameDialogOpen: false });
     let [success, pending] = await LocalGame.smartBoard!.newAIGame(config);
     this.setState({ loadingDialogOpen: false });
     if (!success || pending > 0) {
+      // @ts-ignore
       UIkit.notification(i18n.notifications.serversBusy(pending));
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.aiNotAvailable);
+    }
+  }
+
+  async onNewAIvsAIGame(config: NewAIvsAIGameDialogStates) {
+    // this.setState({ newAIvsAIGameDialogOpen: false, loadingDialogOpen: true, });
+    this.setState({ newAIvsAIGameDialogOpen: false });
+    let [success, pending] = await LocalGame.smartBoard!.newAIvsAIGame(config);
+    this.setState({ loadingDialogOpen: false });
+    if (!success || pending > 0) {
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.serversBusy(pending));
+      // @ts-ignore
       UIkit.notification(i18n.notifications.aiNotAvailable);
     }
   }
 
   async onNewSelfGame(config: NewGameDialogStates) {
     this.setState({ loadingDialogOpen: true, });
-    if (!await LocalGame.smartBoard!.newSelfGame(config)) { UIkit.notification(i18n.notifications.aiNotAvailable); }
+    if (!await LocalGame.smartBoard!.newSelfGame(config)) {
+      // @ts-ignore
+      UIkit.notification(i18n.notifications.aiNotAvailable);
+    }
     this.setState({ loadingDialogOpen: false, newSelfDialogOpen: false });
+  }
+
+  async loadSgf(sgf: string | undefined, move: number, options?: SGFDialogStates) {
+    try {
+      if (!sgf) return;
+
+      let { game, whitePlayer, blackPlayer } = SGF.import(sgf);
+      UserPreferences.whitePlayer = whitePlayer || '';
+      UserPreferences.blackPlayer = blackPlayer || '';
+      UserPreferences.kifu = sgf;
+
+      if (options!.online) {
+        await ReviewClient.default.init();
+        // this.setState({ loadingDialogOpen: true });
+        let room = await ReviewClient.default.createReviewRoom({ nickname: UserPreferences.nickname, roomName: (options!.roomName || ''), uuid: UserPreferences.uuid, sgf, });
+        if (!room) return;
+
+        App.history.push(`/review/${room.roomId}`);
+        return;
+      }
+
+      setTimeout(() => {
+        LocalGame.smartBoard!.importGame({ game, whitePlayer, blackPlayer }, 'review');
+        // Change from to 0-based
+        if (move) {
+          move = move - 1;
+        }
+        LocalGame.smartBoard!.changeCursor(move);
+        window.dispatchEvent(new Event('resize'));
+      }, 500);
+    } finally {
+      // this.setState({ loadSgfDialogOpen: false, loadingDialogOpen: false });
+    }
   }
 
   async onLoadSgf(sgf: string | undefined, options?: SGFDialogStates) {
@@ -126,6 +200,9 @@ class App extends React.Component<AppProps, AppStates> {
 
   async popScoreInfo() {
     this.setState({ loadingDialogOpen: true });
+    if (!GameClient.default.aiConnected) {
+      await GameClient.default.requestAI(Engine.default);
+    }
     let msg = await GameClient.default.finalScore() || '';
     this.setState({ loadingDialogOpen: false, infoDialogOpen: true, info: { title: i18n.dialogs.info.title_score, message: msg } });
   }
@@ -170,9 +247,9 @@ class App extends React.Component<AppProps, AppStates> {
           {/* Head Aera */}
           <div style={{ position: 'relative' }}>
             <div id='logo' style={{ margin: 0, marginTop: 22, fontWeight: 100, fontSize: 22, display: 'flex', justifyContent: 'center', }}>
-              <img src='/favicon.ico' style={{ width: 36, height: 36 }} alt='DeepLeela' />
+              {/* <img src='/favicon.ico' style={{ width: 36, height: 36 }} alt='DeepLeela' /> */}
               <Link to={location.pathname.startsWith('/cgos/') ? '/cgos' : '/'} onClick={e => this.forceUpdate()}>
-                <span style={{ display: 'inline-block', marginLeft: 8, verticalAlign: 'middle', lineHeight: '38px', fontFamily: 'Questrial', fontWeight: 100, opacity: 0.7, color: ThemeManager.default.logoColor }}>DeepLeela</span>
+                <span style={{ display: 'inline-block', marginLeft: 8, verticalAlign: 'middle', lineHeight: '38px', fontFamily: 'Questrial', fontWeight: 100, opacity: 0.7, color: ThemeManager.default.logoColor }}>{i18n.title}</span>
               </Link>
             </div>
 
@@ -187,8 +264,12 @@ class App extends React.Component<AppProps, AppStates> {
                   <ul className="uk-nav uk-dropdown-nav">
 
                     <div className='uk-nav uk-dropdown-nav'>
+                      <li className="uk-nav-divider"></li>
+                      {/*
                       <li><a href='#' onClick={e => App.history.push('/cgos')}>CGOS</a></li>
                       <li><a href="#" onClick={e => App.history.push('/joseki')}>{i18n.menu.joseki}</a> </li>
+                      */}
+                      <li><a href="#" onClick={e => App.history.push('/gamelist')}>{i18n.menu.gamelist}</a> </li>
                       <li className="uk-nav-divider"></li>
                     </div>
 
@@ -198,13 +279,12 @@ class App extends React.Component<AppProps, AppStates> {
                         <div className='uk-nav uk-dropdown-nav'>
                           <li><a href="#" onClick={e => this.setState({ newGameDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'ai' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_vs_leela}</a></li>
                           <li><a href="#" onClick={e => this.setState({ newSelfDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'self' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_vs_self}</a></li>
+                          <li><a href="#" onClick={e => this.setState({ newAIvsAIGameDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'ai-ai' ? 'deepskyblue' : undefined }}>{i18n.menu.newgame_ai_vs_ai}</a></li>
                           <li><a href="#" onClick={e => this.setState({ loadSgfDialogOpen: true })} style={{ color: UserPreferences.gameMode === 'review' ? 'deepskyblue' : undefined }}>{i18n.menu.loadsgf}</a></li>
                         </div>
                     }
 
-                    <li><a href="#" onClick={e => this.outputSgf()}>{i18n.menu.exportsgf}</a></li>
-
-                    {
+                    {/*
                       this.isOnlineMode ?
                         undefined :
                         <div className='uk-nav uk-dropdown-nav'>
@@ -213,7 +293,7 @@ class App extends React.Component<AppProps, AppStates> {
                           <li><a href="#" onClick={e => { UserPreferences.heatmap = !UserPreferences.heatmap; this.forceUpdate(); }}><span className={UserPreferences.heatmap ? '' : 'display-none'} uk-icon="check"></span> {i18n.menu.showHeatmap}</a></li>
                           <li><a href="#" onClick={e => { UserPreferences.winrate = !UserPreferences.winrate; this.forceUpdate(); }}><span className={UserPreferences.winrate ? '' : 'display-none'} uk-icon="check"></span> {i18n.menu.showWinrate}</a></li>
                         </div>
-                    }
+                    */}
 
                     {
                       this.isOnlineMode ?
@@ -225,14 +305,15 @@ class App extends React.Component<AppProps, AppStates> {
                         </div>
                     }
 
-                    {
-                      LocalGame.smartBoard && LocalGame.smartBoard.gameMode === 'ai' ?
-                        <div className='uk-nav uk-dropdown-nav'>
-                          <li><a href="#" onClick={e => this.popResignInfo()}>{i18n.menu.resign}</a></li>
-                          <li><a href="#" onClick={e => this.popScoreInfo()}>{i18n.menu.score}</a></li>
-                        </div> :
-                        undefined
-                    }
+                    <div className='uk-nav uk-dropdown-nav'>
+                      {
+                        LocalGame.smartBoard && LocalGame.smartBoard.gameMode === 'ai'
+                          ? <li><a href="#" onClick={e => this.popResignInfo()}>{i18n.menu.resign}</a></li>
+                          : undefined
+                      }
+                      <li><a href="#" onClick={e => this.popScoreInfo()}>{i18n.menu.score}</a></li>
+                      <li><a href="#" onClick={e => this.outputSgf()}>{i18n.menu.exportsgf}</a></li>
+                    </div>
 
                     <li className="uk-nav-divider"></li>
 
@@ -250,20 +331,22 @@ class App extends React.Component<AppProps, AppStates> {
               <Route path='/cgos' exact component={CGOS} />
               <Route path='/cgos/:gameId' component={LiveGame} />
               <Route path='/joseki' component={Joseki} />
+              <Route path='/gamelist' component={Games} />
               <Route path='/' component={LocalGame} />
             </Switch>
           </div>
 
           {/* Footer Aera */}
-          <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
-            <div style={{ fontSize: 10, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
-              &copy; 2018 DeepLeela
+          {/* <div style={{ bottom: 0, width: '100%', marginTop: this.isCGOS ? 0 : Math.max(this.state.boardBottomMargin, BrowserHelper.isMobile ? 58 : 0) }}>
+            <div style={{ fontSize: 12, color: ThemeManager.default.subtextColor, textAlign: 'center', margin: ' 8px 0', fontFamily: 'Questrial' }}>
+              {i18n.hint}
             </div>
-          </div>
+          </div> */}
 
           {/* Dialogs Aera */}
-          <NewGameDialog isOpen={this.state.newGameDialogOpen} onCancel={() => this.setState({ newGameDialogOpen: false })} onOk={c => this.onNewAIGame(c)} enableStone />
+          <NewGameDialog isOpen={this.state.newGameDialogOpen} onCancel={() => this.setState({ newGameDialogOpen: false })} onOk={c => this.onNewAIGame(c)} enableSize enableStone />
           <NewGameDialog isOpen={this.state.newSelfDialogOpen} onCancel={() => this.setState({ newSelfDialogOpen: false })} onOk={c => this.onNewSelfGame(c)} enableSize />
+          <NewAIvsAIGameDialog isOpen={this.state.newAIvsAIGameDialogOpen} onCancel={() => this.setState({ newAIvsAIGameDialogOpen: false })} onOk={c => this.onNewAIvsAIGame(c)} enableSize />
           <SGFDialog isOpen={this.state.loadSgfDialogOpen} onCancel={() => this.setState({ loadSgfDialogOpen: false })} onOk={(sgf, options) => this.onLoadSgf(sgf, options)} showOnlineMode />
           <SGFDialog isOpen={this.state.exportSgfDialogOpen} sgf={this.state.sgf} readOnly onCancel={() => this.setState({ exportSgfDialogOpen: false })} onOk={() => this.setState({ exportSgfDialogOpen: false })} />
           <SettingsDialog isOpen={this.state.settingsDialogOpen} onOk={() => this.setState({ settingsDialogOpen: false })} />

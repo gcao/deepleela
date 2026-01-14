@@ -26,7 +26,7 @@ export default class Go extends EventEmitter {
     branchCursor?: number;
 
     get size() { return this.board.length };
-    komi = 7.5;
+    komi = 5.5;
     current = State.Black;
     cartesianCoordXY = { x: -1, y: -1 };
 
@@ -50,7 +50,7 @@ export default class Go extends EventEmitter {
 
     get length() { return this.snapshots.length; }
 
-    get cartesianCoord() { return this.cartesianCoordXY.x < 0 ? '' : Board.cartesianCoordToString(this.cartesianCoordXY.x, this.cartesianCoordXY.y); }
+    get cartesianCoord() { return this.cartesianCoordXY.x < 0 ? '' : Board.cartesianCoordToString(this.cartesianCoordXY.x, this.cartesianCoordXY.y, this.size); }
 
     constructor(size: number) {
         super();
@@ -83,10 +83,15 @@ export default class Go extends EventEmitter {
 
         let neighbors: Coordinate[] = [];
 
-        if (row > 0) neighbors.push({ x: row - 1, y: col }); // upper neighbor
-        if (row < boardSize - 1) neighbors.push({ x: row + 1, y: col }); // lower neighbor
-        if (col > 0) neighbors.push({ x: row, y: col - 1 }); // left neighbor
-        if (col < boardSize - 1) neighbors.push({ x: row, y: col + 1 }); // right neighbor
+        // if (row > 0) neighbors.push({ x: row - 1, y: col }); // upper neighbor
+        // if (row < boardSize - 1) neighbors.push({ x: row + 1, y: col }); // lower neighbor
+        // if (col > 0) neighbors.push({ x: row, y: col - 1 }); // left neighbor
+        // if (col < boardSize - 1) neighbors.push({ x: row, y: col + 1 }); // right neighbor
+
+        neighbors.push({ x: (row - 1 + boardSize) % boardSize, y: col }); // upper neighbor
+        neighbors.push({ x: (row + 1) % boardSize, y: col }); // lower neighbor
+        neighbors.push({ x: row, y: (col - 1 + boardSize) % boardSize }); // left neighbor
+        neighbors.push({ x: row, y: (col + 1) % boardSize }); // right neighbor
 
         return neighbors;
     }
@@ -133,7 +138,7 @@ export default class Go extends EventEmitter {
     play(row: number, col: number, mode: 'normal' | 'force_main' | 'cut_current' = 'normal') {
         // Convert cartesian coord to array offset
         let currentCoord = { x: row, y: col };
-        let { x, y } = { x: this.size - row, y: col - 1 };
+        let { x, y } = { x: (this.size - row) % this.size, y: (this.size + col - 1) % this.size };
         row = x;
         col = y;
 
@@ -370,7 +375,7 @@ export default class Go extends EventEmitter {
         let moves = mainBranch ? this.mainBranch : this.mainBranch.slice(0, this.cursor + 1).concat(this.history);
         moves = handicap.concat(moves);
 
-        return moves.map(m => [m.stone, Board.cartesianCoordToString(m.cartesianCoord.x, m.cartesianCoord.y)]) as [string, string][];
+        return moves.map(m => [m.stone, Board.cartesianCoordToString(m.cartesianCoord.x, m.cartesianCoord.y, this.size)]) as [string, string][];
     }
 
     genSgf(info: { blackPlayer: string, whitePlayer: string, result?: string, size?: number, handicap?: string[] }, mainBranch = false) {

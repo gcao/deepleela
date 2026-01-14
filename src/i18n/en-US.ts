@@ -1,11 +1,22 @@
 
 export const lang = {
+    title: 'Welcome to Daoqi!',
+    human: 'Human',
+    ai: 'AI',
+    hint: 'Hint: rightclick or drag the board to adjust the view point.',
+    B: 'Black',
+    W: 'White',
+    yes: 'Yes',
+    no: 'No',
+
     menu: {
         cgos: 'CGOS',
         joseki: 'Joseki',
+        gamelist: 'Games',
 
         newgame_vs_leela: 'Challenge AI',
         newgame_vs_self: 'Free Practice',
+        newgame_ai_vs_ai: 'AI vs AI',
         loadsgf: 'Review SGF',
         exportsgf: 'Export SGF',
 
@@ -21,11 +32,26 @@ export const lang = {
         about: 'About',
     },
 
+    aiLevel: {
+        strongest: 'Strongest',
+    },
+
+    bot: {
+        newestFast: 'Newest bot (1 sec/move)',
+        newest    : 'Newest bot (5 secs/move)',
+        newestSlow: 'Newest bot (30 secs/move)',
+        oldFast   : 'Prev bot (1 sec/move)',
+        old       : 'Prev bot (5 secs/move)',
+        oldSlow   : 'Prev bot (30 secs/move)',
+    },
+
     dialogs: {
         newgame: {
             title: 'New Game',
             yourColor: 'Your Color',
-            engine: 'Go Engine',
+            engine: 'AI Engine',
+            engineB: 'AI Engine (B)',
+            engineW: 'AI Engine (W)',
             komi: 'Komi',
             handicap: 'Handicap',
             time: 'Time (minutes)',
@@ -43,7 +69,7 @@ export const lang = {
 
         info: {
             title_score: 'Game Score',
-            resigns: (color: string) => `${color} resigns`,
+            resigns: (color: string) => `${color} resigned`,
         },
 
         about: {
@@ -74,6 +100,8 @@ export const lang = {
             winrateBase_percent: 'Percent-based',
             winrateBase_500: '500-based',
             nickname: 'Nickname',
+            aiWaitTime: 'AI Thinking Time(ms)',
+            aiWaitRandom: 'Randomize AI Thinking Time',
         }
     },
 
@@ -82,6 +110,7 @@ export const lang = {
         white: 'White',
         date: 'Date',
         time: 'Time',
+        komi: 'Komi',
         result: 'Result',
     },
 

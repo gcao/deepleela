@@ -45,6 +45,9 @@ export default class BoardController extends React.Component<BoardControllerProp
         this.root = document.getElementById('board-controller') as HTMLDivElement;
         this.calcPos();
         jQuery(window).on('resize', this.calcPos);
+        setTimeout(() => {
+            this.expandSelf();
+        }, 50);
     }
 
     componentWillUnmount() {
@@ -58,12 +61,24 @@ export default class BoardController extends React.Component<BoardControllerProp
         jQuery('#board-controller').css('left', fx).css('top', fy);
     }
 
-    private onAIClick() {
-        if (this.props.mode === 'self') {
-            if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
-            this.setState({ autoplay: !this.state.autoplay });
-            return;
+    private async onAIClick() {
+        if (this.props.onAIAutoPlayClick) {
+            let autoplay = this.state.autoplay;
+            this.setState({autoplay: !this.state.autoplay});
+            if (!autoplay) {
+                setImmediate(async () => {
+                    // @ts-ignore ignore the error of "cannot invoke an object which is possibly undefined"
+                    await this.props.onAIAutoPlayClick(true);
+                    this.setState({autoplay: false});
+                });
+            }
         }
+
+        // if (this.props.mode === 'self') {
+        //     if (this.props.onAIAutoPlayClick) this.props.onAIAutoPlayClick(!this.state.autoplay);
+        //     this.setState({ autoplay: !this.state.autoplay });
+        //     return;
+        // }
 
         if (!this.props.onAIThinkingClick) return;
         this.props.onAIThinkingClick();
@@ -99,12 +114,12 @@ export default class BoardController extends React.Component<BoardControllerProp
     }
 
     componentDidUpdate() {
-        if (!this.props.onAIAutoPlayClick) return;
+        // if (!this.props.onAIAutoPlayClick) return;
 
-        if (this.props.mode !== 'self' && this.state.autoplay) {
-            this.props.onAIAutoPlayClick(false);
-            this.setState({ autoplay: false });
-        }
+        // if (this.props.mode !== 'self' && this.state.autoplay) {
+        //     this.props.onAIAutoPlayClick(false);
+        //     this.setState({ autoplay: false });
+        // }
     }
 
     enterBranchMode() {
@@ -129,9 +144,14 @@ export default class BoardController extends React.Component<BoardControllerProp
                     <div id='draggable-handler' className='center-div' onMouseEnter={e => this.expandSelf()} onClick={e => this.toggleSelf()} style={{ background: 'transparent', height: 52, }}>
                         <span uk-icon='icon: more-vertical; ratio: 1' style={{ display: 'inline-block', paddingLeft: 10 }}></span>
                     </div>
+                    <div className='touch' uk-tooltip={i18n.tips.first} onClick={e => this.triggerCursorChange(-1000)}>
+                        <span uk-icon='icon: chevron-left; ratio: 1;' style={{ display: 'inline-block', marginLeft: 0 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1;' style={{ display: 'inline-block', marginLeft: -15 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1.2;' style={{ display: 'inline-block', marginLeft: -16 }}></span>
+                    </div>
                     <div className='touch' uk-tooltip={i18n.tips.backward} onClick={e => this.triggerCursorChange(-10)}>
-                        <span uk-icon='icon:  chevron-left; ratio: 1;'></span>
-                        <span uk-icon='icon:  chevron-left; ratio: 1.2' style={{ display: 'inline-block', marginLeft: -16 }}></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1;'></span>
+                        <span uk-icon='icon: chevron-left; ratio: 1.2' style={{ display: 'inline-block', marginLeft: -16 }}></span>
                     </div>
                     <div className='touch' style={{ paddingTop: 2 }} uk-tooltip={i18n.tips.previous} onClick={e => this.triggerCursorChange(-1)}>
                         <span uk-icon='icon: arrow-left; ratio: 1.35'></span>
@@ -146,6 +166,12 @@ export default class BoardController extends React.Component<BoardControllerProp
                         <span uk-icon='icon:  chevron-right; ratio: 1.2' style={{ display: 'inline-block', marginRight: -16 }}></span>
                         <span uk-icon='icon:  chevron-right; ratio: 1'></span>
                     </div>
+                    <div className='touch' uk-tooltip={i18n.tips.last} onClick={e => this.triggerCursorChange(1000)}>
+                        <span uk-icon='icon:  chevron-right; ratio: 1.2;' style={{ display: 'inline-block', marginRight: -16 }}></span>
+                        <span uk-icon='icon:  chevron-right; ratio: 1;' style={{ display: 'inline-block', marginRight: -15 }}></span>
+                        <span uk-icon='icon:  chevron-right; ratio: 1;' style={{ display: 'inline-block', marginRight: 0 }}></span>
+                    </div>
+
 
                     {isReview ?
                         <div className='touch' uk-tooltip={i18n.tips.branch} onClick={e => this.triggerExitBranchMode()}>
@@ -153,11 +179,11 @@ export default class BoardController extends React.Component<BoardControllerProp
                         </div> : undefined
                     }
 
-                    {isReview && this.props.showAnalytics ?
+                    {/* {isReview && this.props.showAnalytics ?
                         <div className='touch' uk-tooltip={i18n.tips.anayltics} onClick={e => this.props.onAnalyticsClick && this.props.onAnalyticsClick()}>
                             <span uk-icon='icon: nut; ' style={{ display: 'inline-block', marginLeft: -32, marginTop: 2, }}></span>
                         </div> : undefined
-                    }
+                    } */}
                 </div>
             </div>
         );

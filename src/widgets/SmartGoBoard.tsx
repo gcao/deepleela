@@ -8,16 +8,19 @@ import * as jQuery from 'jquery';
 import GameClient from '../common/GameClient';
 import Go from '../common/Go';
 import { NewGameDialogStates } from '../dialogs/NewGameDialog';
+import { NewAIvsAIGameDialogStates } from 'src/dialogs/NewAIvsAIGameDialog';
 import { State } from '../components/Intersection';
 import { StoneColor } from '../common/Constants';
 import * as moment from 'moment';
 import * as Utils from '../lib/Utils';
+import { getUrlParams } from '../lib/URL';
 import SGF from '../common/SGF';
 import UserPreferences from '../common/UserPreferences';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import Tooltip from 'rc-tooltip';
+import Engine from 'src/components/Engine';
 const Handle = Slider.Handle;
 
 const handle = (props) => {
@@ -52,28 +55,56 @@ interface SmartGoBoardStates {
     heatmap?: number[][];
     isThinking?: boolean;
 
+    isAIvsAI?: boolean;
     whitePlayer?: string;
     blackPlayer?: string;
 
     forceColor?: StoneColor;
 }
 
-export type GameMode = 'ai' | 'self' | 'guest' | 'review';
+export type GameMode = 'ai' | 'ai-ai' | 'self' | 'guest' | 'review';
 
 export default class SmartGoBoard extends React.Component<SmartGoBoardProps, SmartGoBoardStates> {
 
     private board: Board;
-    private readonly client = GameClient.default;
+    private client = GameClient.default;
+    private client2 = new GameClient(); // Engine for white if AI vs AI
     private wheeling = false;
 
-    game = new Go(19);
+    game = new Go(UserPreferences.gameSize);
     gameMode: GameMode = 'self';
     state: SmartGoBoardStates = { remaingTime: '--:--' };
     userStone: StoneColor = 'B';
-    engine: string;
-    configs: NewGameDialogStates;
+    engine: string = Engine.default;
 
     get currentCursor() { return this.game.cursor; }
+
+    vbSize = 3;
+    vbOffsetX = 3;
+    vbOffsetY = 3;
+
+    constructor(props: any, ctx: any) {
+        super(props, ctx);
+
+        // Added to window for debugging purpose
+        (window as any).board = this;
+        (window as any).client = this.client;
+        (window as any).client2 = this.client2;
+
+        const urlParams = getUrlParams();
+        const vbSizeParam = urlParams.get('vbSize');
+        if (vbSizeParam) {
+            this.vbSize = parseInt(vbSizeParam);
+        }
+        const vbOffsetXParam = urlParams.get('vbOffsetX');
+        if (vbOffsetXParam) {
+            this.vbOffsetX = parseInt(vbOffsetXParam);
+        }
+        const vbOffsetYParam = urlParams.get('vbOffsetY');
+        if (vbOffsetYParam) {
+            this.vbOffsetY = parseInt(vbOffsetYParam);
+        }
+    }
 
     componentDidMount() {
         this.game.on('tick', () => {
@@ -87,24 +118,22 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.gameMode = 'ai';
         this.userStone = config.selectedColor;
         this.engine = config.engine;
-        this.configs = config;
         UserPreferences.whitePlayer = this.userStone === 'W' ? 'Human' : this.engine;
         UserPreferences.blackPlayer = this.userStone === 'B' ? 'Human' : this.engine;
 
         this.board.clearVariations();
-        this.game = new Go(19);
+        this.game = new Go(config.boardSize);
         this.game.time = config.time;
         this.game.komi = config.komi;
         this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
 
-        let results = await this.client.requestAI(config.engine || 'leela');
+        let results = await this.client.requestAI(config.engine);
         if (!results[0]) return results;
         this.client.initBoard(config);
 
         UserPreferences.gameMode = this.gameMode;
         UserPreferences.userStone = this.userStone;
         UserPreferences.gameEngine = this.engine;
-        UserPreferences.komi = this.configs.komi;
 
         if (config.handicap > 1) {
             this.game.setHandicap(config.handicap);
@@ -125,9 +154,67 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         return results;
     }
 
+    async newAIvsAIGame(config: NewAIvsAIGameDialogStates): Promise<[boolean, number]> {
+        this.gameMode = 'ai-ai';
+        this.state.isAIvsAI = true;
+        this.userStone = 'B';
+        this.engine = config.engineW;
+        UserPreferences.blackPlayer = config.engineB;
+        UserPreferences.whitePlayer = config.engineW;
+
+        this.board.clearVariations();
+        this.game = new Go(config.boardSize);
+        this.game.time = config.time;
+        this.game.komi = config.komi;
+        this.setState({ heatmap: undefined, disabled: false, whitePlayer: UserPreferences.whitePlayer, blackPlayer: UserPreferences.blackPlayer });
+
+        let results = await this.client.requestAI(config.engineB);
+        if (!results[0]) return results;
+        this.client.initBoard(config);
+
+        let results2 = await this.client2.requestAI(config.engineW);
+        if (!results2[0]) return results2;
+        this.client2.initBoard(config);
+
+        UserPreferences.gameMode = this.gameMode;
+        UserPreferences.userStone = this.userStone;
+        UserPreferences.gameEngine = this.engine;
+        UserPreferences.komi = config.komi;
+
+        if (config.handicap > 0) {
+            this.game.setHandicap(config.handicap);
+            let handicaps =  this.game.genMoves(true);
+            await this.client.loadMoves(handicaps);
+            await this.client2.loadMoves(handicaps);
+            await this.pass();
+        }
+
+        this.game.start();
+        this.returnToMainBranch();
+
+        var lastMoveIsPass = false;
+        gameLoop: while (this.game.length < 350) {
+            let move = await this.genmove2(this.game.currentColor);
+            switch(move) {
+                case 'pass':
+                    if (lastMoveIsPass) {
+                        break gameLoop;
+                    }
+                    lastMoveIsPass = true;
+                case 'resign':
+                    lastMoveIsPass = false;
+                    break gameLoop;
+                default:
+                    lastMoveIsPass = false;
+            }
+        }
+
+        return results;
+    }
+
     async newSelfGame(config: NewGameDialogStates): Promise<boolean> {
         this.gameMode = 'self';
-        this.engine = config.engine || 'leela';
+        this.engine = config.engine || Engine.default;
         UserPreferences.whitePlayer = UserPreferences.blackPlayer = 'Human';
 
         let results = await this.client.requestAI(this.engine);
@@ -136,7 +223,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         UserPreferences.gameEngine = this.engine;
 
         this.game = new Go(config.boardSize);
-        this.client.initBoard({ handicap: 0, komi: this.game.komi, time: 60 * 24, size: config.boardSize });
+        this.client.initBoard({ handicap: 0, komi: this.game.komi, time: 60 * 24, boardSize: config.boardSize });
         if (config.handicap > 1) {
             this.game.setHandicap(config.handicap);
             await this.reloadCurrentBoard();
@@ -150,11 +237,26 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         return results[0];
     }
 
+    recenter() {
+        if (this.game.mainBranch.length == 0 || this.board == null) {
+            return;
+        }
+
+        let lastMove = this.game.mainBranch[this.game.cursor];
+        this.board.setState({
+            vbOffsetX: Math.floor(this.game.size/2) - lastMove.arrayCoord.x + this.board.state.vbSize,
+            vbOffsetY: Math.floor(this.game.size/2) - lastMove.arrayCoord.y + this.board.state.vbSize,
+        });
+    }
+
     changeCursor(delta: number) {
         if (delta > 0 && this.game.isLatestCursor) return;
 
         this.board.clearVariations();
         this.game.changeCursor(delta);
+        if (delta == 0) {
+            this.recenter();
+        }
 
         if (this.gameMode === 'review') UserPreferences.cursor = this.game.cursor;
         if (this.game.isBranch) this.showBranch();
@@ -194,8 +296,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (this.client.aiConnected) return true;
 
-        let [success, pending] = await this.client.requestAI(this.engine || 'leela');
+        let [success, pending] = await this.client.requestAI(this.engine);
         if (!success) {
+            // @ts-ignore
             UIkit.notification({ message: i18n.notifications.aiNotAvailable, status: 'primary' });
             return false;
         }
@@ -208,7 +311,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.setState({ disabled: true });
 
         if (this.client.aiConnected) {
-            await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, size: this.game.size });
+            await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, boardSize: this.game.size });
             await this.client.loadMoves(this.game.genMoves(true));
         }
 
@@ -255,16 +358,16 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         if (!reloaded) {
             this.setState({ disabled: true });
-            let move = Board.cartesianCoordToString(x, y);
+            let move = Board.cartesianCoordToString(x, y, this.game.size);
             await this.client.play(lastColor, move);
             this.setState({ disabled: false });
         }
 
-        if (this.gameMode === 'self' && this.props.showHeatmap) {
-            this.setState({ disabled: true });
-            let heatmap = await this.client.heatmap();
-            this.setState({ heatmap, disabled: false });
-        }
+        // if (this.gameMode === 'self' && this.props.showHeatmap) {
+        //     this.setState({ disabled: true });
+        //     let heatmap = await this.client.heatmap();
+        //     this.setState({ heatmap, disabled: false });
+        // }
 
         if (this.props.showWinrate) {
             await this.peekWinrate();
@@ -280,33 +383,98 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         await this.genmove(this.game.currentColor);
     }
 
-    private async genmove(color: StoneColor) {
+    private async genmove(color: StoneColor): Promise<string> {
         await this.checkAIOnline();
 
         this.setState({ isThinking: true, disabled: true });
         let result = await this.client.genmove(color);
-        this.setState({ isThinking: false, disabled: false });
+        // this.setState({ isThinking: false, disabled: false });
 
         switch (result.move) {
             case 'pass':
-                UIkit.notification({ message: i18n.notifications.pass(this.engine), status: 'primary' });
+                // TODO: handle AI vs AI
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.pass(i18n[this.game.currentColor]), status: 'primary' });
                 this.game.pass();
-                return;
+                return result.move;
             case 'resign':
-                UIkit.notification({ message: i18n.notifications.resigns(this.engine), status: 'success' });
+                // TODO: handle AI vs AI
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.resigns(i18n[this.game.currentColor]), status: 'success' });
                 this.setState({ disabled: true });
-                return;
+                return result.move;
+        }
+
+        await Utils.aiThinking();
+
+        let coord = Board.stringToCartesianCoord(result.move);
+        this.game.play(coord.x, coord.y, 'force_main');
+
+        this.setState({ isThinking: false, disabled: false });
+        // TODO: this.clent.heatmap() does not work?
+        // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
+
+        // if (this.props.showWinrate && this.game.isLatestCursor) {
+        //     await this.peekWinrate();
+        // }
+
+        return result.move;
+    }
+
+    private async genmove2(color: StoneColor): Promise<string> {
+        await this.checkAIOnline();
+
+        this.setState({ isThinking: true, disabled: true });
+        var result: any;
+        if (color == 'B') {
+            result = await this.client.genmove(color);
+        } else {
+            result = await this.client2.genmove(color);
+        }
+
+        switch (result.move) {
+            case 'pass':
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.pass(i18n[this.game.currentColor]), status: 'primary' });
+                // Notify the other AI
+                if (color == 'B') {
+                    await this.client2.pass(this.game.currentColor);
+                } else {
+                    await this.client.pass(this.game.currentColor);
+                }
+                this.game.pass();
+                return result.move;
+            case 'resign':
+                // @ts-ignore
+                UIkit.notification({ message: i18n.notifications.resigns(i18n[this.game.currentColor]), status: 'success' });
+                if (color == 'B') {
+                    await this.client2.resign(this.game.currentColor);
+                } else {
+                    await this.client.resign(this.game.currentColor);
+                }
+                this.setState({ disabled: true });
+                return result.move;
         }
 
         let coord = Board.stringToCartesianCoord(result.move);
         this.game.play(coord.x, coord.y, 'force_main');
 
-        this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
-
-        if (this.props.showWinrate && this.game.isLatestCursor) {
-            await this.peekWinrate();
+        // Notify the other AI
+        if (color == 'B') {
+            await this.client2.play(color, result.move);
+        } else {
+            await this.client.play(color, result.move);
         }
 
+        this.setState({ isThinking: false, disabled: false });
+        // TODO: this.clent.heatmap() does not work?
+        // this.setState({ heatmap: this.props.showHeatmap && this.game.isLatestCursor ? await this.client.heatmap() : undefined });
+
+        // if (this.props.showWinrate && this.game.isLatestCursor) {
+        //     await this.peekWinrate();
+        // }
+
+        return result.move;
     }
 
     private async peekWinrate() {
@@ -333,16 +501,16 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         this.setState({ disabled: true, isThinking: true });
 
         // peek winrate
-        await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, size: this.game.size });
+        await this.client.initBoard({ komi: this.game.komi, handicap: 0, time: 0, boardSize: this.game.size });
         let moves = this.game.genMoves();
         await this.client.loadMoves(moves);
 
         let vars = await this.client.peekWinrate(this.game.currentColor, UserPreferences.winrateBlackOnly, UserPreferences.winrate500Base);
         this.board.setVariations(vars);
 
-        if (vars.length === 0) {
-            this.setState({ heatmap: await this.client.heatmap() });
-        }
+        // if (vars.length === 0) {
+        //     this.setState({ heatmap: await this.client.heatmap() });
+        // }
 
         this.setState({ disabled: false, isThinking: false });
 
@@ -364,7 +532,7 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         if (mode !== 'ai') return;
 
         let userstone = (UserPreferences.userStone) as StoneColor;
-        this.engine = UserPreferences.gameEngine || 'leela';
+        this.engine = UserPreferences.gameEngine || Engine.default;
         this.userStone = userstone;
 
         if (this.game.currentColor === userstone) return;
@@ -451,9 +619,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
 
         return (
             <div id={this.props.id} style={{ position: 'relative' }} onWheel={e => this.onWheelChanged(e)} onContextMenu={e => this.onContextMenu(e)}>
-                <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, fontSize: 10, color: tm.logoColor, marginLeft: aiTipsMarginLeft, marginTop: 12, opacity: this.state.isThinking ? 1 : 0, transition: 'all 0.5s', }}>
+                {/* <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, fontSize: 10, color: tm.logoColor, marginLeft: aiTipsMarginLeft, marginTop: 12, opacity: this.state.isThinking ? 1 : 0, transition: 'all 0.5s', }}>
                     {i18n.notifications.aiIsThinking}
-                </div>
+                </div> */}
 
                 {
                     this.gameMode === 'review' ?
@@ -469,6 +637,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                     style={{ background: 'transparent', padding: 15, gridColor: tm.gridLineColor, blackStoneColor: tm.blackStoneColor, whiteStoneColor: tm.whiteStoneColor, coordTextColor: tm.coordTextColor, starPointColor: tm.starPointColor, winrateColor: tm.winrateColor, winrateBackgroundColor: tm.themeColor }}
                     size={this.game.size}
                     states={this.game.board}
+                    vbSize={this.vbSize}
+                    vbOffsetX={this.vbOffsetX}
+                    vbOffsetY={this.vbOffsetY}
                     disabled={this.props.disabled || this.state.disabled || shouldBeDisabled}
                     onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                     showCoordinate={window.innerWidth >= 800}
@@ -488,7 +659,9 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
                             <span style={{ opacity: 0.75, maxWidth: 150, textOverflow: 'ellipsis' }}>{blackPlayer || '---'}</span>
                         </div>
 
+                        {/*
                         <div style={{ color: this.game.currentColor === 'B' ? constants.BlackStoneColor : 'lightgrey', marginTop: 12, fontSize: 11, position: 'absolute', left: '50%', transform: 'translate(-50%, -50%)', }}>{this.gameMode === 'self' ? '--:--' : this.state.remaingTime}</div>
+                        */}
 
                         <div style={{ marginRight: playerMargin, paddingTop: 4, display: 'flex', alignItems: 'center', alignContent: 'center' }}>
                             <div style={{ position: 'relative', width: 12, height: 12, marginRight: 4, marginTop: -1 }}>
@@ -503,3 +676,4 @@ export default class SmartGoBoard extends React.Component<SmartGoBoardProps, Sma
         );
     }
 }
+

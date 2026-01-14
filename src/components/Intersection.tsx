@@ -17,6 +17,7 @@ interface IntersectionProps {
     lineThickness?: number;
     onTouch?: (x: number, y: number) => void;
     onClick: (row: number, col: number) => void;
+    onRightClick?: (row: number, col: number) => void;
     onMouseEnter?: (x: number, y: number) => void;
     onMouseLeave?: (x: number, y: number) => void;
     onVariationHover?: (row: number, col: number) => void;
@@ -29,6 +30,7 @@ interface IntersectionProps {
     leftEdge?: boolean;
     topEdge?: boolean;
     bottomEdge?: boolean;
+    size: number;
     row: number;
     col: number;
     style?: CSSProperties & { whiteStoneColor?: string, blackStoneColor?: string, startPointColor?: string, winrateFontColor?: string, winrateBackground?: string };
@@ -40,6 +42,11 @@ interface IntersectionProps {
     needTouchConfirmation?: boolean;
     showTouchConfirmation?: boolean;
     disableAnimation?: boolean;
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 interface IntersectionStates {
@@ -55,6 +62,11 @@ export enum State {
 }
 
 export default class Intersection extends React.Component<IntersectionProps, IntersectionStates> {
+
+    get isOnVirtualBoard() {
+        return this.props.row <= this.props.vbSize || this.props.row > this.props.size + this.props.vbSize ||
+            this.props.col <= this.props.vbSize || this.props.col > this.props.size + this.props.vbSize;
+    }
 
     constructor(props: IntersectionProps, ctx: any) {
         super(props, ctx);
@@ -93,6 +105,12 @@ export default class Intersection extends React.Component<IntersectionProps, Int
         this.setState({ touchConfirmed: true, firstTouch: true });
     }
 
+    private onRightClick(e: React.MouseEvent<HTMLDivElement>) {
+        if (this.props.onRightClick) {
+            this.props.onRightClick(this.props.row, this.props.col);
+        }
+    }
+
     private onTouchStart() {
         if (this.props.winrate && this.props.onVariationHover)
             this.props.onVariationHover(this.props.row, this.props.col)
@@ -109,23 +127,28 @@ export default class Intersection extends React.Component<IntersectionProps, Int
             this.setState({ firstTouch: false, touchConfirmed: false });
         }
     }
+
     render() {
+        const key = this.props.row + '-' + this.props.col;
         const gridColor = this.props.style ? (this.props.style.color || 'black') : 'black';
         const highlightSize = this.props.highlightPointSize === 'small' ? 5 : 8;
         // const moveNumberPaddingTop = this.props.highlightPointSize === 'small' ? 0 : 2;
         const moveNumberFontSize = this.props.fontSize && this.props.highlightPointSize === 'large' ? this.props.fontSize + 2 : (this.props.fontSize || 10);
         const winrateMargin = this.props.highlightPointSize === 'small' ? '3%' : '4.3%';
         const winrate = (this.props.winrate || {}) as WinRate;
+        // const background = this.isOnVirtualBoard ? 'inherited' : 'rgb(220, 191, 73)';
+        // const background = this.isOnVirtualBoard ? '#B8B888' : '#C39350';
+        const background = this.isOnVirtualBoard ? 'inherited' : '#B8B888';
 
         return (
 
-            <div style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center' }}>
+            <div key={key} style={{ float: 'left', lineHeight: 1, paddingTop: `${this.props.width}%`, width: `${this.props.width}%`, position: 'relative', textAlign: 'center', background }}>
 
                 {/* Vertical Grid Line */}
-                <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '50%' : 0, left: this.props.leftEdge ? '50%' : 0, transform: 'translateY(-50%)' }} />
+                <div style={{ pointerEvents: 'none', background: gridColor, height: this.props.lineThickness || 1, position: 'absolute', top: '50%', right: this.props.rightEdge ? '30%' : 0, left: this.props.leftEdge ? '30%' : 0, transform: 'translateY(-50%)' }} />
 
                 {/* Horizontal Grid Line */}
-                <div style={{ pointerEvents: 'none', background: gridColor, width: this.props.lineThickness || 1, position: 'absolute', left: '50%', top: this.props.topEdge ? '50%' : 0, bottom: this.props.bottomEdge ? '50%' : 0, transform: 'translateX(-50%)' }} />
+                <div style={{ pointerEvents: 'none', background: gridColor, width: this.props.lineThickness || 1, position: 'absolute', left: '50%', top: this.props.topEdge ? '30%' : 0, bottom: this.props.bottomEdge ? '30%' : 0, transform: 'translateX(-50%)' }} />
 
                 {/* Star Point */}
                 {this.props.star ? <div style={{ pointerEvents: 'none', background: this.props.style ? (this.props.style.startPointColor || '#d3d3d380') : '#d3d3d380', borderRadius: '50%', height: 6, width: 6, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', }} /> : null}
@@ -139,6 +162,7 @@ export default class Intersection extends React.Component<IntersectionProps, Int
                 {/* Winrate */}
                 <div className='uk-tooltip-visits' uk-tooltip={this.props.winrate ? `${this.props.winrate.visits} Visits` : undefined}
                     style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, fontSize: this.props.fontSize || 10, background: 'transparent', opacity: this.props.state !== State.Empty ? 0 : (winrate.value || winrate.uvalue) ? (winrate.weight || 1) + 0.45 : 0, transition: 'all 0.5s', zIndex: 2 }}
+                    onContextMenu={e => this.onRightClick(e)}
                     onMouseEnter={e => this.onMouseEnter(e)}
                     onClick={e => this.onClick(e)}
                     onTouchStart={e => this.onTouchStart()}

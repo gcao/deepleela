@@ -114,7 +114,7 @@ export default class Joseki extends React.Component<{}, States> {
             let coord = (n.props.W || n.props.B)!;
             let pos = SGF.stringToArrayPosition(coord);
             let cartesian = Board.arrayPositionToCartesianCoord(pos.x, pos.y, 19);
-            coord = Board.cartesianCoordToString(cartesian.x, cartesian.y).toLowerCase();
+            coord = Board.cartesianCoordToString(cartesian.x, cartesian.y, 19).toLowerCase();
 
             let [win, nextMove] = n.props.C!.split('\n');
             let winrate = Number.parseFloat(win);
@@ -242,6 +242,10 @@ export default class Joseki extends React.Component<{}, States> {
                             style={{ background: 'transparent', padding: 15, gridColor: tm.gridLineColor, blackStoneColor: tm.blackStoneColor, whiteStoneColor: tm.whiteStoneColor, coordTextColor: tm.coordTextColor, starPointColor: tm.starPointColor, winrateColor: tm.winrateColor }}
                             size={this.game.size}
                             states={this.game.board}
+                            // Daoqi virtual board parameters
+                            vbSize={3}
+                            vbOffsetX={3}
+                            vbOffsetY={3}
                             disabled={false}
                             onIntersectionClicked={(row, col) => this.onStonePlaced(row, col)}
                             showCoordinate={window.innerWidth >= 640}

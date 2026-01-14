@@ -9,7 +9,9 @@ import SGF from "./SGF";
 
 export default class GameClient extends EventEmitter {
 
-    static readonly url = process.env.NODE_ENV === 'production' ? `wss://w.deepleela.com` : 'ws://192.168.31.54:3301';
+    // static readonly url = process.env.NODE_ENV === 'production' ? `wss://w.daoqi.org` : 'ws://192.168.31.54:3301';
+    // static readonly url = 'ws://gtp.daoqi.org:8080';
+    static readonly url = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/gtp`;
     static readonly default = new GameClient();
 
     private ws: WebSocket;
@@ -147,9 +149,9 @@ export default class GameClient extends EventEmitter {
         });
     }
 
-    initBoard(configs: { komi: number, handicap: number, time: number, size: number }) {
+    initBoard(configs: { komi: number, handicap: number, time: number, boardSize: number }) {
         return new Promise(resolve => {
-            this.sendGtpCommand(CommandBuilder.boardsize(configs.size || 19, this.msgId++));
+            this.sendGtpCommand(CommandBuilder.boardsize(configs.boardSize || 19, this.msgId++));
             if (configs.komi > 0) this.sendGtpCommand(CommandBuilder.komi(configs.komi, this.msgId++));
             if (configs.handicap > 0) this.sendGtpCommand(CommandBuilder.fixed_handicap(configs.handicap, this.msgId++));
             if (configs.time > 0) this.sendGtpCommand(CommandBuilder.time_settings(configs.time * 60, 25 * 60, 25, this.msgId++));

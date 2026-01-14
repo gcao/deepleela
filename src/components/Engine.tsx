@@ -1,0 +1,196 @@
+import * as React from 'react';
+import { CSSProperties } from 'react';
+import i18n from '../i18n';
+
+interface EngineProps {
+    engine?: string;
+    onChange?: (e: any) => void;
+}
+
+export default class Engine extends React.Component<EngineProps, any> {
+
+    static default = "KataGo:cao-v31";
+
+    render() {
+        return (
+          <select style={{ width: '100%' }} onChange={this.props.onChange} defaultValue={this.props.engine}>
+            {/*
+            <option value="KataGo:temp">快棋成长狗（每步  1 秒）</option>
+            <option value="KataGoX:temp">正常成长狗（每步  5 秒）</option>
+            <option value="KataGoXX:temp">长考成长狗（每步 30 秒）</option>
+            */}
+            <option value="KataGo:cao-v31">ModelCao v31</option>
+            <option value="KataGoX:cao-v31">ModelCao v31（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v31">ModelCao v31（每步 30 秒）</option>
+            <option value="KataGo:cao-v30">ModelCao v30</option>
+            <option value="KataGoX:cao-v30">ModelCao v30（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v30">ModelCao v30（每步 30 秒）</option>
+            <option value="KataGo:cao-v29">ModelCao v29</option>
+            <option value="KataGoX:cao-v29">ModelCao v29（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v29">ModelCao v29（每步 30 秒）</option>
+            <option value="KataGo:cao-v28">ModelCao v28</option>
+            <option value="KataGoX:cao-v28">ModelCao v28（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v28">ModelCao v28（每步 30 秒）</option>
+            <option value="KataGo:cao-v27">ModelCao v27</option>
+            <option value="KataGoX:cao-v27">ModelCao v27（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v27">ModelCao v27（每步 30 秒）</option>
+            <option value="KataGo:cao-v26">ModelCao v26</option>
+            <option value="KataGoX:cao-v26">ModelCao v26（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v26">ModelCao v26（每步 30 秒）</option>
+            <option value="KataGo:cao-v25">ModelCao v25</option>
+            <option value="KataGoX:cao-v25">ModelCao v25（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v25">ModelCao v25（每步 30 秒）</option>
+            <option value="KataGo:cao-v24">ModelCao v24</option>
+            <option value="KataGoX:cao-v24">ModelCao v24（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v24">ModelCao v24（每步 30 秒）</option>
+            <option value="KataGo:cao-v23">ModelCao v23</option>
+            <option value="KataGoX:cao-v23">ModelCao v23（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v23">ModelCao v23（每步 30 秒）</option>
+            <option value="KataGo:cao-v22">ModelCao v22</option>
+            <option value="KataGoX:cao-v22">ModelCao v22（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v22">ModelCao v22（每步 30 秒）</option>
+            <option value="KataGo:cao-v21">ModelCao v21</option>
+            <option value="KataGoX:cao-v21">ModelCao v21（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v21">ModelCao v21（每步 30 秒）</option>
+            <option value="KataGo:cao-v20">ModelCao v20</option>
+            <option value="KataGoX:cao-v20">ModelCao v20（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v20">ModelCao v20（每步 30 秒）</option>
+            <option value="KataGo:cao-v19">ModelCao v19</option>
+            <option value="KataGoX:cao-v19">ModelCao v19（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v19">ModelCao v19（每步 30 秒）</option>
+            <option value="KataGo:xu-600">ModelXu v600</option>
+            <option value="KataGoX:xu-600">ModelXu v600（每步  5 秒）</option>
+            <option value="KataGoXX:xu-600">ModelXu v600（每步 30 秒）</option>
+            <option value="KataGo:cao-v18">ModelCao v18</option>
+            <option value="KataGoX:cao-v18">ModelCao v18（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v18">ModelCao v18（每步 30 秒）</option>
+            <option value="KataGo:cao-v17">ModelCao v17</option>
+            <option value="KataGoX:cao-v17">ModelCao v17（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v17">ModelCao v17（每步 30 秒）</option>
+            {/*
+            <option value="KataGo:xu-200">{i18n.bot.newestFast}</option>
+            <option value="KataGoX:xu-200">{i18n.bot.newest}</option>
+            <option value="KataGoXX:xu-200">{i18n.bot.newestSlow}</option>
+            <option value="KataGo:s60775040-d15559956">{i18n.bot.oldFast}</option>
+            <option value="KataGoX:s60775040-d15559956">{i18n.bot.old}</option>
+            <option value="KataGoXX:s60775040-d15559956">{i18n.bot.oldSlow}</option>
+            */}
+            <option value="KataGo:xu-200">ModelXu v200</option>
+            <option value="KataGoX:xu-200">ModelXu v200（每步  5 秒）</option>
+            <option value="KataGoXX:xu-200">ModelXu v200（每步 30 秒）</option>
+            <option value="KataGo:s60775040-d15559956">ModelXu v100</option>
+            <option value="KataGoX:s60775040-d15559956">ModelXu v100（每步  5 秒）</option>
+            <option value="KataGoXX:s60775040-d15559956">ModelXu v100（每步 30 秒）</option>
+            <option value="KataGo:cao-v16">ModelCao v16</option>
+            <option value="KataGoX:cao-v16">ModelCao v16（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v16">ModelCao v16（每步 30 秒）</option>
+            <option value="KataGo:cao-v15">ModelCao v15</option>
+            <option value="KataGoX:cao-v15">ModelCao v15（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v15">ModelCao v15（每步 30 秒）</option>
+            <option value="KataGo:cao-v14">ModelCao v14</option>
+            <option value="KataGoX:cao-v14">ModelCao v14（每步  5 秒）</option>
+            <option value="KataGoXX:cao-v14">ModelCao v14（每步 30 秒）</option>
+            <option value="KataGo:cao-v13">ModelCao V13</option>
+            <option value="KataGo:cao-v12">ModelCao V12</option>
+            <option value="KataGo:cao-v11">ModelCao V11</option>
+            <option value="KataGo:cao-v10">ModelCao V10</option>
+            <option value="KataGo:cao-v9">ModelCao V9</option>
+            <option value="KataGo:cao-v8">ModelCao V8</option>
+            <option value="KataGo:cao-v7">ModelCao V7</option>
+            <option value="KataGo:cao-v6">ModelCao V6</option>
+            <option value="KataGo:cao-v5">ModelCao V5</option>
+            <option value="KataGo:cao-v4">ModelCao V4</option>
+            <option value="KataGo:cao-v3">ModelCao V3</option>
+            <option value="KataGo:cao-v2">ModelCao V2</option>
+            <option value="KataGo:cao-v1">ModelCao V1</option>
+            {/*
+            <option value="KataGo:s23439424-d13434081">快棋??狗（每步  1 秒）</option>
+            <option value="KataGoX:s23439424-d13434081">正常??狗（每步  5 秒）</option>
+            <option value="KataGoXX:s23439424-d13434081">长考??狗（每步 30 秒）</option>
+            */}
+            {/*
+            <option value="KataGoXX:s23439424-d13434081">长考一代狗（每步 30 秒）</option>
+            <option value="KataGoX:s23439424-d13434081">正常一代狗（每步  5 秒）</option>
+            <option value="KataGo:s23439424-d13434081">快棋一代狗（每步  1 秒）</option>
+            <option value="KataGo:xu-128">{i18n.bot.xu128Fast}</option>
+            <option value="KataGo:xu-100">KataGo Xu 100</option>
+            <option value="KataGo:s23439424-d13434081">KataGo 75</option>
+            <option value="KataGo:s23172608-d13319785">KataGo 74</option>
+            <option value="KataGo:s22906496-d13208116">KataGo 73</option>
+            <option value="KataGo:s21172736-d12529899">KataGo 72</option>
+            <option value="KataGo:s40746624-d11963425">KataGo 71</option>
+            <option value="KataGo:s40413184-d11733792">KataGo 70</option>
+            <option value="KataGo:s40080640-d11542882">KataGo 69</option>
+            <option value="KataGo:s39415040-d11203900">KataGo 68</option>
+            <option value="KataGo:s39148800-d11051308">KataGo 67</option>
+            <option value="KataGo:s38882688-d10899161">KataGo 66</option>
+            <option value="KataGo:s37169152-d10156350">KataGo 65</option>
+            <option value="KataGo:s36889088-d10038372">KataGo 64</option>
+            <option value="KataGo:s36335872-d9808736">KataGo 63</option>
+            <option value="KataGo:s36064384-d9694347">KataGo 62</option>
+            <option value="KataGo:s35788160-d9579671">KataGo 61</option>
+            <option value="KataGo:s17324544-d9313956">KataGo 60</option>
+            <option value="KataGo:s29096448-d8520277">KataGo 59</option>
+            <option value="KataGo:s28731264-d8293612">KataGo 58</option>
+            <option value="KataGo:s28096256-d8065839">KataGo 57</option>
+            <option value="KataGo:s27462400-d7834755">KataGo 56</option>
+            <option value="KataGo:s26842368-d7607189">KataGo 55</option>
+            <option value="KataGo:s26578560-d7491279">KataGo 54</option>
+            <option value="KataGo:s26316288-d7374800">KataGo 53</option>
+            <option value="KataGo:s25689344-d7145883">KataGo 52</option>
+            <option value="KataGo:s25358464-d7031902">KataGo 51</option>
+            <option value="KataGo:s24627968-d6801221">KataGo 50</option>
+            <option value="KataGo:s23540096-d6555060">KataGo 49</option>
+            <option value="KataGo:s22476928-d6383159">KataGo 48</option>
+            <option value="KataGo:s21923712-d6270832">KataGo 47</option>
+            <option value="KataGo:s21570816-d6215256">KataGo 46</option>
+            <option value="KataGo:s20945408-d5996552">KataGo 45</option>
+            <option value="KataGo:s20411520-d5768001">KataGo 44</option>
+            <option value="KataGo:s20144512-d5651555">KataGo 43</option>
+            <option value="KataGo:s19877632-d5535464">KataGo 42</option>
+            <option value="KataGo:s19500288-d5421211">KataGo 41</option>
+            <option value="KataGo:s19110144-d5305068">KataGo 40</option>
+            <option value="KataGo:s18852992-d5190371">KataGo 39</option>
+            <option value="KataGo:s18563328-d5076623">KataGo 38</option>
+            <option value="KataGo:s17405952-d4744022">KataGo 37</option>
+            <option value="KataGo:s17047168-d4602037">KataGo 36</option>
+            <option value="KataGo:s16085888-d4164005">KataGo 35</option>
+            <option value="KataGo:s15832832-d4016039">KataGo 34</option>
+            <option value="KataGo:s15579136-d3875110">KataGo 33</option>
+            <option value="KataGo:s15325952-d3731791">KataGo 32</option>
+            <option value="KataGo:s14939904-d3588306">KataGo 31</option>
+            <option value="KataGo:s14586496-d3448502">KataGo 30</option>
+            <option value="KataGo:s13805312-d3160255">KataGo 29</option>
+            <option value="KataGo:s13530240-d3016364">KataGo 28</option>
+            <option value="KataGo:s12528000-d2717595">KataGo 27</option>
+            <option value="KataGo:s12054144-d2599380">KataGo 26</option>
+            <option value="KataGo:s11670656-d2481051">KataGo 25</option>
+            <option value="KataGo:s11296256-d2359737">KataGo 24</option>
+            <option value="KataGo:s10299264-d2109329">KataGo 23</option>
+            <option value="KataGo:s10029824-d1986592">KataGo 22</option>
+            <option value="KataGo:s9756928-d1864817">KataGo 21</option>
+            <option value="KataGo:s9505280-d1743621">KataGo 20</option>
+            <option value="KataGo:s8783872-d1620336">KataGo 19</option>
+            <option value="KataGo:s8465024-d1496465">KataGo 18</option>
+            <option value="KataGo:s7762560-d1372578">KataGo 17</option>
+            <option value="KataGo:s7251456-d1247147">KataGo 16</option>
+            <option value="KataGo:s6658560-d1120345">KataGo 15</option>
+            <option value="KataGo:s6396416-d989141">KataGo 14</option>
+            <option value="KataGo:s6145408-d850423">KataGo 13</option>
+            <option value="KataGo:s5643520-d750502">KataGo 12</option>
+            <option value="KataGo:s4947712-d653703">KataGo 11</option>
+            <option value="KataGo:s4290944-d588493">KataGo 10</option>
+            <option value="KataGo:s3785344-d522090">KataGo 09</option>
+            <option value="KataGo:s3362304-d454629">KataGo 08</option>
+            <option value="KataGo:s3022336-d392620">KataGo 07</option>
+            <option value="KataGo:s2685056-d338903">KataGo 06</option>
+            <option value="KataGo:s2311296-d283638">KataGo 05</option>
+            <option value="KataGo:s1600128-d224253">KataGo 04</option>
+            <option value="KataGo:s951936-d170159">KataGo 03</option>
+            <option value="KataGo:s437376-d86279">KataGo 02</option>
+            <option value="KataGo:s583680-d41745">KataGo 01 {i18n.aiLevel.notWorking}</option>
+            */}
+          </select>
+        );
+    }
+}

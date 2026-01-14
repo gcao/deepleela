@@ -6,6 +6,7 @@ import i18n from '../i18n';
 import * as jQuery from 'jquery';
 import { littleBox } from './Styles';
 import UserPreferences from '../common/UserPreferences';
+import Engine from '../components/Engine';
 
 interface NewGameDialogProps {
     onCancel?: () => void,
@@ -21,7 +22,7 @@ export interface NewGameDialogStates {
     komi: number,
     handicap: number,
     time: number,
-    size: number,
+    // size: number,
     engine: string;
     boardSize: number;
 }
@@ -32,7 +33,14 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
         super(props, ctx);
 
         let preferences = localStorage.getItem('newgame');
-        let defaultPreference: any = { selectedColor: "B", komi: UserPreferences.komi || 7.5, handicap: 0, time: 120, engine: 'Leela', boardSize: 19 };
+        let defaultPreference: any = {
+            selectedColor: "B",
+            komi: UserPreferences.komi || 6.5,
+            handicap: 0,
+            time: 120,
+            engine: Engine.default,
+            boardSize: 19
+        };
 
         try {
             let pref = preferences ? JSON.parse(preferences) : defaultPreference;
@@ -87,10 +95,7 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.engine}:</label>
                         <div className="full-width" uk-form-custom="target: > * > span.selected-text">
-                            <select style={{ width: '100%' }} onChange={e => this.setState({ engine: e.target.value })} defaultValue={this.state.engine}>
-                                <option value="Leela">{'Leela'}</option>
-                                {/* <option value="Leela">{'Leela-Zero'}</option> */}
-                            </select>
+                            <Engine onChange={e => this.setState({ engine: e.target.value })} engine={this.state.engine}/>
                             <button className="uk-button uk-button-default" type="button" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }} >
                                 <span className="selected-text"></span>
                                 <span uk-icon="icon: chevron-down"></span>
@@ -112,12 +117,14 @@ export default class NewGameDialog extends React.Component<NewGameDialogProps, N
                         </div>
                     </div>
 
+                    {/*
                     <div className="uk-margin">
                         <label className="uk-form-label">{i18n.dialogs.newgame.time}:</label>
                         <div className="uk-form-controls">
                             <input className="uk-input" type="number" placeholder="200" defaultValue={this.state.time.toString()} onChange={e => this.setState({ time: e.target.valueAsNumber || 120 })} />
                         </div>
                     </div>
+                    */}
 
 
                     <div style={{ height: 1, width: '100%', backgroundColor: '#eee', marginBottom: 12 }} />

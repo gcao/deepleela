@@ -35,6 +35,11 @@ interface BoardProps {
     heatmap?: number[][];
     fontSize?: number;
     currentColor: 'W' | 'B';
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 interface BoardStates {
@@ -43,6 +48,12 @@ interface BoardStates {
     highlightWinrateVariationOffset?: { x: number, y: number };
     touchedCoord?: { x: number, y: number };
     disableAnimation?: boolean;
+    dragStart?: {x: number, y: number};
+
+    // vb: virtual board
+    vbSize: number;
+    vbOffsetX: number;
+    vbOffsetY: number;
 }
 
 export default class Board extends React.Component<BoardProps, BoardStates> {
@@ -53,7 +64,9 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         return { x: size - x, y: y - 1 };
     }
 
-    static cartesianCoordToString(x: number, y: number) {
+    static cartesianCoordToString(x: number, y: number, size: number) {
+        if (x == 0) x = size;
+        if (y == 0) y = size;
         return `${Board.alphabets[y - 1]}${x}`;
     }
 
@@ -77,28 +90,38 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         super(props, ctx);
 
         let variationStates: (Variation | undefined)[][] = [];
-
-        for (let i = 0; i < props.size; i++) {
+        for (let i = 0; i < 19; i++) {
             variationStates.push([]);
-            for (let j = 0; j < props.size; j++) {
+            for (let j = 0; j < 19; j++) {
                 variationStates[i].push(undefined);
             }
         }
 
         let branchStates: (BranchState | undefined)[][] = [];
-        for (let i = 0; i < props.size; i++) {
+        for (let i = 0; i < 19; i++) {
             branchStates.push([]);
-            for (let j = 0; j < props.size; j++) {
+            for (let j = 0; j < 19; j++) {
                 branchStates[i].push(undefined)
             }
         }
 
-        this.state = { variationStates, branchStates };
+        const { vbSize, vbOffsetX, vbOffsetY } = this.props;
+        this.state = { variationStates, branchStates, vbSize, vbOffsetX, vbOffsetY };
     }
 
     private onClick(row: number, col: number) {
         if (!this.props.onIntersectionClicked) return;
+        row = (row + this.state.vbOffsetX - 2 * this.state.vbSize + this.props.size) % this.props.size;
+        col = (col - this.state.vbOffsetY + this.props.size) % this.props.size;
         this.props.onIntersectionClicked(row, col);
+    }
+
+    private onRightClick(row: number, col: number) {
+        row = (row + this.state.vbOffsetX - 2 * this.state.vbSize + this.props.size) % this.props.size;
+        col = (col - this.state.vbOffsetY + this.props.size) % this.props.size;
+        let vbOffsetX = (row + this.state.vbSize + (this.props.size - 1)/2) % this.props.size;
+        let vbOffsetY = (-col + this.state.vbSize + (this.props.size + 1)/2) % this.props.size;
+        this.setState({ vbOffsetX, vbOffsetY });
     }
 
     private onVariationHover(row: number, col: number) {
@@ -174,8 +197,52 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         this.setState({ touchedCoord: { x: -1, y: -1 } });
     }
 
+    getVisibleBoardState() {
+        const { size } = this.props;
+        const { vbSize, vbOffsetX, vbOffsetY } = this.state;
+        const visibleSize = size + 2 * vbSize;
+        let state: State[][] = [];
+
+        for (let i = 0; i < visibleSize; i++) {
+            let realI = (i - vbOffsetX + size) % size;
+            state.push([]);
+            for (let j = 0; j < visibleSize; j++) {
+                let realJ = (j - vbOffsetY + size) % size;
+                state[i].push(this.props.states[realI][realJ]);
+            }
+        }
+
+        return state;
+    }
+
+    private onDragStart(event) {
+        var dragStart = {x: event.clientX, y: event.clientY};
+        this.setState({ dragStart });
+    }
+
+    private onDragEnd(event) {
+        if (this.state.dragStart) {
+            var dragEnd = {x: event.clientX, y: event.clientY};
+            let { vbOffsetX, vbOffsetY } = this.state;
+            vbOffsetX += Math.round((dragEnd.y - this.state.dragStart.y ) / this.gridWidth);
+            vbOffsetX = vbOffsetX % this.props.size;
+            vbOffsetY += Math.round((dragEnd.x - this.state.dragStart.x ) / this.gridWidth);
+            vbOffsetY = vbOffsetY % this.props.size;
+            this.setState({ vbOffsetX, vbOffsetY });
+        }
+    }
+
+    private get gridWidth() {
+        const visibleBoardState = this.getVisibleBoardState();
+        const boardParent = document.getElementById(this.props.id || '');
+        const size = 100.0 / visibleBoardState.length;
+        return boardParent ? boardParent!.getBoundingClientRect().height * (size / 100.0) : 0;
+    }
+
     render() {
-        const size = 100.0 / this.props.size;
+        const visibleBoardState = this.getVisibleBoardState();
+
+        const size = 100.0 / visibleBoardState.length;
         const dimension = this.props.size;
 
         const boardParent = document.getElementById(this.props.id || '');
@@ -185,69 +252,82 @@ export default class Board extends React.Component<BoardProps, BoardStates> {
         const gridLineColor = this.props.style ? this.props.style.gridColor : undefined;
         const coordTextColor = this.props.style ? this.props.style.coordTextColor : gridLineColor;
 
-        const subtleTextCoordLeftMargin = 4.2 * (1 - this.props.size / 19);
-        const subtleTextBaseLeftMargin = this.props.size > 13 ? 2 : (this.props.size > 9 ? 2.12 : (this.props.size === 9 ? 4.24 : 3.92));
-
         const startPoints = [dimension > 9 ? 3 : (dimension > 7 ? 2 : 1), dimension > 9 ? dimension - 4 : (dimension > 7 ? dimension - 3 : dimension - 2), (dimension - 1) / 2];
 
         return (
-            <div id={this.props.id} style={this.props.style} draggable={false}>
+            <div id={this.props.id} style={this.props.style} draggable={true}
+                onDragStart={e => this.onDragStart(e)}
+                onDragEnd={e => this.onDragEnd(e)}
+            >
 
                 <div style={{ background: this.props.style ? (this.props.style.background || '') : '', padding: 4, paddingBottom: `${0.6 + size}%`, }}>
 
-                    {this.props.states.map((row, i) => (
-                        <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
-                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: 0, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - i}</div> : undefined}
+                    {visibleBoardState.map((row, i) => {
+                        const realI = (i - this.state.vbOffsetX + this.props.size) % this.props.size;
+                        return <div style={{ clear: 'both', height: `${size}%`, position: 'relative' }} key={i} >
+                            {this.props.showCoordinate ? <div style={{ position: 'absolute', left: -10, top: top, bottom: 0, fontSize: 8, fontWeight: 100, color: coordTextColor, }}>{this.props.size - realI}</div> : undefined}
 
-                            {row.map((state, j) => (
-                                <div key={`${i},${j}`}>
-                                    {this.props.showCoordinate && i === (this.props.size - 1) ?
-                                        <div style={{ position: 'absolute', bottom: 0, left: left + j * (gridWidth - subtleTextBaseLeftMargin), fontSize: 8, fontWeight: 100, color: coordTextColor, top: top + 12 }}>
-                                            {'ABCDEFGHJKLMNOPQRST'[j]}
-                                        </div>
-                                        : undefined
-                                    }
-
+                            {row.map((state, j) => {
+                                const realJ = (j - this.state.vbOffsetY + this.props.size) % this.props.size;
+                                return <div key={`${i},${j}`}>
                                     <Intersection
                                         onClick={(r, c) => this.onClick(r, c)}
+                                        onRightClick={(r, c) => this.onRightClick(r, c)}
                                         style={{ color: gridLineColor, whiteStoneColor: this.props.style ? this.props.style.whiteStoneColor : 'white', blackStoneColor: this.props.style ? this.props.style.blackStoneColor : 'black', startPointColor: this.props.style ? this.props.style.starPointColor : undefined, winrateFontColor: this.props.style && this.props.style.winrateColor, winrateBackground: this.props.style && this.props.style.winrateBackgroundColor }}
                                         key={j}
-                                        row={this.props.size - i}
+                                        size={this.props.size}
+                                        row={visibleBoardState.length - i}
                                         col={j + 1}
-                                        lineThickness={window.innerWidth < 1280 ? 1 : 1.5}
+                                        // Daoqi virtual board parameters
+                                        vbSize={this.state.vbSize}
+                                        vbOffsetX={this.state.vbOffsetX}
+                                        vbOffsetY={this.state.vbOffsetY}
+                                        lineThickness={1}
                                         disabled={this.props.disabled}
                                         width={size}
-                                        state={state === State.Empty ? (this.state.branchStates[i][j] ? this.state.branchStates[i][j]!.state : state) : state}
+                                        state={state === State.Empty ? (this.state.branchStates[realI][realJ] ? this.state.branchStates[realI][realJ]!.state : state) : state}
                                         topEdge={i === 0}
-                                        bottomEdge={i === dimension - 1}
+                                        bottomEdge={i === visibleBoardState.length - 1}
                                         leftEdge={j === 0}
-                                        rightEdge={j === dimension - 1}
-                                        star={startPoints.indexOf(i) >= 0 && startPoints.indexOf(j) >= 0}
-                                        highlight={this.props.highlightCoord && i === (this.props.size - this.props.highlightCoord.x) && j === this.props.highlightCoord.y - 1}
+                                        rightEdge={j === visibleBoardState.length - 1}
+                                        star={startPoints.indexOf(i - this.state.vbSize) >= 0 && startPoints.indexOf(j - this.state.vbSize) >= 0}
+                                        highlight={this.props.highlightCoord && realI === (this.props.size - this.props.highlightCoord.x) && realJ === (this.props.highlightCoord.y - 1)}
                                         highlightPointSize={gridWidth > 25 ? 'large' : 'small'}
                                         needTouchConfirmation={this.props.needTouchConfirmation !== undefined ? this.props.needTouchConfirmation : gridWidth < 25}
                                         onTouch={(x, y) => this.setState({ touchedCoord: { x, y } })}
                                         showTouchConfirmation={this.state.touchedCoord && i === (this.props.size - this.state.touchedCoord.x) && j === (this.state.touchedCoord.y - 1)}
-                                        heatmap={this.props.heatmap ? this.props.heatmap[i][j] : 0}
-                                        winrate={this.state.variationStates[i][j] ? {
-                                            value: this.state.variationStates[i][j]!.stats.W,
-                                            uvalue: this.state.variationStates[i][j]!.stats.U,
-                                            visits: this.state.variationStates[i][j]!.visits,
-                                            weight: this.state.variationStates[i][j]!.weight,
+                                        heatmap={this.props.heatmap ? this.props.heatmap[realI][realJ] : 0}
+                                        winrate={this.state.variationStates[realI][realJ] ? {
+                                            value: this.state.variationStates[realI][realJ]!.stats.W,
+                                            uvalue: this.state.variationStates[realI][realJ]!.stats.U,
+                                            visits: this.state.variationStates[realI][realJ]!.visits,
+                                            weight: this.state.variationStates[realI][realJ]!.weight,
                                             highest: this.state.highlightWinrateVariationOffset ? this.state.highlightWinrateVariationOffset.x === i && this.state.highlightWinrateVariationOffset.y === j : false,
                                         } : undefined}
                                         fontSize={this.props.fontSize}
                                         onVariationHover={(row, col) => this.onVariationHover(row, col)}
                                         onVariationHoverLeave={(row, col) => { this.clearBranchStates(), this.forceUpdate() }}
-                                        moveNumber={this.state.branchStates[i][j] ? this.state.branchStates[i][j]!.moveNumber : undefined}
+                                        moveNumber={this.state.branchStates[realI][realJ] ? this.state.branchStates[realI][realJ]!.moveNumber : undefined}
                                         disableAnimation={this.state.disableAnimation}
                                     />
                                 </div>
-                            ))}
+                            })}
 
                         </div>
-                    ))}
-
+                    })}
+                    <div key='hlabel' style={{ position: 'absolute', bottom: 15 }}>
+                        {visibleBoardState.map((_row, i) => {
+                            const realI = (i - this.state.vbOffsetY + this.props.size) % this.props.size;
+                            // TODO: the calculation is not working for different board size
+                            // const width = (gridWidth * visibleBoardState.length - Math.round(gridWidth) * i) * 0.96 / (visibleBoardState.length - i);
+                            const width = (gridWidth * visibleBoardState.length - gridWidth * i) * 0.951 / (visibleBoardState.length - i);
+                            return <div key={i} style={{ display: 'inline-block', float: 'left', width: width }}>
+                                <div style={{ left: 0, top: -15, textAlign: 'center', fontSize: 8, fontWeight: 100, color: coordTextColor }}>
+                                    {'ABCDEFGHJKLMNOPQRST'[realI]}
+                                </div>
+                            </div>
+                        })}
+                    </div>
                 </div>
 
             </div>

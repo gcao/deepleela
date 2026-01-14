@@ -1,11 +1,22 @@
 
 export const lang = {
+    title: '欢迎进入道棋的奇妙世界！',
+    human: '凡人',
+    ai: 'AI',
+    hint: '提示：点鼠标右键 或 拖拽棋盘 可以帮助调整对局视角。',
+    B: '黑方',
+    W: '白方',
+    yes: '是',
+    no: '否',
+
     menu: {
         cgos: '遛狗场',
         joseki: '定式大全',
+        gamelist: '欣赏对局',
 
-        newgame_vs_leela: '对战 AI',
+        newgame_vs_leela: '挑战 AI',
         newgame_vs_self: '自由探索',
+        newgame_ai_vs_ai: 'AI 战 AI',
         loadsgf: '复盘 SGF',
         exportsgf: '导出 SGF',
 
@@ -21,11 +32,27 @@ export const lang = {
         about: '关于',
     },
 
+    aiLevel: {
+        strongest: '最强版',
+        notWorking: '有问题',
+    },
+
+    bot: {
+        newestFast: '快棋最新狗（每步  1 秒）',
+        newest    : '正常最新狗（每步  5 秒）',
+        newestSlow: '长考最新狗（每步 30 秒）',
+        oldFast   : '快棋上代狗（每步  1 秒）',
+        old       : '正常上代狗（每步  5 秒）',
+        oldSlow   : '长考上代狗（每步 30 秒）',
+    },
+
     dialogs: {
         newgame: {
             title: '新对局',
             yourColor: '执子颜色',
             engine: 'AI 引擎',
+            engineB: 'AI 引擎（黑）',
+            engineW: 'AI 引擎（白）',
             komi: '贴目',
             handicap: '让子',
             time: '游戏时间 (分钟)',
@@ -74,6 +101,8 @@ export const lang = {
             winrateBase_percent: '基于百分比显示',
             winrateBase_500: '基于 500 显示',
             nickname: '昵称',
+            aiWaitTime: 'AI思考时间(毫秒)',
+            aiWaitRandom: 'AI思考时间不固定，模拟人类下棋速度',
         }
     },
 
@@ -82,6 +111,7 @@ export const lang = {
         white: '白棋',
         date: '日期',
         time: '时间',
+        komi: '贴目',
         result: '比赛结果',
     },
 

@@ -5,7 +5,8 @@ import { Command, Response } from "@sabaki/gtp";
 import SGF from "./SGF";
 
 export default class ReviewClient extends EventEmitter {
-    static readonly url = process.env.NODE_ENV === 'production' ? `ws${location.protocol === 'https:' ? 's' : ''}://review.deepleela.com` : 'ws://192.168.31.54:3303';
+    // static readonly url = process.env.NODE_ENV === 'production' ? `ws${location.protocol === 'https:' ? 's' : ''}://review.daoqi.org` : 'ws://192.168.31.54:3303';
+    static readonly url = 'ws://review.daoqi.org:8080';
     static readonly default = new ReviewClient();
 
     private ws: WebSocket;

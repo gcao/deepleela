@@ -36,7 +36,7 @@ export default class SGF {
                 let row = SGF.alphabets.indexOf(pos[1]);
                 let col = SGF.alphabets.indexOf(pos[0]);
                 let coord = Board.arrayPositionToCartesianCoord(row, col, boardSize);
-                let coordstr = Board.cartesianCoordToString(coord.x, coord.y);
+                let coordstr = Board.cartesianCoordToString(coord.x, coord.y, parseInt(tree.props.SZ || '19'));
 
                 moves.push([color!, coordstr]);
             }
@@ -58,7 +58,7 @@ export default class SGF {
         let size = Number.parseInt(tree.props.SZ || '19') || 19;
 
         let game = new Go(size);
-        game.komi = Number.parseFloat(tree.props.KM || '7.5');
+        game.komi = Number.parseFloat(tree.props.KM || '6.5');
         game.result = tree.props.RE;
 
         if (tree.props.AB && tree.props.AB.length > 0) {
